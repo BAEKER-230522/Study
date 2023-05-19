@@ -1,4 +1,4 @@
-package com.baeker.study.study.domain.entity;
+package com.baeker.study.base.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
