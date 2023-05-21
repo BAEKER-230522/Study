@@ -31,16 +31,8 @@ public class StudyRuleService {
 
     @Transactional
     public RsData<StudyRule> create(StudyRuleForm studyRuleForm, Long ruleId, Study study) {
-        Rule rule = ruleService.getRule(ruleId).getData();
+        StudyRule studyRule = StudyRule.create(studyRuleForm, ruleId);
 
-        StudyRule studyRule = StudyRule.builder()
-                .name(studyRuleForm.getName())
-                .about(studyRuleForm.getAbout())
-                .rule(rule)
-                .study(study)
-                .build();
-        studyRule.getRule().getStudyRules().add(studyRule);
-        studyRule.getStudy().getStudyRules().add(studyRule);
         studyRuleRepository.save(studyRule);
         return RsData.of("S-1", "스터디 규칙 생성완료.", studyRule);
     }

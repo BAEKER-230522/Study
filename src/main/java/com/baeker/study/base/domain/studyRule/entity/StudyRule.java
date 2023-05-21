@@ -1,7 +1,9 @@
 package com.baeker.study.base.domain.studyRule.entity;
 
+import com.baeker.study.base.domain.studyRule.dto.StudyRuleForm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,7 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 public class StudyRule {
@@ -29,7 +31,6 @@ public class StudyRule {
 
     private String about;
 
-    private Double rate;  // double 랭킹?
     @CreatedDate
     private LocalDateTime createDate;
 
@@ -52,5 +53,19 @@ public class StudyRule {
         } else {
             this.mission = Mission.FAIL;
         }
+    }
+
+    public static StudyRule create(StudyRuleForm studyRuleForm, Long ruleId) {
+        return builder()
+                .name(studyRuleForm.getName())
+                .about(studyRuleForm.getAbout())
+                .ruleId(ruleId)
+                .mission(Mission.FAIL)
+                .build();
+    }
+
+    public void setStudy(Study study) {
+        this.study = study;
+        study.getStudyRules.add(this);
     }
 }
