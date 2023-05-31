@@ -1,10 +1,9 @@
 package com.baeker.study.study.domain.entity;
 
-import com.baeker.study.base.entity.BaseEntity;
 import com.baeker.study.base.entity.ScoreBase;
+import com.baeker.study.myStudy.domain.entity.MyStudy;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +34,7 @@ public class Study extends ScoreBase {
     @OneToMany(mappedBy = "study")
     private List<StudyRule> studyRules = new ArrayList<>();
 
+
     //-- create method --//
     public static Study createStudy(String name, String about, Integer capacity, String nickname) {
         return builder()
@@ -50,7 +50,7 @@ public class Study extends ScoreBase {
     //-- business logic --//
 
     // 이름, 소개, 최대 인원 변경 //
-    protected Study modifyStudy(String name, String about, Integer capacity) {
+    public Study modifyStudy(String name, String about, Integer capacity) {
         return this.toBuilder()
                 .name(name)
                 .about(about)
@@ -60,7 +60,7 @@ public class Study extends ScoreBase {
     }
 
     // 리더 변경 //
-    protected Study modifyLeader(String leader) {
+    public Study modifyLeader(String leader) {
         return this.toBuilder()
                 .leader(leader)
                 .modifyDate(LocalDateTime.now())
