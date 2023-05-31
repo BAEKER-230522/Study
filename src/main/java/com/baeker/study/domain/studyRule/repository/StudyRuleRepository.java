@@ -1,6 +1,6 @@
-package com.baeker.study.base.domain.studyRule.repository;
+package com.baeker.study.domain.studyRule.repository;
 
-import com.baeker.study.base.domain.studyRule.entity.StudyRule;
+import com.baeker.study.domain.studyRule.entity.StudyRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

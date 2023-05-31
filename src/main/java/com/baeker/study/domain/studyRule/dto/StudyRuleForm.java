@@ -1,4 +1,4 @@
-package com.baeker.study.base.domain.studyRule.dto;
+package com.baeker.study.domain.studyRule.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

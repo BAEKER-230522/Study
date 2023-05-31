@@ -1,8 +1,9 @@
-package com.baeker.study.base.domain.studyRule.service;
+package com.baeker.study.domain.studyRule.service;
 
-import com.baeker.study.base.domain.studyRule.dto.StudyRuleForm;
-import com.baeker.study.base.domain.studyRule.entity.StudyRule;
-import com.baeker.study.base.domain.studyRule.repository.StudyRuleRepository;
+import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.studyRule.dto.StudyRuleForm;
+import com.baeker.study.domain.studyRule.entity.StudyRule;
+import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

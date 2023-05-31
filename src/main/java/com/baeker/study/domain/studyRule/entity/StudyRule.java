@@ -1,7 +1,7 @@
-package com.baeker.study.base.domain.studyRule.entity;
+package com.baeker.study.domain.studyRule.entity;
 
-import com.baeker.study.base.domain.studyRule.Mission;
-import com.baeker.study.base.domain.studyRule.dto.StudyRuleForm;
+import com.baeker.study.domain.studyRule.Mission;
+import com.baeker.study.domain.studyRule.dto.StudyRuleForm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
