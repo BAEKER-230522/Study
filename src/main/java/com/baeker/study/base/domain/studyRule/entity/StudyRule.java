@@ -1,12 +1,12 @@
 package com.baeker.study.base.domain.studyRule.entity;
 
+import com.baeker.study.base.domain.studyRule.Mission;
 import com.baeker.study.base.domain.studyRule.dto.StudyRuleForm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

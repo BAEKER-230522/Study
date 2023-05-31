@@ -21,7 +21,6 @@ public class StudyRuleService {
 
     private final StudyService studyService;
 
-    private final RuleService ruleService;
     private final StudySnapShotRepository studySnapShotRepository;
 
 
