@@ -36,7 +36,7 @@ public class Study extends ScoreBase {
     private List<StudyRule> studyRules = new ArrayList<>();
 
     //-- create method --//
-    protected static Study createStudy(String name, String about, Integer capacity, String nickname) {
+    public static Study createStudy(String name, String about, Integer capacity, String nickname) {
         return builder()
                 .name(name)
                 .about(about)
@@ -73,14 +73,14 @@ public class Study extends ScoreBase {
     }
 
     // 백준 점수 최신화 //
-    protected Study updateBaekJoon(BaekJoonDto dto) {
-        return this.toBuilder()
-                .bronze(this.getBronze() + dto.getBronze())
-                .sliver(this.getSliver() + dto.getSliver())
-                .gold(this.getGold() + dto.getGold())
-                .diamond(this.getDiamond() + dto.getDiamond())
-                .ruby(this.getRuby() + dto.getRuby())
-                .platinum(this.getPlatinum() + dto.getPlatinum())
-                .build();
-    }
+//    protected Study updateBaekJoon(BaekJoonDto dto) {
+//        return this.toBuilder()
+//                .bronze(this.getBronze() + dto.getBronze())
+//                .sliver(this.getSliver() + dto.getSliver())
+//                .gold(this.getGold() + dto.getGold())
+//                .diamond(this.getDiamond() + dto.getDiamond())
+//                .ruby(this.getRuby() + dto.getRuby())
+//                .platinum(this.getPlatinum() + dto.getPlatinum())
+//                .build();
+//    }
 }
