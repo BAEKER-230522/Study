@@ -1,6 +1,7 @@
 package com.baeker.study.study.domain.entity;
 
 import com.baeker.study.base.entity.ScoreBase;
+import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;

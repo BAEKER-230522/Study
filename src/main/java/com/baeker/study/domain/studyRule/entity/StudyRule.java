@@ -2,6 +2,8 @@ package com.baeker.study.domain.studyRule.entity;
 
 import com.baeker.study.domain.studyRule.Mission;
 import com.baeker.study.domain.studyRule.dto.StudyRuleForm;
+import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
+import com.baeker.study.study.domain.entity.Study;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +49,7 @@ public class StudyRule {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    protected void setMission(boolean mission) {
+    public void setMission(boolean mission) {
         if (mission) {
             this.mission = Mission.COMPLETE;
         } else {
@@ -55,17 +57,17 @@ public class StudyRule {
         }
     }
 
-    public static StudyRule create(StudyRuleForm studyRuleForm, Long ruleId) {
+    public static StudyRule create(CreateStudyRuleRequest request) {
         return builder()
-                .name(studyRuleForm.getName())
-                .about(studyRuleForm.getAbout())
-                .ruleId(ruleId)
+                .name(request.getName())
+                .about(request.getAbout())
+                .ruleId(request.getRuleId())
                 .mission(Mission.FAIL)
                 .build();
     }
 
-    public void setStudy(Study study) {
+    public void setStudy(StudyRule studyRule, Study study) {
         this.study = study;
-        study.getStudyRules.add(this);
+        study.getStudyRules().add(studyRule);
     }
 }
