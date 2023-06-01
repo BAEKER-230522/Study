@@ -1,10 +1,9 @@
 package com.baeker.study.study.in.resDto;
 
+import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.domain.entity.StudyRule;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
