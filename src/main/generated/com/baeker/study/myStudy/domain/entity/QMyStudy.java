@@ -32,8 +32,6 @@ public class QMyStudy extends EntityPathBase<MyStudy> {
 
     public final NumberPath<Long> member = createNumber("member", Long.class);
 
-    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifyDate = _super.modifyDate;
 

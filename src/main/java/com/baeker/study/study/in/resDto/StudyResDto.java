@@ -26,8 +26,6 @@ public class StudyResDto {
     int ruby;
     int platinum;
     int solvedCount;
-    private List<MyStudy> myStudies;
-    private List<StudyRule> studyRules;
 
     public StudyResDto(Study study) {
         this.id = study.getId();
@@ -45,7 +43,5 @@ public class StudyResDto {
         this.ruby = study.getRuby();
         this.platinum = study.getPlatinum();
         this.solvedCount = bronze + sliver + gold + diamond + ruby + platinum;
-        this.myStudies = study.getMyStudies();
-        this.studyRules = study.getStudyRules();
     }
 }

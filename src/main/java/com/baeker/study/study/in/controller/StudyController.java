@@ -5,6 +5,7 @@ import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
+import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -49,7 +52,7 @@ public class StudyController {
     }
 
     //-- update leader --//
-    @PostMapping("/v1/update-leader")
+    @PostMapping("/v1/leader")
     public RsData updateLeader(@RequestBody @Valid UpdateLeaderReqDto dto) {
         log.info("리더 수정 요청 확인 id = {}", dto.getId());
 
@@ -59,39 +62,53 @@ public class StudyController {
         return RsData.successOf(resDto);
     }
 
+    //-- add xp --//
+    @PostMapping("/v1/xp")
+    public RsData addXp(@RequestBody @Valid AddXpReqDto dto) {
+        log.info("xp 추가 업데이트 요청 확인 id ={}", dto.getId());
+
+        Study study = studyService.addXp(dto);
+        UpdateResDto resDto = new UpdateResDto(study.getId());
+
+        return RsData.successOf(resDto);
+    }
+
     //-- find list --//
     @GetMapping("/v1/list")
-    public RsData list(@RequestBody @Valid int page) {
+    public RsData list(@RequestParam @Valid int page) {
         log.info("스터디 리스트 요청 확인 page = {}", page);
 
-        Page<Study> studyPage = studyService.findAll(page);
+        List<StudyResDto> dtoList = studyService.findAll(page)
+                .stream()
+                .map(s -> new StudyResDto(s))
+                .toList();
 
         log.info("스터디 리스트 요청 완료");
-        return RsData.successOf(studyPage);
+        return RsData.successOf(dtoList);
     }
 
     //-- find by id --//
-    @GetMapping("/v1/find-by-id")
-    public RsData findByName(@RequestBody @Valid Long id) {
+    @GetMapping("/v1/id")
+    public RsData findByName(@RequestParam @Valid Long id) {
         log.info("Study 조회 요청 확인 id = {}", id);
 
         Study study = studyService.findById(id);
-        StudyResDto resDto = new StudyResDto(study);
+        StudyResDto dto = new StudyResDto(study);
 
-        log.info("Study 응답 완료 id = {}", resDto.getId());
-        return RsData.successOf(resDto);
+        log.info("Study 응답 완료 id = {}", dto.getId());
+        return RsData.successOf(dto);
     }
 
     //-- find by name --//
-    @GetMapping("/v1/find-by-name")
-    public RsData findByName(@RequestBody @Valid String name) {
+    @GetMapping("/v1/name")
+    public RsData findByName(@RequestParam @Valid String name) {
         log.info("Study 조회 요청 확인 name = {}", name);
 
         Study study = studyService.findByName(name);
-        StudyResDto resDto = new StudyResDto(study);
+        StudyResDto dto = new StudyResDto(study);
 
-        log.info("Study 응답 완료 id = {}", resDto.getId());
-        return RsData.successOf(resDto);
+        log.info("Study 응답 완료 id = {}", dto.getId());
+        return RsData.successOf(dto);
     }
 
 }
