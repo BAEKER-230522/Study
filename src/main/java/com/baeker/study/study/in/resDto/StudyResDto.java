@@ -3,9 +3,12 @@ package com.baeker.study.study.in.resDto;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
+import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -27,6 +30,7 @@ public class StudyResDto {
     int platinum;
     int solvedCount;
 
+
     public StudyResDto(Study study) {
         this.id = study.getId();
         this.createDate = study.getCreateDate();
@@ -42,6 +46,6 @@ public class StudyResDto {
         this.diamond = study.getDiamond();
         this.ruby = study.getRuby();
         this.platinum = study.getPlatinum();
-        this.solvedCount = bronze + sliver + gold + diamond + ruby + platinum;
+        this.solvedCount = study.solvedBaekJoon();
     }
 }
