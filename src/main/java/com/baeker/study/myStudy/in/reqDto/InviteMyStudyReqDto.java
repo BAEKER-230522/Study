@@ -3,9 +3,10 @@ package com.baeker.study.myStudy.in.reqDto;
 import lombok.Data;
 
 @Data
-public class MyStudyJoinReqDto {
+public class InviteMyStudyReqDto {
 
     private Long study;
-    private Long member;
+    private Long inviter;
+    private Long invitee;
     private String msg;
 }
