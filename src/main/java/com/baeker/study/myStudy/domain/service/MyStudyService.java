@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
 
@@ -52,6 +53,7 @@ public class MyStudyService {
     }
 
     //-- invite member --//
+    @Transactional
     public MyStudy invite(InviteMyStudyReqDto dto, Study study) {
 
         invalidInviter(dto.getInviter(), study);
@@ -97,4 +99,46 @@ public class MyStudyService {
 
         return myStudies.get(0);
     }
+
+    public MyStudy findById(Long id) {
+        Optional<MyStudy> byId = myStudyRepository.findById(id);
+
+        if (byId.isPresent())
+            return byId.get();
+
+        throw  new NotFoundException("MyStudy 가 존재하지 않습니다.");
+    }
+
+
+    /**
+     * ** UPDATE METHOD **
+     * modify msg
+     */
+
+    //-- modify msg --//
+    @Transactional
+    public void modifyMsg(MyStudy myStudy, String msg) {
+        myStudy.modifyMsg(msg);
+    }
+
+    @Transactional
+    public void accept(MyStudy myStudy) {
+
+        if (myStudy.getStatus() == MEMBER)
+            throw new IllegalStateException("이미 승인된 스터디 맴버입니다.");
+
+        myStudy.accept();
+    }
+
+    /**
+     * ** DELETE METHOD **
+     * delete my study
+     */
+
+    //-- delete my study --//
+    @Transactional
+    public void delete(MyStudy myStudy) {
+        myStudyRepository.delete(myStudy);
+    }
+
 }

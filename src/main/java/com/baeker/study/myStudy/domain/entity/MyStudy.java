@@ -68,4 +68,16 @@ public class MyStudy extends BaseEntity {
     }
 
 
+    //-- business logic --//
+
+    // modify msg //
+    public void modifyMsg(String msg) {
+        this.msg = msg;
+    }
+
+    // accept //
+    public void accept() {
+        this.status = MEMBER;
+        this.msg = null;
+    }
 }
