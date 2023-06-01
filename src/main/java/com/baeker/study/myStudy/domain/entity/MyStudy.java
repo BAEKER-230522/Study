@@ -23,8 +23,6 @@ public class MyStudy extends BaseEntity {
     private String msg;
     @Enumerated(STRING)
     private StudyStatus status;
-    private Long memberId;
-
     private Long member;
 
     @ManyToOne(fetch = LAZY)

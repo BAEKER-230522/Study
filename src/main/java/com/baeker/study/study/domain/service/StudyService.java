@@ -3,6 +3,7 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
@@ -48,6 +49,7 @@ public class StudyService {
      * ** UPDATE METHOD **
      * update name, about, capacity
      * update leader
+     * add xp
      */
 
     //-- update name, about, capacity --//
@@ -56,6 +58,7 @@ public class StudyService {
 
         try {
             this.findByName(dto.getName());
+            throw new InvalidDuplicateException("이미 존재하는 name 입니다.");
         } catch (NotFoundException e) {
         }
         
@@ -72,6 +75,15 @@ public class StudyService {
         Study modifyLeader = study.modifyLeader(dto.getLeader());
 
         return studyRepository.save(modifyLeader);
+    }
+
+    //-- add xp --//
+    @Transactional
+    public Study addXp(AddXpReqDto dto) {
+        Study study = this.findById(dto.getId());
+        study.xpUp(dto.getXp());
+
+        return study;
     }
 
 
@@ -94,7 +106,7 @@ public class StudyService {
     //-- find all + page --//
     public Page<Study> findAll(int page) {
         ArrayList<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("xp"));
+        sorts.add(Sort.Order.desc("createDate"));
 
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return studyRepository.findAll(pageable);

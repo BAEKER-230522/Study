@@ -25,11 +25,11 @@ public class MyStudyController {
 
 
     //-- 가입 신청 --//
-    @PostMapping("/v1/join")
-    public RsData join(@RequestBody @Valid MyStudyJoinReqDto dto) {
-        log.info("study 가입신청 요청 확인 study id = {}", dto.getStudy());
-
-        Study study = studyService.findById(dto.getStudy());
-        MyStudy myStudy = myStudyService.join(dto, study);
-    }
+//    @PostMapping("/v1/join")
+//    public RsData join(@RequestBody @Valid MyStudyJoinReqDto dto) {
+//        log.info("study 가입신청 요청 확인 study id = {}", dto.getStudy());
+//
+//        Study study = studyService.findById(dto.getStudy());
+//        MyStudy myStudy = myStudyService.join(dto, study);
+//    }
 }

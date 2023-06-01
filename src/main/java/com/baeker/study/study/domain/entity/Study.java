@@ -70,7 +70,7 @@ public class Study extends ScoreBase {
     }
 
     // 경험치 상승 //
-    protected void xpUp(Integer addXp) {
+    public void xpUp(Integer addXp) {
         this.xp += addXp;
     }
 
