@@ -28,5 +28,4 @@ public class MyStudyQueryRepository {
                         .and(myStudy.study.eq(study)))
                 .fetch();
     }
-
 }

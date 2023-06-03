@@ -39,4 +39,7 @@ public class StudyRuleServiceTests {
 
         assertThat(studyRule.getRuleId()).isEqualTo(1L);
     }
+
+
+
 }
