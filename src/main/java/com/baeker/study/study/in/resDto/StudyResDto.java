@@ -1,15 +1,9 @@
 package com.baeker.study.study.in.resDto;
 
-import com.baeker.study.domain.studyRule.entity.StudyRule;
-import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
-import jakarta.persistence.OneToMany;
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class StudyResDto {
@@ -46,6 +40,6 @@ public class StudyResDto {
         this.diamond = study.getDiamond();
         this.ruby = study.getRuby();
         this.platinum = study.getPlatinum();
-        this.solvedCount = study.solvedBaekJoon();
+        this.solvedCount = study.solvedCount();
     }
 }
