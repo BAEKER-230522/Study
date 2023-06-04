@@ -1,8 +1,13 @@
 package com.baeker.study.study.in.reqDto;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PROTECTED;
 
 @Data
+@NoArgsConstructor(access = PROTECTED)
 public class CreateReqDto {
 
     private Long member;
