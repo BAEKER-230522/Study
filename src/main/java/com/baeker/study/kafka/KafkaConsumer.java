@@ -47,6 +47,7 @@ public class KafkaConsumer {
 
             MemberDto member = new MemberDto(longId, bronze, silver, gold, platinum, diamond, ruby);
             //TODO: 이벤트리스너
+
         } catch (NoSuchElementException e) {
             throw new NotFoundException("Member 데이터 없음");
         }

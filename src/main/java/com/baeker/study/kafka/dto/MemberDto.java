@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 문제풀이수 = 오늘 - 어제
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
