@@ -13,13 +13,15 @@ public class StudyRuleDto {
     private Long id;
     private String name;
     private String about;
-    private StudyResDto studyResDto;
+    private StudyResDto study;
     private Long ruleId;
 
     public StudyRuleDto(StudyRule studyRule) {
-        name = studyRule.getName();
-        about = studyRule.getAbout();
-        studyResDto = new StudyResDto(studyRule.getStudy());
-        ruleId = studyRule.getRuleId();
+        this.name = studyRule.getName();
+        this.about = studyRule.getAbout();
+        this.study = new StudyResDto(studyRule.getStudy());
+        this.ruleId = studyRule.getRuleId();
     }
+
+
 }

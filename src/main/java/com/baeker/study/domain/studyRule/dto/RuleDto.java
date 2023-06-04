@@ -15,4 +15,14 @@ public class RuleDto {
     private int xp;
     private int count;
     private String difficulty;
+
+    public RuleDto(RuleDto ruleDto) {
+        this.id = ruleDto.getId();
+        this.name = ruleDto.getName();
+        this.about = ruleDto.getAbout();
+        this.provider = ruleDto.getProvider();
+        this.xp = ruleDto.getXp();
+        this.count = ruleDto.getCount();
+        this.difficulty = ruleDto.getDifficulty();
+    }
 }
