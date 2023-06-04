@@ -61,7 +61,7 @@ class StudyServiceTest {
     }
 
     private Study createStudy(Long member, String name, String about, String leader) {
-        Study study = studyService.create(new CreateReqDto(member, name, about, leader, 10));
+        Study study = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
         myStudyService.create(member, study);
         return study;
     }
