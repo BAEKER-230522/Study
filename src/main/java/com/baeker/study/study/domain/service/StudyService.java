@@ -3,10 +3,12 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
+import com.baeker.study.study.out.StudyQueryRepository;
 import com.baeker.study.study.out.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    private final StudyQueryRepository studyQueryRepository;
 
     /**
      * ** CREATE METHOD **
@@ -50,6 +54,7 @@ public class StudyService {
      * update name, about, capacity
      * update leader
      * add xp
+     * event : 해결한 문제 추가
      */
 
     //-- update name, about, capacity --//
@@ -86,11 +91,22 @@ public class StudyService {
         return study;
     }
 
+    //-- event : 해결한 문제 추가 --//
+    public void addSolveCount(AddSolvedCountEvent event) {
+        List<Study> studies = studyQueryRepository.findByMember(event.getMember());
+
+        for (Study study : studies)
+            studyRepository.save(study.updateSolvedCount(event));
+    }
+
 
     /**
      * ** SELECT METHOD **
      * find by name
      * find all + page
+     * find all
+     * find by id
+     * find by member
      */
 
     //-- find by name --//
@@ -112,6 +128,11 @@ public class StudyService {
         return studyRepository.findAll(pageable);
     }
 
+    //-- find all --//
+    public List<Study> findAll() {
+        return studyRepository.findAll();
+    }
+
     //-- find by id --//
     public Study findById(Long id) {
         Optional<Study> byId = studyRepository.findById(id);
@@ -120,5 +141,10 @@ public class StudyService {
             return byId.get();
 
         throw new NotFoundException("존재하지 않는 id 입니다.");
+    }
+
+    //-- find by member --//
+    public List<Study> findByMember(Long member) {
+        return studyQueryRepository.findByMember(member);
     }
 }

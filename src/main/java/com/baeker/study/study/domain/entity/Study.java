@@ -3,6 +3,7 @@ package com.baeker.study.study.domain.entity;
 import com.baeker.study.base.entity.ScoreBase;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -75,14 +76,14 @@ public class Study extends ScoreBase {
     }
 
     // 백준 점수 최신화 //
-//    protected Study updateBaekJoon(BaekJoonDto dto) {
-//        return this.toBuilder()
-//                .bronze(this.getBronze() + dto.getBronze())
-//                .sliver(this.getSliver() + dto.getSliver())
-//                .gold(this.getGold() + dto.getGold())
-//                .diamond(this.getDiamond() + dto.getDiamond())
-//                .ruby(this.getRuby() + dto.getRuby())
-//                .platinum(this.getPlatinum() + dto.getPlatinum())
-//                .build();
-//    }
+    public Study updateSolvedCount(AddSolvedCountEvent event) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + event.getBronze())
+                .sliver(this.getSliver() + event.getSliver())
+                .gold(this.getGold() + event.getGold())
+                .diamond(this.getDiamond() + event.getDiamond())
+                .ruby(this.getRuby() + event.getRuby())
+                .platinum(this.getPlatinum() + event.getPlatinum())
+                .build();
+    }
 }

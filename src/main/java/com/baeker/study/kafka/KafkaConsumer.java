@@ -12,7 +12,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -39,7 +38,6 @@ public class KafkaConsumer {
         try {
             Integer memberId = (Integer) map.get("id");
             Long longId = memberId.longValue();
-            String baekJoonName = (String) map.get("baekJoonName");
             Integer bronze = (Integer) map.get("bronze");
             Integer silver = (Integer) map.get("silver");
             Integer gold = (Integer) map.get("gold");
@@ -47,8 +45,8 @@ public class KafkaConsumer {
             Integer diamond = (Integer) map.get("diamond");
             Integer ruby = (Integer) map.get("ruby");
 
-            MemberDto member = new MemberDto(longId, baekJoonName, bronze, silver, gold, platinum, diamond, ruby);
-            System.out.println("#####################"+member.getBaekJoonName()+"#####################");
+            MemberDto member = new MemberDto(longId, bronze, silver, gold, platinum, diamond, ruby);
+            //TODO: 이벤트리스너
         } catch (NoSuchElementException e) {
             throw new NotFoundException("Member 데이터 없음");
         }
