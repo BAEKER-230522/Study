@@ -35,7 +35,6 @@ public class StudyRuleController {
         Long studyRuleId = studyRuleService.create(request);
         CreateStudyRuleResponse createStudyRuleResponse = new CreateStudyRuleResponse();
         createStudyRuleResponse.setId(studyRuleId);
-
         return RsData.successOf(createStudyRuleResponse);
     }
 
@@ -54,7 +53,7 @@ public class StudyRuleController {
     @PatchMapping("/v1/{studyruleid}")
     @Operation(summary = "스터디규칙 개별 변경", description = "이름(name), 소개(about), 규칙Id(ruleId) 원하는 값을 Key:Value 형태로 입력", tags = "StudyRule-수정")
     public RsData<StudyRuleDto> modifyStudyRule(@Parameter(description = "수정하고싶은 StudyRuleId 입력", example = "1")@PathVariable("studyruleid") Long studyruleid,
-                                                @RequestBody Map<String, String> updates) {
+                                                @Parameter(description = "key:value 형태로(ex: name:이름) 전달", example = "name:이름")@RequestBody Map<String, String> updates) {
         studyRuleService.updateStudyRule(studyruleid, updates);
         StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
         return RsData.successOf(new StudyRuleDto(studyRule));
