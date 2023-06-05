@@ -65,7 +65,6 @@ public class StudyRuleServiceTests {
 
         assertThat(studyRule.getRuleId()).isEqualTo(1L);
 
-
         ModifyStudyRuleRequest request = new ModifyStudyRuleRequest("수정이름", "수정소개", 2L);
         studyRuleService.modify(studyRule, request);
 
@@ -122,5 +121,9 @@ public class StudyRuleServiceTests {
         }
         List<StudyRule> all = studyRuleService.getAll();
         assertThat(all.size()).isEqualTo(100);
+        long i = 1;
+        for (StudyRule studyRule : all) {
+            assertThat(studyRule.getName()).isEqualTo("이름"+i++);
+        }
     }
 }
