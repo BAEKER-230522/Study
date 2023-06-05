@@ -182,6 +182,7 @@ public class StudyRuleService {
         int ruleCount = rule.getCount();
         String difficulty = rule.getDifficulty();
 
+
         int yesterdayCount = studyRule.getStudy().solvedCount(); // 스터디 어제 푼 문제 수
 
 

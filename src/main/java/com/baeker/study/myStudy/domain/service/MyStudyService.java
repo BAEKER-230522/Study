@@ -4,7 +4,6 @@ import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.OverLimitedException;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.myStudy.out.MyStudyQueryRepository;
