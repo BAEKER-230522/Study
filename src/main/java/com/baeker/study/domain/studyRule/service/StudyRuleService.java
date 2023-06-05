@@ -4,6 +4,7 @@ import com.baeker.study.base.address.Address;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.studyRule.dto.RuleDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
@@ -35,7 +36,7 @@ public class StudyRuleService {
 
     private final StudyService studyService;
 
-
+    private final EmailService emailService;
     /**
      * 생성
      */
@@ -187,7 +188,7 @@ public class StudyRuleService {
 
 
         switch (difficulty) {
-            //TODO: 오늘 값 - 내일 값
+            //TODO:스냅샷
 //            case "BRONZE" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getBronze();
 //            case "SILVER" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getSliver();
 //            case "GOLD" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getGold();
@@ -202,10 +203,16 @@ public class StudyRuleService {
             addXpReqDto.setId(studyRule.getStudy().getId());
             addXpReqDto.setXp(getXp(studyRule));
             studyService.addXp(addXpReqDto);
-            log.info("study xp ++");
+            log.debug("study xp ++");
         } else {
             setMission(studyRule.getId(), false);
-            log.info("xp 추가안됨 ");
+//            List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+//            for (MyStudy myStudy : myStudies) {
+//
+//                emailService.mailSend(new MailDto(myStudy.getMember().getEmail(), //TODO: 멤버 정보 받아오는 로직 있는지?
+//                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
+//            }
+            log.debug("xp 추가안됨 ");
         }
     }
 
