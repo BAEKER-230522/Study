@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,7 +64,7 @@ public class StudyRuleController {
 
     @GetMapping("/v1/search")
     @Operation(summary = "스터디 규칙 전체조회", description = "모든 StudyRule 을 조회 합니다.", tags = "StudyRule-조회")
-    public RsData<List<StudyRuleDto>> searchStudyRule() throws ParseException {
+    public RsData<List<StudyRuleDto>> searchStudyRule() {
         List<StudyRule> studyRuleList = studyRuleService.getAll();
         List<StudyRuleDto> collect = studyRuleList.stream()
                 .map(StudyRuleDto::new)
