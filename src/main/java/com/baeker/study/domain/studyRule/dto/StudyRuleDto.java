@@ -23,6 +23,7 @@ public class StudyRuleDto {
     private Long ruleId;
 
     public StudyRuleDto(StudyRule studyRule) {
+        this.id = studyRule.getId();
         this.name = studyRule.getName();
         this.about = studyRule.getAbout();
         this.study = new StudyResDto(studyRule.getStudy());

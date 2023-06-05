@@ -7,3 +7,6 @@ spring:
 message:
   topic:
     solved-member: "solved-member"
+
+server:
+  port: 8082
