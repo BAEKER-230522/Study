@@ -10,6 +10,8 @@ import com.baeker.study.myStudy.in.reqDto.ModifyMsgDto;
 import com.baeker.study.myStudy.in.resDto.CreateMyStudyDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/my-study")
 @RequiredArgsConstructor
+@Tag(name = "My Study",description = "My Study - CRUD")
 public class MyStudyController {
 
     private final MyStudyService myStudyService;
@@ -27,6 +30,7 @@ public class MyStudyController {
 
     //-- 가입 신청 --//
     @PostMapping("/v1/join")
+    @Operation(summary = "Study 에 가입 신청")
     public RsData join(@RequestBody @Valid JoinMyStudyReqDto dto) {
         log.info("study 가입신청 요청 확인 study id = {}", dto.getStudy());
 
@@ -41,6 +45,7 @@ public class MyStudyController {
 
     //-- 초대 하기 --//
     @PostMapping("/v1/invite")
+    @Operation(summary = "Study 로 초대")
     public RsData invite(@RequestBody @Valid InviteMyStudyReqDto dto) {
         log.info("study 로 가입 초대 study id = {}", dto.getStudy());
 
@@ -55,6 +60,7 @@ public class MyStudyController {
 
     //-- 초대, 가입 메시지 수정 --//
     @PostMapping("/v1/msg")
+    @Operation(summary = "가입, 초대 메시지 업데이트")
     public RsData modifyMsg(@RequestBody @Valid ModifyMsgDto dto) {
         log.info("메시지 수정 요청 확인 my study id = {}", dto.getId());
 
@@ -69,6 +75,7 @@ public class MyStudyController {
 
     //-- 초대, 가입 요청 거절 --//
     @DeleteMapping("/v1")
+    @Operation(summary = "가입, 초대 거절")
     public RsData delete(@RequestParam Long id) {
         log.info("My Study 삭제 요청 확인 my study id = {}", id);
 
@@ -81,6 +88,7 @@ public class MyStudyController {
 
     //-- 가입 , 초대 승인 --//
     @PostMapping("/v1/accept")
+    @Operation(summary = "가입, 초대 승인")
     public RsData accept(@RequestBody @Valid AcceptDto dto) {
         log.info("가입, 초대 승인 요청 확인 my study id ={}", dto.getId());
 
