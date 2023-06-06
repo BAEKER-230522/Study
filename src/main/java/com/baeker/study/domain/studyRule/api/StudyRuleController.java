@@ -28,6 +28,7 @@ public class StudyRuleController {
      * @return
      */
     // Path 로 입력받을지? 아니면 RequestBody 로 입력받을지?
+    //TODO: 화면구성을 확인해야함 스터디->스터디룰 일경우 가능 
     @PostMapping("/v1/studyrules")
     @Operation(summary = "스터디규칙 생성", description = "StudyRule 생성", tags = "StudyRule-생성")
     public RsData<CreateStudyRuleResponse> createStudyRule(@RequestBody @Valid CreateStudyRuleRequest request) {
