@@ -33,7 +33,7 @@ dependencies {
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 	// spring doc open api
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
 	// jasypt 암호화
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'

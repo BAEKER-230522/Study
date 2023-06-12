@@ -54,7 +54,7 @@ public class KafkaConsumer {
         }
     }
 
-    @KafkaListener(topics = "${message.topic.studyRule}")
+    @KafkaListener(topics = "${message.topic.studyRule}", groupId = ConsumerConfig.GROUP_ID_CONFIG)
     public void consumeStudyRule(String msg) {
         Map<Object, Object> map;
         ObjectMapper objectMapper = new ObjectMapper();

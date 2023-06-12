@@ -32,13 +32,8 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
 
-custom:
-  con: connection success!
-
-
-
-
 
 message:
   topic:
+    studyRule: "studyRule"
     solved-member: "solved-member"
