@@ -57,6 +57,7 @@ custom:
 
 message:
   topic:
+    studyRule: "studyRule"
     solved-member: "solved-member"
 
 server:

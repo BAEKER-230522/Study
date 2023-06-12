@@ -1,7 +1,8 @@
 package com.baeker.study.kafka;
 
 import com.baeker.study.base.exception.NotFoundException;
-import com.baeker.study.kafka.dto.MemberDto;
+import com.baeker.study.kafka.dto.consume.MemberDto;
+import com.baeker.study.kafka.dto.consume.StudyRuleConsumeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,7 @@ public class KafkaConsumer {
             map = objectMapper.readValue(message, new TypeReference<Map<Object, Object>>() {
             });
         } catch (JsonProcessingException e) {
-            throw new NotFoundException(e + "데이터 없음");
+            throw new NotFoundException(e.getMessage() + "데이터 없음");
         }
         try {
             Integer memberId = (Integer) map.get("id");
@@ -50,6 +51,29 @@ public class KafkaConsumer {
 
         } catch (NoSuchElementException e) {
             throw new NotFoundException("Member 데이터 없음");
+        }
+    }
+
+    @KafkaListener(topics = "${message.topic.studyRule}")
+    public void consumeStudyRule(String msg) {
+        Map<Object, Object> map;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            map = objectMapper.readValue(msg, new TypeReference<Map<Object, Object>>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new NotFoundException(e.getMessage() + "데이터 없음");
+        }
+        try {
+            Integer studyInt = (Integer) map.get("studyRuleId");
+            Long studyRuleId = studyInt.longValue();
+            //TODO: 필요유무 체크 해야함
+//            Integer ruleInt = (Integer) map.get("ruleId");
+//            Long ruleId = ruleInt.longValue();
+            StudyRuleConsumeDto dto = new StudyRuleConsumeDto(studyRuleId);
+            //TODO: 이벤트 리스너
+        } catch (NoSuchElementException e) {
+            throw new NotFoundException("StudyRule 데이터 없음");
         }
     }
 }
