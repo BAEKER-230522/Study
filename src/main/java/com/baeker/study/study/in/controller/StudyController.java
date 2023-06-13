@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/study")
 @RequiredArgsConstructor
-@Tag(name = "Study",description = "Study - CRUD")
+@Tag(name = "study", description = "study crud")
 public class StudyController {
 
     private final StudyService studyService;
@@ -59,7 +59,7 @@ public class StudyController {
     //-- update leader --//
     @PostMapping("/v1/leader")
     @Operation(summary = "업데이트 leader")
-    public RsData updateLeader(@RequestBody @Valid UpdateLeaderReqDto dto) {
+    public RsData<UpdateResDto> updateLeader(@RequestBody @Valid UpdateLeaderReqDto dto) {
         log.info("리더 수정 요청 확인 id = {}", dto.getId());
 
         Study study = studyService.updateLeader(dto);
