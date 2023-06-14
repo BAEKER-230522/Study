@@ -4,12 +4,14 @@ import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
 import com.baeker.study.study.in.resDto.CreateResDto;
+import com.baeker.study.study.in.resDto.SnapshotResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.in.resDto.UpdateResDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +37,7 @@ public class StudyController {
     //-- create study --//
     @PostMapping("/v1/create")
     @Operation(summary = "Study 생성")
-    public RsData create(@RequestBody @Valid CreateReqDto dto) {
+    public RsData<CreateResDto> create(@RequestBody @Valid CreateReqDto dto) {
         log.info("스터디 생성 요청 확인");
 
         Study study = studyService.create(dto);
@@ -48,7 +50,7 @@ public class StudyController {
     //-- update name, about, capacity --//
     @PostMapping("/v1/update")
     @Operation(summary = "업데이트 name / about / capacity")
-    public RsData update(@RequestBody @Valid UpdateReqDto dto) {
+    public RsData<UpdateResDto> update(@RequestBody @Valid UpdateReqDto dto) {
         log.info("update 요청 확인 id = {}", dto.getId());
 
         Study study = studyService.update(dto);
@@ -71,7 +73,7 @@ public class StudyController {
     //-- add xp --//
     @PostMapping("/v1/xp")
     @Operation(summary = "XP 추가")
-    public RsData addXp(@RequestBody @Valid AddXpReqDto dto) {
+    public RsData<UpdateResDto> addXp(@RequestBody @Valid AddXpReqDto dto) {
         log.info("xp 추가 업데이트 요청 확인 id ={}", dto.getId());
 
         Study study = studyService.addXp(dto);
@@ -83,7 +85,7 @@ public class StudyController {
     //-- find list --//
     @GetMapping("/v1/list")
     @Operation(summary = "모든 스터디 조회 + 페이징")
-    public RsData list(@RequestParam @Valid int page) {
+    public RsData<List<StudyResDto>> list(@RequestParam @Valid int page) {
         log.info("스터디 리스트 요청 확인 page = {}", page);
 
         List<StudyResDto> dtoList = studyService.findAll(page)
@@ -98,7 +100,7 @@ public class StudyController {
     //-- find by id --//
     @GetMapping("/v1/id")
     @Operation(summary = "id 로 조회하기")
-    public RsData findByName(@RequestParam @Valid Long id) {
+    public RsData<StudyResDto> findByName(@RequestParam @Valid Long id) {
         log.info("Study 조회 요청 확인 id = {}", id);
 
         Study study = studyService.findById(id);
@@ -111,7 +113,7 @@ public class StudyController {
     //-- find by name --//
     @GetMapping("/v1/name")
     @Operation(summary = "name 으로 조회하기")
-    public RsData findByName(@RequestParam @Valid String name) {
+    public RsData<StudyResDto> findByName(@RequestParam @Valid String name) {
         log.info("Study 조회 요청 확인 name = {}", name);
 
         Study study = studyService.findByName(name);
@@ -121,4 +123,20 @@ public class StudyController {
         return RsData.successOf(dto);
     }
 
+    //-- find by Snapshot list --//
+    @GetMapping("/v1/snapshots")
+    @Operation(summary = "study id 로 snapshot list 조회하기")
+    public RsData<List<SnapshotResDto>> findAllSnapshot(@RequestParam @Valid Long id) {
+        log.info("Study Snapshot list 요청 확인 Study id = {}", id);
+
+        Study study = studyService.findById(id);
+        List<SnapshotResDto> resDtoList = studyService
+                .findAllSnapshot(study)
+                .stream()
+                .map(s -> new SnapshotResDto(s))
+                .toList();
+
+        log.info("Study Snapshot list 응답 완료 count = {}", resDtoList.size());
+        return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+    }
 }
