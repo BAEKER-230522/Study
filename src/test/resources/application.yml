@@ -32,6 +32,8 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
 
+
 message:
   topic:
+    studyRule: "studyRule"
     solved-member: "solved-member"

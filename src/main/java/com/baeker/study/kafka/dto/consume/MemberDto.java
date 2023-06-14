@@ -1,4 +1,4 @@
-package com.baeker.study.kafka.dto;
+package com.baeker.study.kafka.dto.consume;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
