@@ -50,6 +50,9 @@ logging.level:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+    password:
+
+
 
 
 message:

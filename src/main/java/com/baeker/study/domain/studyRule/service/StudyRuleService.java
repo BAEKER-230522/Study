@@ -37,6 +37,7 @@ public class StudyRuleService {
     private final StudyService studyService;
 
     private final EmailService emailService;
+
     /**
      * 생성
      */
