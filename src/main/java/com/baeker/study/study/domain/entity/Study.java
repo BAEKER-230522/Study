@@ -37,6 +37,10 @@ public class Study extends ScoreBase {
     @OneToMany(mappedBy = "study")
     private List<StudyRule> studyRules = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "study")
+    private List<StudySnapshot> snapshots = new ArrayList<>();
+
 
     //-- create method --//
     public static Study createStudy(String name, String about, Integer capacity, String nickname) {
