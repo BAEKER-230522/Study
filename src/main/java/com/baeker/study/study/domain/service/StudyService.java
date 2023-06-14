@@ -3,11 +3,11 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
-import com.baeker.study.study.in.reqDto.AddXpReqDto;
-import com.baeker.study.study.in.reqDto.CreateReqDto;
-import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.reqDto.UpdateReqDto;
+import com.baeker.study.study.in.reqDto.*;
+import com.baeker.study.study.out.SnapshotQueryRepository;
+import com.baeker.study.study.out.SnapshotRepository;
 import com.baeker.study.study.out.StudyQueryRepository;
 import com.baeker.study.study.out.StudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyQueryRepository studyQueryRepository;
+    private final SnapshotRepository snapshotRepository;
+    private final SnapshotQueryRepository snapshotQueryRepository;
 
     /**
      * ** CREATE METHOD **
@@ -55,6 +58,7 @@ public class StudyService {
      * update leader
      * add xp
      * event : 해결한 문제 추가
+     * update snapshot
      */
 
     //-- update name, about, capacity --//
@@ -94,9 +98,33 @@ public class StudyService {
     //-- event : 해결한 문제 추가 --//
     public void addSolveCount(AddSolvedCountEvent event) {
         List<Study> studies = studyQueryRepository.findByMember(event.getMember());
+        BaekjoonDto dto = new BaekjoonDto(event);
 
-        for (Study study : studies)
-            studyRepository.save(study.updateSolvedCount(event));
+        for (Study study : studies) {
+            Study saveStudy = studyRepository.save(study.updateSolvedCount(event));
+            this.updateSnapshot(saveStudy, dto);
+        }
+    }
+
+    // update snapshot //
+    private void updateSnapshot(Study study, BaekjoonDto dto) {
+        String today = LocalDateTime.now().getDayOfWeek().toString();
+        List<StudySnapshot> snapshots = study.getSnapshots();
+
+        if (snapshots.size() == 0 || !snapshots.get(0).getDayOfWeek().equals(today)) {
+            StudySnapshot snapshot = StudySnapshot.create(study, dto, today);
+            snapshotRepository.save(snapshot);
+
+        }else{
+            StudySnapshot snapshot = snapshots.get(0).update(dto);
+            snapshotRepository.save(snapshot);
+        }
+
+        if (snapshots.size() > 7) {
+            StudySnapshot snapshot = snapshots.get(7);
+            snapshots.remove(snapshot);
+            snapshotRepository.delete(snapshot);
+        }
     }
 
 
@@ -107,6 +135,7 @@ public class StudyService {
      * find all
      * find by id
      * find by member
+     * find all snapshot by study
      */
 
     //-- find by name --//
@@ -146,5 +175,10 @@ public class StudyService {
     //-- find by member --//
     public List<Study> findByMember(Long member) {
         return studyQueryRepository.findByMember(member);
+    }
+
+    //-- find all snapshot by study --//
+    public List<StudySnapshot> findAllSnapshot(Study study) {
+        return snapshotQueryRepository.findAllByStudy(study);
     }
 }
