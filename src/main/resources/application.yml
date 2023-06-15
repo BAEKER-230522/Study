@@ -19,7 +19,7 @@ spring:
             enable: true
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${custom.server}:9092
     consumer:
       group-id: study
       auto-offset-reset: earliest
