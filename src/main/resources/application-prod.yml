@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ENC(plDde76MscNwKMt9v4A6Rw==)
     password: ENC(OH+qshDPtFh1h1gDdWExzz/t0BlOzVbo)
-    url: ENC(L4aT4GfkEsf36RsmLcicmZmhfwgA7o3VTkq0GMSRBorX3d++tPdam9QXDcnR99LE+6YH3dImFev/dHPxJ1+l9++i2B8cg6IHw3Y508pY/zARtnynx6yle453gCfUJkYAzBH2kEtzTeB7cyEvXiXqUIkVgOevG6NMOk3Eth8Kroib8xkHWpFNOOWnSt72b7dC)
+    url: ENC(cSoA3oSK2DMctERnDqZJqmq4OB2hRDLzLYryWmrAshsGgQ7tAqmsh7dkDO2BuYqw5NWk5/XJVr4QJjeUQvfzZlMFBYyICb7EgUjx80dIo7A9zSldUrtiLHKNvhHw3IJNNZOC2fO4uokHOebcLa65EohPa7BG4ieairbQp4RDWdN3bZjK5Zg4w+va8oYmfZ7w)
   kafka:
     bootstrap-servers: ${custom.server}:9092
     consumer:
