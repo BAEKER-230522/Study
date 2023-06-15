@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: prod
   kafka:
     bootstrap-servers: ${custom.server}:9092
     consumer:
@@ -11,8 +14,6 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       linger:
         ms: 10
-  profiles:
-    active: prod
 
 eureka:
   instance:
