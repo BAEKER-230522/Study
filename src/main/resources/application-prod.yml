@@ -2,6 +2,11 @@ spring:
   config:
     activate:
       on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ENC(plDde76MscNwKMt9v4A6Rw==)
+    password: ENC(OH+qshDPtFh1h1gDdWExzz/t0BlOzVbo)
+    url: ENC(cSoA3oSK2DMctERnDqZJqmq4OB2hRDLzLYryWmrAshsGgQ7tAqmsh7dkDO2BuYqw5NWk5/XJVr4QJjeUQvfzZlMFBYyICb7EgUjx80dIo7A9zSldUrtiLHKNvhHw3IJNNZOC2fO4uokHOebcLa65EohPa7BG4ieairbQp4RDWdN3bZjK5Zg4w+va8oYmfZ7w)
   kafka:
     bootstrap-servers: ${custom.server}:9092
     consumer:
@@ -14,7 +19,13 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       linger:
         ms: 10
-
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
 eureka:
   instance:
     preferIpAddress: true
