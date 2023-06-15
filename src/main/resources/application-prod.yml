@@ -2,6 +2,11 @@ spring:
   config:
     activate:
       on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ENC(plDde76MscNwKMt9v4A6Rw==)
+    password: ENC(OH+qshDPtFh1h1gDdWExzz/t0BlOzVbo)
+    url: ENC(L4aT4GfkEsf36RsmLcicmZmhfwgA7o3VTkq0GMSRBorX3d++tPdam9QXDcnR99LE+6YH3dImFev/dHPxJ1+l9++i2B8cg6IHw3Y508pY/zARtnynx6yle453gCfUJkYAzBH2kEtzTeB7cyEvXiXqUIkVgOevG6NMOk3Eth8Kroib8xkHWpFNOOWnSt72b7dC)
   kafka:
     bootstrap-servers: ${custom.server}:9092
     consumer:
