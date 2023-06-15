@@ -11,6 +11,8 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       linger:
         ms: 10
+  profiles:
+    active: prod
 
 eureka:
   instance:
