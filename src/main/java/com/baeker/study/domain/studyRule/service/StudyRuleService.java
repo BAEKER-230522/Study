@@ -10,9 +10,12 @@ import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
+import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
+import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -37,6 +40,8 @@ public class StudyRuleService {
     private final StudyService studyService;
 
     private final EmailService emailService;
+
+    private final SnapshotRepository snapshotRepository;
     /**
      * 생성
      */
@@ -182,19 +187,18 @@ public class StudyRuleService {
         int todayCount = 0;
         int ruleCount = rule.getCount();
         String difficulty = rule.getDifficulty();
-
+        Long studyId = studyRule.getStudy().getId();
 
         int yesterdayCount = studyRule.getStudy().solvedCount(); // 스터디 어제 푼 문제 수
-
+        List<StudySnapshot> allSnapshot = studyService.findAllSnapshot(studyRule.getStudy());
 
         switch (difficulty) {
-            //TODO:스냅샷
-//            case "BRONZE" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getBronze();
-//            case "SILVER" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getSliver();
-//            case "GOLD" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getGold();
-//            case "PLATINUM" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getPlatinum();
-//            case "DIAMOND" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getDiamond();
-//            case "RUBY" -> todayCount = studySnapShotRepository.findByStudyName(studyName).get(6).getRuby();
+            case "BRONZE" -> todayCount = allSnapshot.get(0).getBronze();
+            case "SILVER" -> todayCount = allSnapshot.get(0).getSliver();
+            case "GOLD" -> todayCount = allSnapshot.get(0).getGold();
+            case "PLATINUM" -> todayCount = allSnapshot.get(0).getPlatinum();
+            case "DIAMOND" -> todayCount = allSnapshot.get(0).getDiamond();
+            case "RUBY" -> todayCount = allSnapshot.get(0).getRuby();
         }
 
         if (todayCount >= ruleCount) {
@@ -206,12 +210,12 @@ public class StudyRuleService {
             log.debug("study xp ++");
         } else {
             setMission(studyRule.getId(), false);
-//            List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
-//            for (MyStudy myStudy : myStudies) {
-//
+            List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+            for (MyStudy myStudy : myStudies) {
+
 //                emailService.mailSend(new MailDto(myStudy.getMember().getEmail(), //TODO: 멤버 정보 받아오는 로직 있는지?
 //                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
-//            }
+            }
             log.debug("xp 추가안됨 ");
         }
     }
