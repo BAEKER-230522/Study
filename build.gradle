@@ -17,10 +17,11 @@ configurations {
 repositories {
 	mavenCentral()
 }
-
 ext {
 	set('springCloudVersion', "2022.0.2")
 }
+
+
 
 dependencies {
 	// Base
@@ -30,15 +31,14 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok' // Lombok
 	compileOnly 'org.projectlombok:lombok' // Lombok
 
-	// Spring Config
-	implementation 'org.springframework.boot:spring-boot-starter-actuator' // Actuator
-	implementation 'org.springframework.cloud:spring-cloud-starter-config' // Config
+	// eureka client
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 	// api 호출
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 	// spring doc open api
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
 	// jasypt 암호화
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
@@ -56,6 +56,15 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// kafka
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 
 dependencyManagement {
@@ -63,6 +72,7 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
@@ -78,3 +88,8 @@ jar{
 clean {
 	delete file('src/main/generated')
 }
+
+
+
+
+

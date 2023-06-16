@@ -1,15 +1,32 @@
 package com.baeker.study.domain.studyRule.service;
 
+import com.baeker.study.base.address.Address;
+import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.domain.studyRule.dto.StudyRuleForm;
+import com.baeker.study.domain.email.EmailService;
+import com.baeker.study.domain.studyRule.dto.RuleDto;
+import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
+import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
+import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.domain.entity.StudySnapshot;
+import com.baeker.study.study.domain.service.StudyService;
+import com.baeker.study.study.in.reqDto.AddXpReqDto;
+import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,19 +39,21 @@ public class StudyRuleService {
 
     private final StudyService studyService;
 
-    private final StudySnapShotRepository studySnapShotRepository;
+    private final EmailService emailService;
 
-
+    private final SnapshotRepository snapshotRepository;
     /**
      * 생성
      */
 
     @Transactional
-    public RsData<StudyRule> create(StudyRuleForm studyRuleForm, Long ruleId, Study study) {
-        StudyRule studyRule = StudyRule.create(studyRuleForm, ruleId);
+    public Long create(CreateStudyRuleRequest request) {
+        Study study = studyService.findById(request.getStudyId());
+        StudyRule studyRule = StudyRule.create(request);
+        studyRule.setStudy(studyRule,study);
 
         studyRuleRepository.save(studyRule);
-        return RsData.of("S-1", "스터디 규칙 생성완료.", studyRule);
+        return studyRule.getId();
     }
 
     /**
@@ -42,18 +61,14 @@ public class StudyRuleService {
      */
 
     @Transactional
-    public void modify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
+    public void modify(StudyRule studyRule, ModifyStudyRuleRequest request) {
         StudyRule modifyRule = studyRule.toBuilder()
-                .name(studyRuleForm.getName())
-                .about(studyRuleForm.getAbout())
+                .name(request.getName())
+                .about(request.getAbout())
+                .ruleId(request.getRuleId())
                 .build();
         studyRuleRepository.save(modifyRule);
         RsData.of("S-1", "수정되었습니다.", modifyRule);
-    }
-
-    public void setForm(StudyRule studyRule, StudyRuleForm studyRuleForm) {
-        studyRuleForm.setName(studyRule.getName());
-        studyRuleForm.setAbout(studyRule.getAbout());
     }
 
     /**
@@ -61,35 +76,33 @@ public class StudyRuleService {
      */
 
     @Transactional
-    public RsData<StudyRule> delete(StudyRule studyRule, String leader, String user) {
-        if (leader.equals(user)) {
-            studyRule.getRule().getStudyRules().remove(studyRule);
-            studyRuleRepository.delete(studyRule);
-            return RsData.of("S-1", "삭제되었습니다");
-        } else {
-            return RsData.failOf(studyRule);
-        }
+    public void delete(StudyRule studyRule) {
+        studyRuleRepository.delete(studyRule);
     }
 
     /**
      * 조회
      */
 
-    public RsData<StudyRule> getStudyRule(Long id) {
+    public StudyRule getStudyRule(Long id) {
         Optional<StudyRule> rs = studyRuleRepository.findById(id);
-        return rs.map(studyRule -> RsData.of("S-1", "StudyRule 조회 성공", studyRule))
-                .orElseGet(() -> RsData.of("F-1", "StudyRule 조회 실패"));
+        if (rs.isEmpty()) {
+            throw new NotFoundException("아이디를 확인해주세요");
+        }
+        return rs.get();
     }
 
-    public RsData<StudyRule> getStudyRule(String name) {
+    public StudyRule getStudyRule(String name) {
         Optional<StudyRule> rs = studyRuleRepository.findByName(name);
-        return rs.map(studyRule -> RsData.of("S-1", "StudyRule 조회", studyRule))
-                .orElseGet(() -> RsData.of("F-1", "StudyRule 조회 실패"));
+        if (rs.isEmpty()) {
+            throw new NotFoundException("이름을 확인해주세요");
+        }
+        return rs.get();
     }
 
     // StudyRuleId -> StudyId
     public Long getStudyId(Long id) {
-        return getStudyRule(id).getData().getStudy().getId();
+        return getStudyRule(id).getStudy().getId();
     }
 
     public List<StudyRule> getAll() {
@@ -102,65 +115,140 @@ public class StudyRuleService {
     /**
      * 검증
      */
-
-    public RsData<Study> verificationLeader(Rq rq, Long id) {
-        RsData<Study> rsData = studyService.getStudy(id);
-        if (rsData.isSuccess()) {
-            if (rsData.getData().getLeader().equals(rq.getMember().getNickName())) {
-                return RsData.of("S-1", "리더 입니다." , rsData.getData());
-            }
-        }
-        return RsData.of("F-1" , "리더가 아닙니다.");
-    }
+//TODO: 세션, jwt, 쿠키 등 확인해야함
+//    public RsData<Study> verificationLeader(Rq rq, Long id) {
+//        Study rsData = studyService.findById(id);
+//        if (rsData.isSuccess()) {
+//            if (rsData.getData().getLeader().equals(rq.getMember().getNickName())) {
+//                return RsData.of("S-1", "리더 입니다." , rsData.getData());
+//            }
+//        }
+//        return RsData.of("F-1" , "리더가 아닙니다.");
+//    }
 
     /**
      * xp 반환
+     * param studyRuleId
      */
-    public Integer getXp(Long id) {
-        StudyRule studyRule = getStudyRule(id).getData();
-        return studyRule.getRule().getXp();
+    public Integer getXp(Long id) throws ParseException {
+        StudyRule studyRule = getStudyRule(id);
+        Long ruleId = studyRule.getRuleId();
+        RuleDto rule = getRule(ruleId);
+        return rule.getXp();
     }
 
-    public Integer getXp(StudyRule studyRule) {
+    public Integer getXp(StudyRule studyRule) throws ParseException {
         return getXp(studyRule.getId());
     }
 
     public void setMission(Long id, boolean mission) {
-        StudyRule studyRule = getStudyRule(id).getData();
+        StudyRule studyRule = getStudyRule(id);
         studyRule.setMission(mission);
+    }
+
+    public void updateStudyRule(Long id, Map<String, String> updates) {
+        StudyRule studyRule = getStudyRule(id);
+        ModifyStudyRuleRequest request = new ModifyStudyRuleRequest();
+
+        request.setName(studyRule.getName());
+        request.setAbout(studyRule.getAbout());
+        request.setRuleId(studyRule.getRuleId());
+
+        String name = updates.get("name");
+        String about = updates.get("about");
+        String ruleId = updates.get("ruleId");
+
+        if (name != null) {
+            request.setName(name);
+        }
+        if (about != null) {
+            request.setAbout(about);
+        }
+        if (ruleId != null) {
+            try {
+                request.setRuleId(Long.parseLong(ruleId));
+            } catch (NumberFormatException e) {
+                throw new NumberInputException("숫자로 입력해주세요");
+            }
+        }
+        modify(studyRule, request);
     }
 
     /**
      *
      * @param id = studyRuleId
-     * else 에는 kakao 메시지 발송 기능 추가 필요
+     *
      */
     @Transactional
-    public void whenstudyEventType(Long id) {
-        StudyRule studyRule = getStudyRule(id).getData();
+    public void whenstudyEventType(Long id) throws ParseException {
+        StudyRule studyRule = getStudyRule(id);
         String studyName = studyRule.getStudy().getName();
-        int count = 0;
-        int ruleCount = studyRule.getRule().getCount();
-        String difficulty = studyRule.getRule().getDifficulty();
+        RuleDto rule = getRule(studyRule.getRuleId());
+        int todayCount = 0;
+        int ruleCount = rule.getCount();
+        String difficulty = rule.getDifficulty();
+        Long studyId = studyRule.getStudy().getId();
+
+        int yesterdayCount = studyRule.getStudy().solvedCount(); // 스터디 어제 푼 문제 수
+        List<StudySnapshot> allSnapshot = studyService.findAllSnapshot(studyRule.getStudy());
 
         switch (difficulty) {
-            case "BRONZE" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getBronze();
-            case "SILVER" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getSliver();
-            case "GOLD" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getGold();
-            case "PLATINUM" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getPlatinum();
-            case "DIAMOND" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getDiamond();
-            case "RUBY" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getRuby();
+            case "BRONZE" -> todayCount = allSnapshot.get(0).getBronze();
+            case "SILVER" -> todayCount = allSnapshot.get(0).getSliver();
+            case "GOLD" -> todayCount = allSnapshot.get(0).getGold();
+            case "PLATINUM" -> todayCount = allSnapshot.get(0).getPlatinum();
+            case "DIAMOND" -> todayCount = allSnapshot.get(0).getDiamond();
+            case "RUBY" -> todayCount = allSnapshot.get(0).getRuby();
         }
 
-        if (count >= ruleCount) {
+        if (todayCount >= ruleCount) {
             setMission(studyRule.getId(), true);
-            studyService.xpUp(studyRule.getRule().getXp(), studyRule.getStudy().getId());
-            log.info("study xp ++");
+            AddXpReqDto addXpReqDto = new AddXpReqDto();
+            addXpReqDto.setId(studyRule.getStudy().getId());
+            addXpReqDto.setXp(getXp(studyRule));
+            studyService.addXp(addXpReqDto);
+            log.debug("study xp ++");
         } else {
             setMission(studyRule.getId(), false);
-            log.info("xp 추가안됨 ");
+            List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+            for (MyStudy myStudy : myStudies) {
+
+//                emailService.mailSend(new MailDto(myStudy.getMember().getEmail(), //TODO: 멤버 정보 받아오는 로직 있는지?
+//                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
+            }
+            log.debug("xp 추가안됨 ");
         }
+    }
 
+    /**
+     * Rule 받아오기
+     * @param id
+     * @return
+     * @throws ParseException
+     */
+    public RuleDto getRule(Long id) throws ParseException {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = Address.RULE_URL + id;
+        String strRule = restTemplate.getForObject(url, String.class);
+        JSONParser jsonParser = new JSONParser();
+        Object o = jsonParser.parse(strRule);
 
+        JSONObject jo = (JSONObject) o;
+
+        RuleDto ruleDto = new RuleDto();
+        JSONObject json = (JSONObject) jo.get("data");
+        ruleDto.setId((Long) json.get("id"));
+        ruleDto.setName((String) json.get("name"));
+        ruleDto.setAbout((String) json.get("about"));
+        Long tempXp = (Long) json.get("xp");
+        int intXp = tempXp.intValue();
+        ruleDto.setXp(intXp);
+        Long tempCount = (Long) json.get("count");
+        int intCount = tempCount.intValue();
+        ruleDto.setCount(intCount);
+        ruleDto.setProvider((String) json.get("provider"));
+        ruleDto.setDifficulty((String) json.get("difficulty"));
+        return ruleDto;
     }
 }
+

@@ -1,5 +1,84 @@
 spring:
+  profiles:
+    default:
+      
   application:
-    name: config-study-dev
-  config:
-    import: optional:configserver:http://ec2-3-39-24-149.ap-northeast-2.compute.amazonaws.com:8080/
+    name: baeker-study
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(EnGEuiNi8se1PXYrqy+PxI2vcLBn3DGx)
+    password: ENC(cqAYQgTmw7Ze3I5X+tqACkP8Ai5vr+DCPvV9cv8n2uk=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
+  kafka:
+    bootstrap-servers: ${custom.server}:9092
+    consumer:
+      group-id: study
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      linger:
+        ms: 10
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/bk__study?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: ENC(MrlF9UZUaHufCgWLRE3ipQ==)
+    password: ENC(dhw6nRBS+50xHhqPVFnZdw==)
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
+
+logging.level:
+  org.hibernate:
+    SQL: debug
+    orm.jdbc.bind: trace
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password:
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+
+message:
+  topic:
+    studyRule: "studyRule"
+    solved-member: "solved-member"
+
+server:
+  port: 8082
+
+custom:
+  server: ENC(0zWdK1NtpOSg0B/P5gqfGe+3WBULxDvm)
