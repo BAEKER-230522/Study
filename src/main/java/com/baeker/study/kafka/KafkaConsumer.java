@@ -1,6 +1,7 @@
 package com.baeker.study.kafka;
 
 import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.domain.studyRule.event.StudyRuleEvent;
 import com.baeker.study.kafka.dto.consume.MemberDto;
 import com.baeker.study.kafka.dto.consume.StudyRuleConsumeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaConsumer {
+    private final ApplicationEventPublisher publisher;
 
     /**
      * solved message
@@ -71,6 +74,7 @@ public class KafkaConsumer {
 //            Integer ruleInt = (Integer) map.get("ruleId");
 //            Long ruleId = ruleInt.longValue();
             StudyRuleConsumeDto dto = new StudyRuleConsumeDto(studyRuleId);
+            publisher.publishEvent(new StudyRuleEvent(this, studyRuleId));
             //TODO: 이벤트 리스너
         } catch (NoSuchElementException e) {
             throw new NotFoundException("StudyRule 데이터 없음");

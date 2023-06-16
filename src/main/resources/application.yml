@@ -1,6 +1,6 @@
 spring:
   profiles:
-    default:
+    default: dev
       
   application:
     name: baeker-study

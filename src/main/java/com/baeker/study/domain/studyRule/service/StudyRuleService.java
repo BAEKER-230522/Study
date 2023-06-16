@@ -1,15 +1,17 @@
 package com.baeker.study.domain.studyRule.service;
 
-import com.baeker.study.base.address.Address;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.email.EmailService;
-import com.baeker.study.domain.studyRule.dto.RuleDto;
+import com.baeker.study.domain.email.MailDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
+import com.baeker.study.global.feign.Feign;
+import com.baeker.study.global.feign.dto.MemberDto;
+import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
@@ -18,12 +20,9 @@ import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +41,8 @@ public class StudyRuleService {
     private final EmailService emailService;
 
     private final SnapshotRepository snapshotRepository;
+
+    private final Feign feign;
     /**
      * 생성
      */
@@ -130,14 +131,14 @@ public class StudyRuleService {
      * xp 반환
      * param studyRuleId
      */
-    public Integer getXp(Long id) throws ParseException {
+    public Integer getXp(Long id) {
         StudyRule studyRule = getStudyRule(id);
         Long ruleId = studyRule.getRuleId();
         RuleDto rule = getRule(ruleId);
         return rule.getXp();
     }
 
-    public Integer getXp(StudyRule studyRule) throws ParseException {
+    public Integer getXp(StudyRule studyRule) {
         return getXp(studyRule.getId());
     }
 
@@ -180,21 +181,21 @@ public class StudyRuleService {
      *
      */
     @Transactional
-    public void whenstudyEventType(Long id) throws ParseException {
+    public void whenstudyEventType(Long id) throws NotFoundException {
         StudyRule studyRule = getStudyRule(id);
         String studyName = studyRule.getStudy().getName();
         RuleDto rule = getRule(studyRule.getRuleId());
+
         int todayCount = 0;
         int ruleCount = rule.getCount();
         String difficulty = rule.getDifficulty();
-        Long studyId = studyRule.getStudy().getId();
 
-        int yesterdayCount = studyRule.getStudy().solvedCount(); // 스터디 어제 푼 문제 수
+
         List<StudySnapshot> allSnapshot = studyService.findAllSnapshot(studyRule.getStudy());
 
         switch (difficulty) {
             case "BRONZE" -> todayCount = allSnapshot.get(0).getBronze();
-            case "SILVER" -> todayCount = allSnapshot.get(0).getSliver();
+            case "SILVER" -> todayCount = allSnapshot.get(0).getSliver(); //TODO: 오타 수정되면 다시
             case "GOLD" -> todayCount = allSnapshot.get(0).getGold();
             case "PLATINUM" -> todayCount = allSnapshot.get(0).getPlatinum();
             case "DIAMOND" -> todayCount = allSnapshot.get(0).getDiamond();
@@ -212,9 +213,10 @@ public class StudyRuleService {
             setMission(studyRule.getId(), false);
             List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
             for (MyStudy myStudy : myStudies) {
-
-//                emailService.mailSend(new MailDto(myStudy.getMember().getEmail(), //TODO: 멤버 정보 받아오는 로직 있는지?
-//                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
+                Long memberId = myStudy.getMember();
+                RsData<MemberDto> member = feign.getMember(memberId);
+                emailService.mailSend(new MailDto(member.getData().email(),
+                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
             }
             log.debug("xp 추가안됨 ");
         }
@@ -226,29 +228,9 @@ public class StudyRuleService {
      * @return
      * @throws ParseException
      */
-    public RuleDto getRule(Long id) throws ParseException {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = Address.RULE_URL + id;
-        String strRule = restTemplate.getForObject(url, String.class);
-        JSONParser jsonParser = new JSONParser();
-        Object o = jsonParser.parse(strRule);
-
-        JSONObject jo = (JSONObject) o;
-
-        RuleDto ruleDto = new RuleDto();
-        JSONObject json = (JSONObject) jo.get("data");
-        ruleDto.setId((Long) json.get("id"));
-        ruleDto.setName((String) json.get("name"));
-        ruleDto.setAbout((String) json.get("about"));
-        Long tempXp = (Long) json.get("xp");
-        int intXp = tempXp.intValue();
-        ruleDto.setXp(intXp);
-        Long tempCount = (Long) json.get("count");
-        int intCount = tempCount.intValue();
-        ruleDto.setCount(intCount);
-        ruleDto.setProvider((String) json.get("provider"));
-        ruleDto.setDifficulty((String) json.get("difficulty"));
-        return ruleDto;
+    public RuleDto getRule(Long id) {
+        RsData<RuleDto> rule = feign.getRule(id);
+        return rule.getData();
     }
 }
 
