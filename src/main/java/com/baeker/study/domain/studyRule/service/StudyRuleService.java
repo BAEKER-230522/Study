@@ -180,7 +180,6 @@ public class StudyRuleService {
      * @param id = studyRuleId
      *
      */
-    @Transactional
     public void whenstudyEventType(Long id) throws NotFoundException {
         StudyRule studyRule = getStudyRule(id);
         String studyName = studyRule.getStudy().getName();

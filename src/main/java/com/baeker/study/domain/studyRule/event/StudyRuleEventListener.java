@@ -4,7 +4,6 @@ import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,7 @@ public class StudyRuleEventListener {
     private final StudyRuleService studyRuleService;
 
     @EventListener
-    public void listen(StudyRuleEvent event) throws ParseException {
+    public void listen(StudyRuleEvent event) {
         try {
             studyRuleService.whenstudyEventType(event.getStudyRuleId());
         } catch (NotFoundException e) {
