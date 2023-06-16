@@ -10,10 +10,10 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class StudyRuleEvent extends ApplicationEvent {
 
-    private final Long id;
+    private final Long studyRuleId;
 
-    public StudyRuleEvent(Object source, Long id) {
+    public StudyRuleEvent(Object source, Long studyRuleId) {
         super(source);
-        this.id = id;
+        this.studyRuleId = studyRuleId;
     }
 }

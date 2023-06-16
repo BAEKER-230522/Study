@@ -37,3 +37,6 @@ message:
   topic:
     studyRule: "studyRule"
     solved-member: "solved-member"
+
+custom:
+  server: localhost

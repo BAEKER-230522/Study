@@ -1,4 +1,4 @@
-package com.baeker.study.domain.studyRule.dto;
+package com.baeker.study.global.feign.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
