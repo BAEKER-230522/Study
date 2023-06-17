@@ -3,16 +3,22 @@ package com.baeker.study.myStudy.domain.service;
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.OverLimitedException;
+import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.myStudy.out.MyStudyQueryRepository;
 import com.baeker.study.myStudy.out.MyStudyRepository;
+import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +31,7 @@ public class MyStudyService {
 
     private final MyStudyRepository myStudyRepository;
     private final MyStudyQueryRepository myStudyQueryRepository;
+    private final MemberClient memberClient;
 
     /**
      * ** CREATE METHOD **
@@ -37,7 +44,16 @@ public class MyStudyService {
     @Transactional
     public MyStudy create(Long id, Study study) {
         MyStudy myStudy = MyStudy.createNewStudy(id, study);
-        return myStudyRepository.save(myStudy);
+        MyStudy saveMyStudy = myStudyRepository.save(myStudy);
+
+        CreateMyStudyReqDto reqDto = new CreateMyStudyReqDto(id, saveMyStudy.getId());
+
+        RsData rsData = memberClient.updateMyStudy(reqDto);
+
+        if (!rsData.isSuccess())
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+
+        return saveMyStudy;
     }
 
     //-- join study --//

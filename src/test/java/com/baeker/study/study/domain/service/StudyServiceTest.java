@@ -1,5 +1,6 @@
 package com.baeker.study.study.domain.service;
 
+import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
@@ -115,7 +116,8 @@ class StudyServiceTest {
     }
 
     private Study createStudy(Long member, String name, String about, String leader) {
-        Study study = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
+        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
+        Study study = myStudy.getStudy();
         myStudyService.create(member, study);
         return study;
     }

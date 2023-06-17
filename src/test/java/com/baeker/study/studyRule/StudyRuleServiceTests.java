@@ -30,7 +30,7 @@ public class StudyRuleServiceTests {
 
     public Study createStudy() {
         CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", "리더", 1);
-        return studyService.create(reqDto);
+        return studyService.create(reqDto).getStudy();
     }
 
 

@@ -2,6 +2,8 @@ package com.baeker.study.study.domain.service;
 
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
@@ -30,6 +32,7 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyQueryRepository studyQueryRepository;
+    private final MyStudyService myStudyService;
     private final SnapshotRepository snapshotRepository;
     private final SnapshotQueryRepository snapshotQueryRepository;
 
@@ -40,7 +43,7 @@ public class StudyService {
 
     //-- create --//
     @Transactional
-    public Study create(CreateReqDto dto) {
+    public MyStudy create(CreateReqDto dto) {
         try {
             this.findByName(dto.getName());
             throw new InvalidDuplicateException("이미 존재하는 name 입니다.");
@@ -48,7 +51,8 @@ public class StudyService {
         }
 
         Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), dto.getLeader());
-        return studyRepository.save(study);
+        Study saveStudy = studyRepository.save(study);
+        return myStudyService.create(dto.getMember(), saveStudy);
     }
 
 
