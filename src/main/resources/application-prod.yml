@@ -34,3 +34,7 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://${custom.server}:8761/eureka/
+
+custom:
+  feign:
+    member: http://${custom.server}:8081/api/member
