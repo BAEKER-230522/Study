@@ -83,3 +83,6 @@ server:
 custom:
   server: ENC(0zWdK1NtpOSg0B/P5gqfGe+3WBULxDvm)
 
+logging:
+  pattern:
+    console:
