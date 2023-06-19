@@ -32,7 +32,6 @@ import java.util.List;
 public class StudyController {
 
     private final StudyService studyService;
-    private final MyStudyService myStudyService;
 
     //-- create study --//
     @PostMapping("/v1/create")
