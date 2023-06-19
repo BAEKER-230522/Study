@@ -84,4 +84,4 @@ custom:
   server: ENC(0zWdK1NtpOSg0B/P5gqfGe+3WBULxDvm)
 
   feign:
-    member: http://localhost:8081/api/member
+    member: http://${custom.server}:8081/api/member

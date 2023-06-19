@@ -36,5 +36,4 @@ eureka:
       defaultZone: http://${custom.server}:8761/eureka/
 
 custom:
-  feign:
-    member: http://${custom.server}:8081/api/member
+  server: 101.101.208.240
