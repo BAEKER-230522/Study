@@ -1,16 +1,28 @@
 package com.baeker.study.study.domain.service;
 
+import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
+import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.out.SnapshotRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +30,32 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
+@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 class StudyServiceTest {
 
     @Autowired private StudyService studyService;
-    @Autowired private MyStudyService myStudyService;
     @Autowired private ApplicationEventPublisher publisher;
     @Autowired private SnapshotRepository snapshotRepository;
+    @MockBean private MemberClient memberClient;
 
+    @BeforeEach
+    public void beforeEach() {
+        when(memberClient.updateMyStudy(any()))
+                .thenReturn(new RsData<>("S-1", "성공", null));
+    }
+
+    @Test
+    void name() {
+        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(1L, "name", "about", "leader", 10));
+        Study study = studyService.findById(myStudy.getStudy().getId());
+
+        assertThat(study.getName()).isEqualTo("name");
+    }
 
     @Test
     void 이벤트로_해결한_문제_업데이트() {
@@ -118,7 +146,6 @@ class StudyServiceTest {
     private Study createStudy(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
         Study study = myStudy.getStudy();
-        myStudyService.create(member, study);
         return study;
     }
 

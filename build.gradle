@@ -56,7 +56,7 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner' // Contract stub runner
+	testImplementation 'org.mockito:mockito-core:3.11.2' // mockito
 
 	// kafka
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
