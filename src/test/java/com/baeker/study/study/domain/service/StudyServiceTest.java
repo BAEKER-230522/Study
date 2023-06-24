@@ -3,8 +3,6 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.domain.service.MyStudyService;
-import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
@@ -12,12 +10,10 @@ import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +46,8 @@ class StudyServiceTest {
     }
 
     @Test
-    void name() {
+    @DisplayName("mockito test")
+    void no0() {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(1L, "name", "about", "leader", 10));
         Study study = studyService.findById(myStudy.getStudy().getId());
 
@@ -58,13 +55,14 @@ class StudyServiceTest {
     }
 
     @Test
-    void 이벤트로_해결한_문제_업데이트() {
-        Study study1 = createStudy(1L, "study1", "about", "member1");
-        Study study2 = createStudy(1L, "study2", "about", "member1");
-        Study study3 = createStudy(1L, "study3", "about", "member1");
-        Study study4 = createStudy(2L, "study4", "about", "member2");
-        Study study5 = createStudy(2L, "study5", "about", "member2");
-        Study study6 = createStudy(2L, "study6", "about", "member2");
+    @DisplayName("이벤트로 해결한 문제 업데이트")
+    void no1() {
+        Study study1 = study(1L, "study1", "about", "member1");
+        Study study2 = study(1L, "study2", "about", "member1");
+        Study study3 = study(1L, "study3", "about", "member1");
+        Study study4 = study(2L, "study4", "about", "member2");
+        Study study5 = study(2L, "study5", "about", "member2");
+        Study study6 = study(2L, "study6", "about", "member2");
 
         List<Study> all = studyService.findAll();
         assertThat(all.size()).isEqualTo(6);
@@ -105,8 +103,9 @@ class StudyServiceTest {
     }
 
     @Test
-    void Snapshot_날짜별_저장() {
-        Study study = createStudy(1L, "study", "about", "member");
+    @DisplayName("Snapshot 날짜별 저장")
+    void no2() {
+        Study study = study(1L, "study", "about", "member");
         Study findStudy = studyService.findById(study.getId());
 
         for (int i = 6; i > 0; i--)testSnapshot(findStudy, i);
@@ -123,8 +122,9 @@ class StudyServiceTest {
     }
 
     @Test
-    void Snapshot_7일만_data_보관() {
-        Study study = createStudy(1L, "study", "about", "member");
+    @DisplayName("Snapshot 7일만 보관")
+    void no3() {
+        Study study = study(1L, "study", "about", "member");
         Study findStudy = studyService.findById(study.getId());
         for (int i = 7; i > 0; i--) testSnapshot(findStudy, i);
 
@@ -143,7 +143,7 @@ class StudyServiceTest {
         assertThat(snapshots.get(0).getDayOfWeek()).isEqualTo(today);
     }
 
-    private Study createStudy(Long member, String name, String about, String leader) {
+    private Study study(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
         Study study = myStudy.getStudy();
         return study;

@@ -11,6 +11,7 @@ import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.myStudy.out.MyStudyQueryRepository;
 import com.baeker.study.myStudy.out.MyStudyRepository;
 import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
+import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,6 +40,7 @@ public class MyStudyService {
      * Study 개설시 create
      * join study
      * invite member
+     * member update 요청
      */
 
     //-- create 개설시 create --//
@@ -46,14 +49,7 @@ public class MyStudyService {
         MyStudy myStudy = MyStudy.createNewStudy(id, study);
         MyStudy saveMyStudy = myStudyRepository.save(myStudy);
 
-        CreateMyStudyReqDto reqDto = new CreateMyStudyReqDto(id, saveMyStudy.getId());
-
-        RsData rsData = memberClient.updateMyStudy(reqDto);
-
-        if (!rsData.isSuccess())
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-
-        return saveMyStudy;
+        return updateMember(saveMyStudy);
     }
 
     //-- join study --//
@@ -62,9 +58,11 @@ public class MyStudyService {
 
         invalidCreateMyStudy(dto.getMember(), study);
 
-        return myStudyRepository.save(
+        MyStudy myStudy = myStudyRepository.save(
                 MyStudy.joinStudy(dto.getMember(), study, dto.getMsg())
         );
+
+        return updateMember(myStudy);
     }
 
     //-- invite member --//
@@ -74,12 +72,14 @@ public class MyStudyService {
         invalidInviter(dto.getInviter(), study);
         invalidCreateMyStudy(dto.getInvitee(), study);
 
-        return myStudyRepository.save(
+        MyStudy myStudy = myStudyRepository.save(
                 MyStudy.inviteStudy(dto.getInvitee(), study, dto.getMsg())
         );
+
+        return updateMember(myStudy);
     }
 
-    // 최대자 권한 확인 //
+    // 초대자 권한 확인 //
     private void invalidInviter(Long inviter, Study study) {
         MyStudy myStudy = this.duplicationCheck(inviter, study);
 
@@ -99,10 +99,23 @@ public class MyStudyService {
             throw new OverLimitedException("최대 인원에 도달한 스터디입니다.");
     }
 
+    // member update 요청 //
+    private MyStudy updateMember(MyStudy myStudy) {
+        CreateMyStudyReqDto reqDto = new CreateMyStudyReqDto(myStudy.getMember(), myStudy.getId());
+
+        RsData rsData = memberClient.updateMyStudy(reqDto);
+
+        if (!rsData.isSuccess())
+            throw new HttpClientErrorException(BAD_REQUEST);
+
+        return myStudy;
+    }
 
     /**
      * ** SELECT METHOD **
      * find by member & study
+     * find by id
+     * find all
      */
 
     //-- find by member & study --//
@@ -115,6 +128,7 @@ public class MyStudyService {
         return myStudies.get(0);
     }
 
+    //-- find by id --//
     public MyStudy findById(Long id) {
         Optional<MyStudy> byId = myStudyRepository.findById(id);
 
@@ -122,6 +136,11 @@ public class MyStudyService {
             return byId.get();
 
         throw  new NotFoundException("MyStudy 가 존재하지 않습니다.");
+    }
+
+    //-- find all --//
+    public List<MyStudy> findAll() {
+        return myStudyRepository.findAll();
     }
 
 
@@ -148,12 +167,23 @@ public class MyStudyService {
     /**
      * ** DELETE METHOD **
      * delete my study
+     * member delete 요청
      */
 
     //-- delete my study --//
     @Transactional
     public void delete(MyStudy myStudy) {
         myStudyRepository.delete(myStudy);
+        deleteMember(myStudy);
     }
 
+
+    // member delete 요청 //
+    private void deleteMember(MyStudy myStudy) {
+        DeleteMyStudyReqDto reqDto = new DeleteMyStudyReqDto(myStudy.getMember(), myStudy.getId());
+        RsData rsData = memberClient.deleteMyStudy(reqDto);
+
+        if (!rsData.isSuccess())
+            throw new HttpClientErrorException(BAD_REQUEST);
+    }
 }
