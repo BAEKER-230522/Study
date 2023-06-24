@@ -40,3 +40,6 @@ message:
 
 custom:
   server: localhost
+
+  feign:
+    member: http://${custom.server}:8081/api/member

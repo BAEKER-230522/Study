@@ -11,7 +11,7 @@ public class CreateMyStudyDto {
     @Schema(example = "1")
     private Long questionId;
     @Schema(example = "1")
-    private Long MyStudyId;
+    private Long myStudyId;
     @Schema(example = "1")
     private Long memberId;
     @Schema(example = "저장된 메시지")
@@ -21,7 +21,7 @@ public class CreateMyStudyDto {
 
     public CreateMyStudyDto(MyStudy myStudy) {
         this.questionId = myStudy.getId();
-        this.MyStudyId = myStudy.getStudy().getId();
+        this.myStudyId = myStudy.getStudy().getId();
         this.memberId = myStudy.getMember();
         this.msg = myStudy.getMsg();
         this.status = myStudy.getStatus();
