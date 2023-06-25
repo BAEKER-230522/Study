@@ -1,17 +1,26 @@
 package com.baeker.study.studyRule;
 
 import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
+import com.baeker.study.global.feign.Feign;
+import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -19,18 +28,36 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
-public class StudyRuleServiceTests {
+@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
+class StudyRuleServiceTests {
     @Autowired
     StudyRuleService studyRuleService;
     @Autowired
     StudyService studyService;
+    @MockBean
+    Feign feign;
+    @MockBean
+    MemberClient client;
+
+    @BeforeEach
+    public void setFeign() {
+        when(feign.getRule(any()))
+                .thenReturn(new RsData<>("S-1", "msg", null));
+        when(client.updateMyStudy(any()))
+                .thenReturn(new RsData<>("S-1", "msg", null));
+        when(client.deleteMyStudy(any()))
+                .thenReturn(new RsData<>("S-1", "msg", null));
+    }
 
     public Study createStudy() {
         CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", "리더", 1);
-        return studyService.create(reqDto);
+        return studyService.create(reqDto).getStudy();
     }
 
 

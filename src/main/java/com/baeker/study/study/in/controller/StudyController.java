@@ -32,7 +32,6 @@ import java.util.List;
 public class StudyController {
 
     private final StudyService studyService;
-    private final MyStudyService myStudyService;
 
     //-- create study --//
     @PostMapping("/v1/create")
@@ -40,11 +39,10 @@ public class StudyController {
     public RsData<CreateResDto> create(@RequestBody @Valid CreateReqDto dto) {
         log.info("스터디 생성 요청 확인");
 
-        Study study = studyService.create(dto);
-        MyStudy myStudy = myStudyService.create(dto.getMember(), study);
+        MyStudy myStudy = studyService.create(dto);
 
-        log.info("스터디 생성 응답 완료 study id = {}", study.getId());
-        return RsData.successOf(new CreateResDto(study.getId(), myStudy.getId()));
+        log.info("스터디 생성 응답 완료 study id = {}", myStudy.getStudy().getId());
+        return RsData.successOf(new CreateResDto(myStudy.getStudy().getId(), myStudy.getId()));
     }
 
     //-- update name, about, capacity --//

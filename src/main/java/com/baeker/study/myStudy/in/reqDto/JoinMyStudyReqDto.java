@@ -1,9 +1,11 @@
 package com.baeker.study.myStudy.in.reqDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class JoinMyStudyReqDto {
 
     @Schema(example = "1")
