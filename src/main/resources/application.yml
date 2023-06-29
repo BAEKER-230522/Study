@@ -81,11 +81,12 @@ server:
   port: 8082
 
 custom:
-  server: ENC(0zWdK1NtpOSg0B/P5gqfGe+3WBULxDvm)
+  server: 101.101.208.240
   feign:
     member: http://${custom.server}:8081/api/member
 
 logging:
   pattern:
     console:
+
 
