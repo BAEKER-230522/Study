@@ -137,4 +137,21 @@ public class StudyController {
         log.info("Study Snapshot list 응답 완료 count = {}", resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
     }
+
+    //-- find by member id --//
+    @GetMapping("/v1/member/{id}")
+    @Operation(summary = "member id 로 member 가 가입한 모든 study 조회하기")
+    public RsData<List<StudyResDto>> findByMemberId(
+            @PathVariable Long id
+    ) {
+        log.info("member 의 study list 요청 확인 member id = {}", id);
+
+        List<StudyResDto> resDtoList = studyService.findByMember(id)
+                .stream()
+                .map(s -> new StudyResDto(s))
+                .toList();
+
+        log.info("member 의 study 목룍 응답 완료 count = {}", resDtoList.size());
+        return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+    }
 }
