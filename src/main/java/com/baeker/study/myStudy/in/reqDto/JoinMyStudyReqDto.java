@@ -1,11 +1,16 @@
 package com.baeker.study.myStudy.in.reqDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PROTECTED;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class JoinMyStudyReqDto {
 
     @Schema(example = "1")

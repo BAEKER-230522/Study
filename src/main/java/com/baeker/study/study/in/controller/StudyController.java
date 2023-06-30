@@ -10,10 +10,7 @@ import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
-import com.baeker.study.study.in.resDto.CreateResDto;
-import com.baeker.study.study.in.resDto.SnapshotResDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.study.in.resDto.UpdateResDto;
+import com.baeker.study.study.in.resDto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,6 +29,7 @@ import java.util.List;
 public class StudyController {
 
     private final StudyService studyService;
+    private final MyStudyService myStudyService;
 
     //-- create study --//
     @PostMapping("/v1/create")
@@ -152,6 +150,21 @@ public class StudyController {
                 .toList();
 
         log.info("member 의 study 목룍 응답 완료 count = {}", resDtoList.size());
+        return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+    }
+
+    //-- find member list by study id --//
+    @GetMapping("/v1/member-list/{id}")
+    @Operation(summary = "study id 로 정회원 member list 조회하기")
+    public RsData<List<MemberResDto>> findMemberList(
+            @PathVariable Long id
+    ) {
+        log.info("study 에 가입한 정회원 목록 조회 study id = {}", id);
+
+        Study study = studyService.findById(id);
+        List<MemberResDto> resDtoList = myStudyService.findMemeberList(study);
+
+        log.info("study 에 가입한 정회원 목록 응답 완료 study id = {} / count = {}", id, resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
     }
 }

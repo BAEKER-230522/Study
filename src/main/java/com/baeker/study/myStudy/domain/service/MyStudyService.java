@@ -5,6 +5,7 @@ import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.OverLimitedException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
+import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
@@ -13,13 +14,12 @@ import com.baeker.study.myStudy.out.MyStudyRepository;
 import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -185,5 +185,16 @@ public class MyStudyService {
 
         if (!rsData.isSuccess())
             throw new HttpClientErrorException(BAD_REQUEST);
+    }
+
+    public List<MemberResDto> findMemeberList(Study study) {
+        List<Long> memberList = myStudyQueryRepository.findMemberList(study);
+
+        RsData<List<MemberResDto>> rsData = memberClient.findMemberList(new MembersReqDto(memberList));
+
+        if (rsData.isFail())
+            throw new NotFoundException("가입한 회원이 없습니다.");
+
+        return rsData.getData();
     }
 }
