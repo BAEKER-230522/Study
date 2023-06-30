@@ -1,6 +1,7 @@
 package com.baeker.study.study.in.controller;
 
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
@@ -10,10 +11,7 @@ import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
-import com.baeker.study.study.in.resDto.CreateResDto;
-import com.baeker.study.study.in.resDto.SnapshotResDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.study.in.resDto.UpdateResDto;
+import com.baeker.study.study.in.resDto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,6 +30,7 @@ import java.util.List;
 public class StudyController {
 
     private final StudyService studyService;
+    private final MyStudyService myStudyService;
 
     //-- create study --//
     @PostMapping("/v1/create")
@@ -153,5 +152,36 @@ public class StudyController {
 
         log.info("member 의 study 목룍 응답 완료 count = {}", resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+    }
+
+    //-- find 정회원 list by study id --//
+    @GetMapping("/v1/member-list/{id}")
+    @Operation(summary = "study id 로 정회원 member list 조회하기")
+    public RsData<List<MemberResDto>> findMemberList(
+            @PathVariable Long id
+    ) {
+        log.info("study 에 가입한 정회원 목록 조회 study id = {}", id);
+
+        Study study = studyService.findById(id);
+        List<MemberResDto> resDtoList = myStudyService.findMemeberList(study);
+
+        log.info("study 에 가입한 정회원 목록 응답 완료 study id = {} / count = {}", id, resDtoList.size());
+        return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+    }
+
+    //-- find 가입 대기 list by study id --//
+    @GetMapping("/v1/candidate-list/{id}")
+    @Operation(summary = "study id 로 가입대기 member list 조회하기")
+    public RsData<CandidateResDto> findCandidateList(
+            @PathVariable Long id
+    ) {
+        log.info("study 가입 대기 목록 조회 study id = {}", id);
+
+        Study study = studyService.findById(id);
+        CandidateResDto resDto = myStudyService.findCandidate(study);
+        resDto.addSize(resDto.getPending().size(), resDto.getInviting().size());
+
+        log.info("study 에 가입 대기 member 목록 응답 완료 study id = {} / pending count = {} / inviting count = {}", id, resDto.getPending().size(), resDto.getInviting().size());
+        return RsData.of("S-1", "성공" , resDto);
     }
 }

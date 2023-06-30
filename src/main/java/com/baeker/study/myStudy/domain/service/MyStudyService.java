@@ -5,6 +5,8 @@ import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.OverLimitedException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
+import com.baeker.study.global.feign.dto.CandidateResDto;
+import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
@@ -13,17 +15,16 @@ import com.baeker.study.myStudy.out.MyStudyRepository;
 import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
-import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
+import static com.baeker.study.myStudy.domain.entity.StudyStatus.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
@@ -115,6 +116,8 @@ public class MyStudyService {
      * ** SELECT METHOD **
      * find by member & study
      * find by id
+     * 정회원 목록 조회
+     * 가입 대기 회원 목록 조회
      * find all
      */
 
@@ -136,6 +139,29 @@ public class MyStudyService {
             return byId.get();
 
         throw  new NotFoundException("MyStudy 가 존재하지 않습니다.");
+    }
+
+    //-- 정회원 목록 조회 --//
+    public List<MemberResDto> findMemeberList(Study study) {
+        List<Long> memberList = myStudyQueryRepository.findMemberList(study, MEMBER);
+
+        RsData<List<MemberResDto>> rsData = memberClient.findMemberList(new MembersReqDto(memberList, "MEMBER"));
+
+        if (rsData.isFail())
+            throw new NotFoundException("가입한 회원이 없습니다.");
+
+        return rsData.getData();
+    }
+
+    //-- 가입 대기 회원 목록 조회 --//
+    public CandidateResDto findCandidate(Study study) {
+        List<Long> pendingList = myStudyQueryRepository.findMemberList(study, PENDING);
+        List<Long> invitingList = myStudyQueryRepository.findMemberList(study, INVITING);
+
+        List<MemberResDto> pendingDto = memberClient.findMemberList(new MembersReqDto(pendingList, "PENDING")).getData();
+        List<MemberResDto> invitingDto = memberClient.findMemberList(new MembersReqDto(invitingList, "INVITING")).getData();
+
+        return new CandidateResDto(pendingDto, invitingDto);
     }
 
     //-- find all --//
