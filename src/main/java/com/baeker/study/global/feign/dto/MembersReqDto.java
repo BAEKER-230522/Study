@@ -10,4 +10,5 @@ import java.util.List;
 public class MembersReqDto {
 
     private List<Long> members;
+    private String status;
 }

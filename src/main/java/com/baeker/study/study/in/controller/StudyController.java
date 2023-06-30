@@ -1,6 +1,7 @@
 package com.baeker.study.study.in.controller;
 
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
@@ -153,7 +154,7 @@ public class StudyController {
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
     }
 
-    //-- find member list by study id --//
+    //-- find 정회원 list by study id --//
     @GetMapping("/v1/member-list/{id}")
     @Operation(summary = "study id 로 정회원 member list 조회하기")
     public RsData<List<MemberResDto>> findMemberList(
@@ -166,5 +167,21 @@ public class StudyController {
 
         log.info("study 에 가입한 정회원 목록 응답 완료 study id = {} / count = {}", id, resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+    }
+
+    //-- find 가입 대기 list by study id --//
+    @GetMapping("/v1/candidate-list/{id}")
+    @Operation(summary = "study id 로 가입대기 member list 조회하기")
+    public RsData<CandidateResDto> findCandidateList(
+            @PathVariable Long id
+    ) {
+        log.info("study 가입 대기 목록 조회 study id = {}", id);
+
+        Study study = studyService.findById(id);
+        CandidateResDto resDto = myStudyService.findCandidate(study);
+        resDto.addSize(resDto.getPending().size(), resDto.getInviting().size());
+
+        log.info("study 에 가입 대기 member 목록 응답 완료 study id = {} / pending count = {} / inviting count = {}", id, resDto.getPending().size(), resDto.getInviting().size());
+        return RsData.of("S-1", "성공" , resDto);
     }
 }

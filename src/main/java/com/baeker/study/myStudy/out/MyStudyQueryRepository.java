@@ -33,12 +33,12 @@ public class MyStudyQueryRepository {
     }
 
     //-- find member list by study --//
-    public List<Long> findMemberList(Study study) {
+    public List<Long> findMemberList(Study study, StudyStatus status) {
         return query
                 .select(myStudy.member)
                 .from(myStudy)
                 .where(myStudy.study.eq(study)
-                        .and(myStudy.status.eq(MEMBER)))
+                        .and(myStudy.status.eq(status)))
                 .fetch();
     }
 }
