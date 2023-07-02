@@ -91,6 +91,7 @@ public class StudyRuleController {
     }
 
     @GetMapping("/v1/studyrules/{studyid}")
+    @Operation(summary = "스터디 규칙 스터디로 조회", description = "스터디 아이디로 스터디 규칙리스트 조회.", tags = "StudyRule-조회")
     public RsData<List<StudyRuleListDto>> studyRuleFromStudy(@PathVariable("studyid") Long studyId) {
         List<StudyRule> studyRuleList = studyRuleService.getStudyRuleFromStudy(studyId);
         List<StudyRuleListDto> collect = studyRuleList.stream()
