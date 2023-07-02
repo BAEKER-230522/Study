@@ -7,5 +7,8 @@ import lombok.Data;
 public class AcceptDto {
 
     @Schema(example = "1")
-    private Long id;
+    private Long memberId;
+
+    @Schema(example = "1")
+    private Long studyId;
 }
