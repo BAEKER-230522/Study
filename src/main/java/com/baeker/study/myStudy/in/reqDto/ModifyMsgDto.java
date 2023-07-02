@@ -7,7 +7,11 @@ import lombok.Data;
 public class ModifyMsgDto {
 
     @Schema(example = "1")
-    private Long id;
+    private Long memberId;
+
+    @Schema(example = "1")
+    private Long studyId;
+
     @Schema(example = "업데이트 메시지")
     private String msg;
 }

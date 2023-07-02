@@ -8,6 +8,7 @@ import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.ModifyMsgDto;
 import com.baeker.study.myStudy.in.resDto.CreateMyStudyDto;
+import com.baeker.study.myStudy.in.resDto.MyStudyResDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,23 @@ public class MyStudyController {
     private final MyStudyService myStudyService;
     private final StudyService studyService;
 
+
+    //-- find by member & study --//
+    @GetMapping("/v1/{memberId}/{studyId}")
+    @Operation(summary = "my study 조회")
+    public RsData<MyStudyResDto> find(
+            @PathVariable Long memberId,
+            @PathVariable Long studyId
+    ) {
+        log.info("my study 조회 요청 확인 member id = {} / study id = {}", memberId, studyId);
+
+        Study study = studyService.findById(studyId);
+        MyStudy myStudy = myStudyService.duplicationCheck(memberId, study);
+        MyStudyResDto resDto = new MyStudyResDto(myStudy);
+
+        log.info("my study 응답 완료 my study id = {}", resDto.getId());
+        return RsData.successOf(resDto);
+    }
 
     //-- 가입 신청 --//
     @PostMapping("/v1/join")
@@ -62,9 +80,10 @@ public class MyStudyController {
     @PostMapping("/v1/msg")
     @Operation(summary = "가입, 초대 메시지 업데이트")
     public RsData modifyMsg(@RequestBody @Valid ModifyMsgDto dto) {
-        log.info("메시지 수정 요청 확인 my study id = {}", dto.getId());
+        log.info("메시지 수정 요청 확인 member id = {} / study id = {}", dto.getMemberId(), dto.getStudyId());
 
-        MyStudy myStudy = myStudyService.findById(dto.getId());
+        Study study = studyService.findById(dto.getStudyId());
+        MyStudy myStudy = myStudyService.duplicationCheck(dto.getMemberId(), study);
         myStudyService.modifyMsg(myStudy, dto.getMsg());
 
         CreateMyStudyDto resDto = new CreateMyStudyDto(myStudy);
@@ -76,10 +95,11 @@ public class MyStudyController {
     //-- 초대, 가입 요청 거절 --//
     @DeleteMapping("/v1")
     @Operation(summary = "가입, 초대 거절")
-    public RsData delete(@RequestParam Long id) {
-        log.info("My Study 삭제 요청 확인 my study id = {}", id);
+    public RsData delete(@RequestBody @Valid AcceptDto dto) {
+        log.info("My Study 삭제 요청 확인 member id = {} / study id = {}", dto.getMemberId(), dto.getStudyId());
 
-        MyStudy myStudy = myStudyService.findById(id);
+        Study study = studyService.findById(dto.getStudyId());
+        MyStudy myStudy = myStudyService.duplicationCheck(dto.getMemberId(), study);
         myStudyService.delete(myStudy);
 
         log.info("My Study 삭제 완료");
@@ -90,9 +110,10 @@ public class MyStudyController {
     @PostMapping("/v1/accept")
     @Operation(summary = "가입, 초대 승인")
     public RsData accept(@RequestBody @Valid AcceptDto dto) {
-        log.info("가입, 초대 승인 요청 확인 my study id ={}", dto.getId());
+        log.info("가입, 초대 승인 요청 확인 member id = {} / study id ={}",dto.getMemberId(), dto.getStudyId());
 
-        MyStudy myStudy = myStudyService.findById(dto.getId());
+        Study study = studyService.findById(dto.getStudyId());
+        MyStudy myStudy = myStudyService.duplicationCheck(dto.getMemberId(), study);
         myStudyService.accept(myStudy);
 
         CreateMyStudyDto resDto = new CreateMyStudyDto(myStudy);
