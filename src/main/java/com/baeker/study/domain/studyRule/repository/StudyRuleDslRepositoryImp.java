@@ -21,7 +21,7 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository{
         return jpaQueryFactory.select(studyRule)
                 .from(studyRule)
                 .innerJoin(study)
-                .on(studyRule.id.eq(study.id))
+                .on(study.id.eq(studyId))
                 .fetch();
     }
 }
