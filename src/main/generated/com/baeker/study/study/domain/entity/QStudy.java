@@ -57,7 +57,7 @@ public class QStudy extends EntityPathBase<Study> {
     public final NumberPath<Integer> ruby = _super.ruby;
 
     //inherited
-    public final NumberPath<Integer> sliver = _super.sliver;
+    public final NumberPath<Integer> silver = _super.silver;
 
     public final ListPath<StudySnapshot, QStudySnapshot> snapshots = this.<StudySnapshot, QStudySnapshot>createList("snapshots", StudySnapshot.class, QStudySnapshot.class, PathInits.DIRECT2);
 

@@ -40,7 +40,7 @@ public class QScoreBase extends EntityPathBase<ScoreBase> {
 
     public final NumberPath<Integer> ruby = createNumber("ruby", Integer.class);
 
-    public final NumberPath<Integer> sliver = createNumber("sliver", Integer.class);
+    public final NumberPath<Integer> silver = createNumber("silver", Integer.class);
 
     public QScoreBase(String variable) {
         super(ScoreBase.class, forVariable(variable));

@@ -5,11 +5,13 @@ import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.RuleDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(name = "Gateway", url = "${custom.server}:9000")
+@Component
 public interface Feign {
 
     /**
@@ -18,7 +20,7 @@ public interface Feign {
      * @return
      */
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/rule/v1/{ruleId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/rule/v1/search/{ruleId}")
     RsData<RuleDto> getRule(@PathVariable("ruleId") Long ruleId);
 
 

@@ -8,17 +8,17 @@ public class AddSolvedCountEvent extends ApplicationEvent {
 
     private Long member;
     int bronze;
-    int sliver;
+    int silver;
     int gold;
     int diamond;
     int ruby;
     int platinum;
 
-    public AddSolvedCountEvent(Object source, Long member, int bronze, int sliver, int gold, int diamond, int ruby, int platinum) {
+    public AddSolvedCountEvent(Object source, Long member, int bronze, int silver, int gold, int diamond, int ruby, int platinum) {
         super(source);
         this.member = member;
         this.bronze = bronze;
-        this.sliver = sliver;
+        this.silver = silver;
         this.gold = gold;
         this.diamond = diamond;
         this.ruby = ruby;

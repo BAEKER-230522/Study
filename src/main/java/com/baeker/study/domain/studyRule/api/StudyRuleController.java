@@ -5,6 +5,7 @@ import com.baeker.study.domain.studyRule.dto.StudyRuleDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.response.CreateStudyRuleResponse;
+import com.baeker.study.domain.studyRule.dto.response.StudyRuleListDto;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,7 @@ public class StudyRuleController {
 
     /**
      * 생성
+     *
      * @param request
      * @return
      */
@@ -44,7 +46,7 @@ public class StudyRuleController {
     @PutMapping("/v1/{studyruleid}")
     @Operation(summary = "스터디 규칙 전부 변경", description = "body 에 이름(name), 소개(about), 규칙(ruleId) 입력", tags = "StudyRule-수정")
     public RsData<StudyRuleDto> modifyStudyRule(@PathVariable("studyruleid") Long studyruleid,
-                                                           @RequestBody @Valid ModifyStudyRuleRequest request) {
+                                                @RequestBody @Valid ModifyStudyRuleRequest request) {
         StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
         studyRuleService.modify(studyRule, request);
         return RsData.successOf(new StudyRuleDto(studyRule));
@@ -52,8 +54,8 @@ public class StudyRuleController {
 
     @PatchMapping("/v1/{studyruleid}")
     @Operation(summary = "스터디규칙 개별 변경", description = "이름(name), 소개(about), 규칙Id(ruleId) 원하는 값을 Key:Value 형태로 입력", tags = "StudyRule-수정")
-    public RsData<StudyRuleDto> modifyStudyRule(@Parameter(description = "수정하고싶은 StudyRuleId 입력", example = "1")@PathVariable("studyruleid") Long studyruleid,
-                                                @Parameter(description = "key:value 형태로(ex: name:이름) 전달", example = "name:이름")@RequestBody Map<String, String> updates) {
+    public RsData<StudyRuleDto> modifyStudyRule(@Parameter(description = "수정하고싶은 StudyRuleId 입력", example = "1") @PathVariable("studyruleid") Long studyruleid,
+                                                @Parameter(description = "key:value 형태로(ex: name:이름) 전달", example = "name:이름") @RequestBody Map<String, String> updates) {
         studyRuleService.updateStudyRule(studyruleid, updates);
         StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
         return RsData.successOf(new StudyRuleDto(studyRule));
@@ -82,10 +84,19 @@ public class StudyRuleController {
 
     @DeleteMapping("/v1/studyrules/{studyruleid}")
     @Operation(summary = "스터디 규칙 삭제", description = "스터디 규칙을 삭제합니다.", tags = "StudyRule-삭제")
-    public RsData delete(@Parameter(description = "삭제하고싶은 StudyRuleId 입력", example = "1")@PathVariable("studyruleid") Long studyruleid) {
+    public RsData<Long> delete(@Parameter(description = "삭제하고싶은 StudyRuleId 입력", example = "1") @PathVariable("studyruleid") Long studyruleid) {
         StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
         studyRuleService.delete(studyRule);
         return RsData.of("S-1", String.format("%d 번 아이디가 삭제 되었습니다.", studyruleid), studyruleid);
     }
 
+    @GetMapping("/v1/studyrules/{studyid}")
+    @Operation(summary = "스터디 규칙 스터디로 조회", description = "스터디 아이디로 스터디 규칙리스트 조회.", tags = "StudyRule-조회")
+    public RsData<List<StudyRuleListDto>> studyRuleFromStudy(@PathVariable("studyid") Long studyId) {
+        List<StudyRule> studyRuleList = studyRuleService.getStudyRuleFromStudy(studyId);
+        List<StudyRuleListDto> collect = studyRuleList.stream()
+                .map(StudyRuleListDto::new)
+                .toList();
+        return RsData.of("S-1", "성공", collect);
+    }
 }

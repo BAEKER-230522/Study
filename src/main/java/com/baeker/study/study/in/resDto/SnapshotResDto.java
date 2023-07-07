@@ -11,7 +11,7 @@ public class SnapshotResDto {
     private String studyName;
     private String dayOfWeek;
     int bronze;
-    int sliver;
+    int silver;
     int gold;
     int diamond;
     int ruby;
@@ -24,7 +24,7 @@ public class SnapshotResDto {
         this.studyName = snapshot.getStudy().getName();
         this.dayOfWeek = snapshot.getDayOfWeek();
         this.bronze = snapshot.getBronze();
-        this.sliver = snapshot.getSliver();
+        this.silver = snapshot.getSilver();
         this.gold = snapshot.getGold();
         this.diamond = snapshot.getDiamond();
         this.ruby = snapshot.getRuby();
