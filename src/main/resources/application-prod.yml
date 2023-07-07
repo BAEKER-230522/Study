@@ -21,7 +21,7 @@ spring:
         ms: 10
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
