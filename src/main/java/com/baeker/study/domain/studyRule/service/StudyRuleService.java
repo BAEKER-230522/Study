@@ -197,7 +197,7 @@ public class StudyRuleService {
 
         switch (difficulty) {
             case "BRONZE" -> todayCount = allSnapshot.get(0).getBronze();
-            case "SILVER" -> todayCount = allSnapshot.get(0).getSliver(); //TODO: 오타 수정되면 다시
+            case "SILVER" -> todayCount = allSnapshot.get(0).getSilver(); //TODO: 오타 수정되면 다시
             case "GOLD" -> todayCount = allSnapshot.get(0).getGold();
             case "PLATINUM" -> todayCount = allSnapshot.get(0).getPlatinum();
             case "DIAMOND" -> todayCount = allSnapshot.get(0).getDiamond();

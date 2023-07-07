@@ -3,6 +3,7 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
@@ -24,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.baeker.study.myStudy.domain.entity.StudyStatus.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -177,8 +180,15 @@ public class StudyService {
     }
 
     //-- find by member --//
-    public List<Study> findByMember(Long member) {
-        return studyQueryRepository.findByMember(member);
+    public List<Study> findByMember(Long member, int status) {
+        StudyStatus studyStatus;
+        switch (status) {
+            case 1 -> studyStatus = MEMBER;
+            case 2 -> studyStatus = PENDING;
+            default -> studyStatus = INVITING;
+        }
+
+        return studyQueryRepository.findByMember(member, studyStatus);
     }
 
     //-- find all snapshot by study --//

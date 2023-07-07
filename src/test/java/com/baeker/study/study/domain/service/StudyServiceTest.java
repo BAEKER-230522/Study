@@ -3,6 +3,9 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.domain.service.MyStudyService;
+import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
+import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
@@ -37,6 +40,7 @@ class StudyServiceTest {
     @Autowired private StudyService studyService;
     @Autowired private ApplicationEventPublisher publisher;
     @Autowired private SnapshotRepository snapshotRepository;
+    @Autowired private MyStudyService myStudyService;
     @MockBean private MemberClient memberClient;
 
     @BeforeEach
@@ -142,6 +146,33 @@ class StudyServiceTest {
 
         assertThat(snapshots.get(0).getDayOfWeek()).isEqualTo(today);
     }
+
+    @Test
+    @DisplayName("member 의 study 조회")
+    public void no4() {
+        Study study1 = study(1L, "my study1", "", "1");
+        Study study2 = study(2L, "my study2", "", "2");
+        Study study3 = study(3L, "pending study", "", "3");
+        Study study4 = study(4L, "invite study", "", "4");
+        Study study5 = study(5L, "study", "", "5");
+
+        MyStudy join = myStudyService.join(new JoinMyStudyReqDto(study2.getId(), 1L, "가입신청"), study2);
+        myStudyService.accept(join);
+
+        myStudyService.join(new JoinMyStudyReqDto(study3.getId(), 1L, "가입신청"), study3);
+        myStudyService.invite(new InviteMyStudyReqDto(study4.getId(), 4L, 1L, "초대"), study4);
+
+        List<Study> studyList = studyService.findByMember(1L, 1);
+        List<Study> pendingList = studyService.findByMember(1L, 2);
+        List<Study> inviteList = studyService.findByMember(1L, 3);
+
+        assertThat(pendingList.size()).isEqualTo(1);
+        assertThat(inviteList.size()).isEqualTo(1);
+        assertThat(studyList.size()).isEqualTo(2);
+    }
+
+
+
 
     private Study study(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
