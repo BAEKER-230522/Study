@@ -46,7 +46,7 @@ class StudyRuleServiceTests {
     MemberClient client;
 
     @BeforeEach
-    public void setFeign() {
+    void setFeign() {
         when(feign.getRule(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(client.updateMyStudy(any()))
@@ -55,7 +55,7 @@ class StudyRuleServiceTests {
                 .thenReturn(new RsData<>("S-1", "msg", null));
     }
 
-    public Study createStudy() {
+    Study createStudy() {
         CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", "리더", 1);
         return studyService.create(reqDto).getStudy();
     }
@@ -63,7 +63,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("생성 메서드")
-    public void createTest() {
+    void createTest() {
         Study study = createStudy();
         CreateStudyRuleRequest request = new CreateStudyRuleRequest();
         request.setRuleId(1L);
@@ -79,7 +79,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("수정 메서드")
-    public void modifyTest() {
+    void modifyTest() {
         Study study = createStudy();
         CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
         cr.setRuleId(1L);
@@ -111,7 +111,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("삭제 메서드")
-    public void delete() {
+    void delete() {
         Study study = createStudy();
         CreateStudyRuleRequest request = new CreateStudyRuleRequest();
         request.setRuleId(1L);
@@ -134,7 +134,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("조회/페이징")
-    public void select() {
+    void selectPaging() {
         Study study = createStudy();
 
         for (int i = 1; i <= 100; i++) {
@@ -153,4 +153,12 @@ class StudyRuleServiceTests {
             assertThat(studyRule.getName()).isEqualTo("이름"+i++);
         }
     }
+
+    @Test
+    @DisplayName("스터디 룰 리스트 리턴")
+    void studyRuleList() {
+        //TODO: 스터디 룰 리스트 테스트 코드 작성
+        studyRuleService.getStudyRuleFromStudy(1L);
+        }
+
 }
