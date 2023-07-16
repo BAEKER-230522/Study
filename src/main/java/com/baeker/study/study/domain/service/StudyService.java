@@ -2,6 +2,8 @@ package com.baeker.study.study.domain.service;
 
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
@@ -9,6 +11,7 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.*;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
 import com.baeker.study.study.out.SnapshotRepository;
 import com.baeker.study.study.out.StudyQueryRepository;
@@ -38,6 +41,7 @@ public class StudyService {
     private final MyStudyService myStudyService;
     private final SnapshotRepository snapshotRepository;
     private final SnapshotQueryRepository snapshotQueryRepository;
+    private final MemberClient memberClient;
 
     /**
      * ** CREATE METHOD **
@@ -53,7 +57,9 @@ public class StudyService {
         } catch (NotFoundException e) {
         }
 
-        Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), dto.getLeader());
+        MemberResDto memberDto = memberClient.findById(dto.getMember()).getData();
+
+        Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getNickname());
         Study saveStudy = studyRepository.save(study);
         return myStudyService.create(dto.getMember(), saveStudy);
     }

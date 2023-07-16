@@ -56,7 +56,7 @@ class StudyRuleServiceTests {
     }
 
     Study createStudy() {
-        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", "리더", 1);
+        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", 1);
         return studyService.create(reqDto).getStudy();
     }
 

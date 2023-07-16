@@ -27,4 +27,8 @@ public interface MemberClient {
     //-- member list 조회 --//
     @PostMapping("/get/v1/id/list")
     RsData<List<MemberResDto>> findMemberList(@RequestBody MembersReqDto reqDto);
+
+    //--my study 로 member 조회 --//
+    @GetMapping("/get/v1/id")
+    RsData<MemberResDto> findById(@RequestParam(value = "id") Long id);
 }

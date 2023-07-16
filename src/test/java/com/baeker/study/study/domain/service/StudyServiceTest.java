@@ -52,7 +52,7 @@ class StudyServiceTest {
     @Test
     @DisplayName("mockito test")
     void no0() {
-        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(1L, "name", "about", "leader", 10));
+        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(1L, "name", "about", 10));
         Study study = studyService.findById(myStudy.getStudy().getId());
 
         assertThat(study.getName()).isEqualTo("name");
@@ -175,7 +175,7 @@ class StudyServiceTest {
 
 
     private Study study(Long member, String name, String about, String leader) {
-        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
+        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, 10));
         Study study = myStudy.getStudy();
         return study;
     }
