@@ -11,6 +11,7 @@ import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,10 +54,12 @@ class StudyRuleServiceTests {
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(client.deleteMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
+        when(client.findById(any()))
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
     Study createStudy() {
-        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", "리더", 1);
+        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", 1);
         return studyService.create(reqDto).getStudy();
     }
 

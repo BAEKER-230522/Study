@@ -14,11 +14,11 @@ public class MemberStudyResDto {
 
     private int count;
     private StudyStatus status;
-    private List<StudyResDto> studyList;
+    private List<StudyResDto> data;
 
     public MemberStudyResDto(int count, int status, List<StudyResDto> studyList) {
         this.count = count;
-        this.studyList = studyList;
+        this.data = studyList;
 
         switch (status) {
             case 1 -> this.status = MEMBER;

@@ -11,6 +11,7 @@ import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,12 +48,15 @@ class StudyServiceTest {
     public void beforeEach() {
         when(memberClient.updateMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "성공", null));
+
+        when(memberClient.findById(any()))
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
     @Test
     @DisplayName("mockito test")
     void no0() {
-        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(1L, "name", "about", "leader", 10));
+        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(1L, "name", "about", 10));
         Study study = studyService.findById(myStudy.getStudy().getId());
 
         assertThat(study.getName()).isEqualTo("name");
@@ -175,7 +179,7 @@ class StudyServiceTest {
 
 
     private Study study(Long member, String name, String about, String leader) {
-        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, leader, 10));
+        MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, 10));
         Study study = myStudy.getStudy();
         return study;
     }
