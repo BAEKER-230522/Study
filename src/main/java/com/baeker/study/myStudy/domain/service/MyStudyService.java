@@ -1,6 +1,7 @@
 package com.baeker.study.myStudy.domain.service;
 
 import com.baeker.study.base.exception.InvalidDuplicateException;
+import com.baeker.study.base.exception.NoPermissionException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.OverLimitedException;
 import com.baeker.study.base.rsdata.RsData;
@@ -9,6 +10,7 @@ import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.in.reqDto.AcceptDto;
+import com.baeker.study.myStudy.in.reqDto.DropReqDto;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.myStudy.out.MyStudyQueryRepository;
@@ -196,6 +198,7 @@ public class MyStudyService {
      * ** DELETE METHOD **
      * delete my study
      * member delete 요청
+     * member 강퇴
      */
 
     //-- delete my study --//
@@ -213,5 +216,20 @@ public class MyStudyService {
 
         if (!rsData.isSuccess())
             throw new HttpClientErrorException(BAD_REQUEST);
+    }
+
+    //-- member 강퇴 --//
+    @Transactional
+    public void dropOut(DropReqDto dto, Study study) {
+
+        MyStudy myStudy = this.duplicationCheck(dto.getDropMemberId(), study);
+        this.duplicationCheck(dto.getLeaderId(), study);
+
+        MemberResDto memberDto = memberClient.findById(dto.getLeaderId()).getData();
+        if (!memberDto.getNickname().equals(study.getLeader()))
+            throw new NoPermissionException(dto.getLeaderId() + "는 leader 가 아닙니다.");
+
+        myStudyRepository.delete(myStudy);
+        memberClient.deleteMyStudy(new DeleteMyStudyReqDto(myStudy.getMember(), myStudy.getId()));
     }
 }

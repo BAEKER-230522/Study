@@ -5,7 +5,6 @@ import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
@@ -17,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -139,19 +137,20 @@ public class StudyController {
 
     //-- find by member id --//
     @GetMapping("/v1/member/{id}")
-    @Operation(summary = "member id 로 member 가 가입한 모든 study 조회하기")
-    public RsData<List<StudyResDto>> findByMemberId(
-            @PathVariable Long id
+    @Operation(summary = "member 의 study list 조회 / status = 1 : 정회원 / 2 : 가입신청 목록 / 3 : 초디받은 목록")
+    public RsData<MemberStudyResDto> findByMemberId(
+            @PathVariable Long id,
+            @RequestParam int status
     ) {
-        log.info("member 의 study list 요청 확인 member id = {}", id);
+        log.info("member 의 study list 요청 확인 member id = {} / status = {}", id, status);
 
-        List<StudyResDto> resDtoList = studyService.findByMember(id)
+        List<StudyResDto> resDtoList = studyService.findByMember(id, status)
                 .stream()
                 .map(s -> new StudyResDto(s))
                 .toList();
 
         log.info("member 의 study 목룍 응답 완료 count = {}", resDtoList.size());
-        return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
+        return RsData.successOf(new MemberStudyResDto(resDtoList.size(), status, resDtoList));
     }
 
     //-- find 정회원 list by study id --//
@@ -182,6 +181,6 @@ public class StudyController {
         resDto.addSize(resDto.getPending().size(), resDto.getInviting().size());
 
         log.info("study 에 가입 대기 member 목록 응답 완료 study id = {} / pending count = {} / inviting count = {}", id, resDto.getPending().size(), resDto.getInviting().size());
-        return RsData.of("S-1", "성공" , resDto);
+        return RsData.of("S-1", "성공", resDto);
     }
 }

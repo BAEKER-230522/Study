@@ -17,17 +17,14 @@ public class CreateReqDto {
     private String name;
     @Schema(example = "스터디 소개")
     private String about;
-    @Schema(example = "스터디 리더")
-    private String leader;
     @Schema(example = "10")
     private Integer capacity;
 
-    public static  CreateReqDto createStudy(Long member, String name, String about, String leader, Integer capacity) {
+    public static  CreateReqDto createStudy(Long member, String name, String about, Integer capacity) {
         CreateReqDto dto = new CreateReqDto();
         dto.member = member;
         dto.name = name;
         dto.about = about;
-        dto.leader = leader;
         dto.capacity = capacity;
         return dto;
     }

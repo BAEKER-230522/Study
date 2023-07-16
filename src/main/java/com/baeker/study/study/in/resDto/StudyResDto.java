@@ -28,7 +28,7 @@ public class StudyResDto {
     @Schema(example = "1")
     int bronze;
     @Schema(example = "1")
-    int sliver;
+    int silver;
     @Schema(example = "1")
     int gold;
     @Schema(example = "1")
@@ -51,7 +51,7 @@ public class StudyResDto {
         this.capacity = study.getCapacity();
         this.xp = study.getXp();
         this.bronze = study.getBronze();
-        this.sliver = study.getSliver();
+        this.silver = study.getSilver();
         this.gold = study.getGold();
         this.diamond = study.getDiamond();
         this.ruby = study.getRuby();

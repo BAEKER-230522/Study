@@ -11,6 +11,7 @@ import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,24 +47,26 @@ class StudyRuleServiceTests {
     MemberClient client;
 
     @BeforeEach
-    public void setFeign() {
+    void setFeign() {
         when(feign.getRule(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(client.updateMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(client.deleteMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
+        when(client.findById(any()))
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
-    public Study createStudy() {
-        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", "리더", 1);
+    Study createStudy() {
+        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", 1);
         return studyService.create(reqDto).getStudy();
     }
 
 
     @Test
     @DisplayName("생성 메서드")
-    public void createTest() {
+    void createTest() {
         Study study = createStudy();
         CreateStudyRuleRequest request = new CreateStudyRuleRequest();
         request.setRuleId(1L);
@@ -79,7 +82,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("수정 메서드")
-    public void modifyTest() {
+    void modifyTest() {
         Study study = createStudy();
         CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
         cr.setRuleId(1L);
@@ -111,7 +114,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("삭제 메서드")
-    public void delete() {
+    void delete() {
         Study study = createStudy();
         CreateStudyRuleRequest request = new CreateStudyRuleRequest();
         request.setRuleId(1L);
@@ -134,7 +137,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("조회/페이징")
-    public void select() {
+    void selectPaging() {
         Study study = createStudy();
 
         for (int i = 1; i <= 100; i++) {
@@ -153,4 +156,12 @@ class StudyRuleServiceTests {
             assertThat(studyRule.getName()).isEqualTo("이름"+i++);
         }
     }
+
+    @Test
+    @DisplayName("스터디 룰 리스트 리턴")
+    void studyRuleList() {
+        //TODO: 스터디 룰 리스트 테스트 코드 작성
+        studyRuleService.getStudyRuleFromStudy(1L);
+        }
+
 }

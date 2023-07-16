@@ -29,7 +29,7 @@ public class StudySnapshot extends ScoreBase {
                 .study(study)
                 .dayOfWeek(dayOfWeek)
                 .bronze(dto.getBronze())
-                .sliver(dto.getSliver())
+                .silver(dto.getSilver())
                 .gold(dto.getGold())
                 .diamond(dto.getDiamond())
                 .ruby(dto.getRuby())
@@ -45,7 +45,7 @@ public class StudySnapshot extends ScoreBase {
     public StudySnapshot update(BaekjoonDto dto) {
         return this.toBuilder()
                 .bronze(this.getBronze() + dto.getBronze())
-                .sliver(this.getSliver() + dto.getSliver())
+                .silver(this.getSilver() + dto.getSilver())
                 .gold(this.getGold() + dto.getGold())
                 .diamond(this.getDiamond() + dto.getDiamond())
                 .ruby(this.getRuby() + dto.getRuby())

@@ -83,7 +83,7 @@ public class Study extends ScoreBase {
     public Study updateSolvedCount(AddSolvedCountEvent event) {
         return this.toBuilder()
                 .bronze(this.getBronze() + event.getBronze())
-                .sliver(this.getSliver() + event.getSliver())
+                .silver(this.getSilver() + event.getSilver())
                 .gold(this.getGold() + event.getGold())
                 .diamond(this.getDiamond() + event.getDiamond())
                 .ruby(this.getRuby() + event.getRuby())

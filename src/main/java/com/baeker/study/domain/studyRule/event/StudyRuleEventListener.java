@@ -18,7 +18,7 @@ public class StudyRuleEventListener {
     @EventListener
     public void listen(StudyRuleEvent event) {
         try {
-            studyRuleService.whenstudyEventType(event.getStudyRuleId());
+            studyRuleService.updateStudySolved(event.getStudyRuleId());
         } catch (NotFoundException e) {
             log.error(e.getMessage());
         }

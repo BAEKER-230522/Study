@@ -8,6 +8,7 @@ import com.baeker.study.domain.email.MailDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
+import com.baeker.study.domain.studyRule.repository.StudyRuleDslRepositoryImp;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.global.feign.Feign;
 import com.baeker.study.global.feign.dto.MemberDto;
@@ -41,6 +42,8 @@ public class StudyRuleService {
     private final EmailService emailService;
 
     private final SnapshotRepository snapshotRepository;
+
+    private final StudyRuleDslRepositoryImp studyRuleDslRepositoryImp;
 
     private final Feign feign;
     /**
@@ -180,7 +183,7 @@ public class StudyRuleService {
      * @param id = studyRuleId
      *
      */
-    public void whenstudyEventType(Long id) throws NotFoundException {
+    public void updateStudySolved(Long id) throws NotFoundException {
         StudyRule studyRule = getStudyRule(id);
         String studyName = studyRule.getStudy().getName();
         RuleDto rule = getRule(studyRule.getRuleId());
@@ -194,7 +197,7 @@ public class StudyRuleService {
 
         switch (difficulty) {
             case "BRONZE" -> todayCount = allSnapshot.get(0).getBronze();
-            case "SILVER" -> todayCount = allSnapshot.get(0).getSliver(); //TODO: 오타 수정되면 다시
+            case "SILVER" -> todayCount = allSnapshot.get(0).getSilver(); //TODO: 오타 수정되면 다시
             case "GOLD" -> todayCount = allSnapshot.get(0).getGold();
             case "PLATINUM" -> todayCount = allSnapshot.get(0).getPlatinum();
             case "DIAMOND" -> todayCount = allSnapshot.get(0).getDiamond();
@@ -230,6 +233,10 @@ public class StudyRuleService {
     public RuleDto getRule(Long id) {
         RsData<RuleDto> rule = feign.getRule(id);
         return rule.getData();
+    }
+
+    public List<StudyRule> getStudyRuleFromStudy(Long studyId) {
+        return studyRuleDslRepositoryImp.getStudyRuleFromStudy(studyId);
     }
 }
 
