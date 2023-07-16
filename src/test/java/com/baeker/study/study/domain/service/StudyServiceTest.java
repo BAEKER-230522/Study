@@ -11,6 +11,7 @@ import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +48,9 @@ class StudyServiceTest {
     public void beforeEach() {
         when(memberClient.updateMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "성공", null));
+
+        when(memberClient.findById(any()))
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
     @Test

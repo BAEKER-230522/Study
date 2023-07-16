@@ -1,5 +1,6 @@
 package com.baeker.study.study.in.resDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Data
 @NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 public class MemberResDto {
 
     private Long id;
@@ -31,4 +33,8 @@ public class MemberResDto {
     private String email;
     private String token;
     private boolean newMember;
+
+    public MemberResDto(String nickname) {
+        this.nickname = nickname;
+    }
 }
