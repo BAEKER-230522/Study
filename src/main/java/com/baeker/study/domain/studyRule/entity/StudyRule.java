@@ -1,5 +1,6 @@
 package com.baeker.study.domain.studyRule.entity;
 
+import com.baeker.study.domain.problem.Problem;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.study.domain.entity.Study;
 import jakarta.persistence.*;
@@ -13,6 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -47,11 +50,13 @@ public class StudyRule {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
+
+    @OneToMany(mappedBy = "studyRule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Problem> problems = new ArrayList<>();
 
     public void setStatus(boolean status) {
         if (status) {

@@ -5,6 +5,8 @@ import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
+import com.baeker.study.domain.problem.ProblemService;
+import com.baeker.study.domain.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
@@ -29,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,8 @@ public class StudyRuleService {
     private final StudyRuleDslRepositoryImp studyRuleDslRepositoryImp;
 
     private final Feign feign;
+
+    private final ProblemService problemService;
     /**
      * 생성
      */
@@ -59,8 +62,13 @@ public class StudyRuleService {
         LocalDate now = LocalDate.now();
         studyRule.setMission(now);
         studyRule.setStudy(studyRule,study);
+        addProblem(request.getCreateProblemList(), studyRule);
         studyRuleRepository.save(studyRule);
         return studyRule.getId();
+    }
+
+    private void addProblem(List<CreateProblem> createProblems, StudyRule studyRule) {
+        problemService.createProblem(createProblems, studyRule);
     }
 
     /**
@@ -91,33 +99,17 @@ public class StudyRuleService {
      * 조회
      */
 
-    public StudyRule getStudyRule(Long id) {
-        Optional<StudyRule> rs = studyRuleRepository.findById(id);
-        if (rs.isEmpty()) {
-            throw new NotFoundException("아이디를 확인해주세요");
-        }
-        return rs.get();
-    }
+    public StudyRule getStudyRule(Long studyRuleId) {
+        return studyRuleDslRepositoryImp.findStudyRule(studyRuleId)
+                .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));}
 
     public StudyRule getStudyRule(String name) {
-        Optional<StudyRule> rs = studyRuleRepository.findByName(name);
-        if (rs.isEmpty()) {
-            throw new NotFoundException("이름을 확인해주세요");
-        }
-        return rs.get();
-    }
-
-    // StudyRuleId -> StudyId
-    public Long getStudyId(Long id) {
-        return getStudyRule(id).getStudy().getId();
-    }
+        return studyRuleRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException("이름을 확인해주세요"));}
 
     public List<StudyRule> getAll() {
         return studyRuleRepository.findAll();
     }
-
-
-
 
     /**
      * 검증
@@ -252,7 +244,7 @@ public class StudyRuleService {
     }
 
     public List<StudyRule> getStudyRuleFromStudy(Long studyId) {
-        return studyRuleDslRepositoryImp.getStudyRuleFromStudy(studyId);
+        return studyRuleDslRepositoryImp.findStudyRuleFromStudy(studyId);
     }
 }
 

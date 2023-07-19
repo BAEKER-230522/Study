@@ -36,6 +36,8 @@ public class QStudyRule extends EntityPathBase<StudyRule> {
 
     public final StringPath name = createString("name");
 
+    public final ListPath<com.baeker.study.domain.problem.Problem, com.baeker.study.domain.problem.QProblem> problems = this.<com.baeker.study.domain.problem.Problem, com.baeker.study.domain.problem.QProblem>createList("problems", com.baeker.study.domain.problem.Problem.class, com.baeker.study.domain.problem.QProblem.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> ruleId = createNumber("ruleId", Long.class);
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
