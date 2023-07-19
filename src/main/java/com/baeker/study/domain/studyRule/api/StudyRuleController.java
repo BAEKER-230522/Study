@@ -76,7 +76,7 @@ public class StudyRuleController {
     }
 
     @GetMapping("/v1/search/{studyruleid}")
-    @Operation(summary = "스터디 규칙 개별조회", description = "한개씩 조회합니다.", tags = "StudyRule-조회")
+    @Operation(summary = "미션 조회", description = "디테일한 정보", tags = "StudyRule-조회")
     public RsData<StudyRuleDto> searchStudyRuleId(@Parameter(description = "조회 하고싶은 StudyRuleId 입력", example = "1") @PathVariable("studyruleid") Long studyruleid) {
         StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
         return RsData.of("S-1", String.format("%d 번 아이디 조회 결과 입니다.", studyruleid), new StudyRuleDto(studyRule));

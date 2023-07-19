@@ -31,4 +31,5 @@ public interface Feign {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/api/member/get/v1/{memberId}")
     RsData<MemberDto> getMember(@PathVariable("memberId") Long memberId);
+
 }

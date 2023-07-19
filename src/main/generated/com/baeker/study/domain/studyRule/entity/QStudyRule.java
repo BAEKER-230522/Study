@@ -26,15 +26,23 @@ public class QStudyRule extends EntityPathBase<StudyRule> {
 
     public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);
 
+    public final DatePath<java.time.LocalDate> deadline = createDate("deadline", java.time.LocalDate.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final EnumPath<com.baeker.study.domain.studyRule.Mission> mission = createEnum("mission", com.baeker.study.domain.studyRule.Mission.class);
+    public final EnumPath<Mission> mission = createEnum("mission", Mission.class);
 
     public final DateTimePath<java.time.LocalDateTime> modifyDate = createDateTime("modifyDate", java.time.LocalDateTime.class);
 
     public final StringPath name = createString("name");
 
+    public final ListPath<com.baeker.study.domain.problem.Problem, com.baeker.study.domain.problem.QProblem> problems = this.<com.baeker.study.domain.problem.Problem, com.baeker.study.domain.problem.QProblem>createList("problems", com.baeker.study.domain.problem.Problem.class, com.baeker.study.domain.problem.QProblem.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> ruleId = createNumber("ruleId", Long.class);
+
+    public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
+
+    public final EnumPath<Status> status = createEnum("status", Status.class);
 
     public final com.baeker.study.study.domain.entity.QStudy study;
 

@@ -2,6 +2,7 @@ package com.baeker.study.studyRule;
 
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
@@ -24,6 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,22 +61,34 @@ class StudyRuleServiceTests {
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
-    Study createStudy() {
-        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름", "소개", 1);
+    Study createStudy(int i) {
+        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름" + i, "소개", 1);
         return studyService.create(reqDto).getStudy();
     }
 
+    CreateStudyRuleRequest setRequest(int i) {
+        Study study = createStudy(i);
+        CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
+        cr.setRuleId(1L);
+        cr.setName("이름" + i);
+        cr.setAbout("소개" + i);
+        cr.setStudyId(study.getId());
+        List<CreateProblem> createProblems = new ArrayList<>();
+        CreateProblem createProblem = new CreateProblem("문제이름", 1);
+        createProblems.add(createProblem);
+        cr.setCreateProblemList(createProblems);
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(1);
+        cr.setStartDate(startDate);
+        cr.setDeadline(endDate);
+        return cr;
+    }
 
     @Test
     @DisplayName("생성 메서드")
+    @Transactional
     void createTest() {
-        Study study = createStudy();
-        CreateStudyRuleRequest request = new CreateStudyRuleRequest();
-        request.setRuleId(1L);
-        request.setName("이름1");
-        request.setAbout("소개1");
-        request.setStudyId(study.getId());
-
+        CreateStudyRuleRequest request = setRequest(1);
         Long studyRuleId = studyRuleService.create(request);
         StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
 
@@ -82,14 +97,9 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("수정 메서드")
+    @Transactional
     void modifyTest() {
-        Study study = createStudy();
-        CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
-        cr.setRuleId(1L);
-        cr.setName("이름1");
-        cr.setAbout("소개1");
-        cr.setStudyId(study.getId());
-
+        CreateStudyRuleRequest cr = setRequest(1);
         Long studyRuleId = studyRuleService.create(cr);
         StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
 
@@ -114,14 +124,9 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("삭제 메서드")
+    @Transactional
     void delete() {
-        Study study = createStudy();
-        CreateStudyRuleRequest request = new CreateStudyRuleRequest();
-        request.setRuleId(1L);
-        request.setName("이름1");
-        request.setAbout("소개1");
-        request.setStudyId(study.getId());
-
+        CreateStudyRuleRequest request = setRequest(1);
         Long studyRuleId = studyRuleService.create(request);
         StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
 
@@ -137,21 +142,17 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("조회/페이징")
+    @Transactional
     void selectPaging() {
-        Study study = createStudy();
 
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 101; i <= 200; i++) {
             Long ruleId = (long) i;
-            CreateStudyRuleRequest createStudyRuleRequest = new CreateStudyRuleRequest();
-            createStudyRuleRequest.setName("이름"+i);
-            createStudyRuleRequest.setRuleId(ruleId);
-            createStudyRuleRequest.setAbout("소개"+i);
-            createStudyRuleRequest.setStudyId(study.getId());
+            CreateStudyRuleRequest createStudyRuleRequest = setRequest(i);
             studyRuleService.create(createStudyRuleRequest);
         }
         List<StudyRule> all = studyRuleService.getAll();
         assertThat(all.size()).isEqualTo(100);
-        long i = 1;
+        long i = 101;
         for (StudyRule studyRule : all) {
             assertThat(studyRule.getName()).isEqualTo("이름"+i++);
         }
@@ -159,6 +160,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("스터디 룰 리스트 리턴")
+    @Transactional
     void studyRuleList() {
         //TODO: 스터디 룰 리스트 테스트 코드 작성
         studyRuleService.getStudyRuleFromStudy(1L);

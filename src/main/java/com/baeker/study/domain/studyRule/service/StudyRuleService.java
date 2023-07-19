@@ -5,6 +5,8 @@ import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
+import com.baeker.study.domain.problem.ProblemService;
+import com.baeker.study.domain.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
@@ -22,12 +24,13 @@ import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +49,8 @@ public class StudyRuleService {
     private final StudyRuleDslRepositoryImp studyRuleDslRepositoryImp;
 
     private final Feign feign;
+
+    private final ProblemService problemService;
     /**
      * 생성
      */
@@ -54,10 +59,16 @@ public class StudyRuleService {
     public Long create(CreateStudyRuleRequest request) {
         Study study = studyService.findById(request.getStudyId());
         StudyRule studyRule = StudyRule.create(request);
+        LocalDate now = LocalDate.now();
+        studyRule.setMission(now);
         studyRule.setStudy(studyRule,study);
-
+        addProblem(request.getCreateProblemList(), studyRule);
         studyRuleRepository.save(studyRule);
         return studyRule.getId();
+    }
+
+    private void addProblem(List<CreateProblem> createProblems, StudyRule studyRule) {
+        problemService.createProblem(createProblems, studyRule);
     }
 
     /**
@@ -88,33 +99,17 @@ public class StudyRuleService {
      * 조회
      */
 
-    public StudyRule getStudyRule(Long id) {
-        Optional<StudyRule> rs = studyRuleRepository.findById(id);
-        if (rs.isEmpty()) {
-            throw new NotFoundException("아이디를 확인해주세요");
-        }
-        return rs.get();
-    }
+    public StudyRule getStudyRule(Long studyRuleId) {
+        return studyRuleDslRepositoryImp.findStudyRule(studyRuleId)
+                .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));}
 
     public StudyRule getStudyRule(String name) {
-        Optional<StudyRule> rs = studyRuleRepository.findByName(name);
-        if (rs.isEmpty()) {
-            throw new NotFoundException("이름을 확인해주세요");
-        }
-        return rs.get();
-    }
-
-    // StudyRuleId -> StudyId
-    public Long getStudyId(Long id) {
-        return getStudyRule(id).getStudy().getId();
-    }
+        return studyRuleRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException("이름을 확인해주세요"));}
 
     public List<StudyRule> getAll() {
         return studyRuleRepository.findAll();
     }
-
-
-
 
     /**
      * 검증
@@ -145,9 +140,22 @@ public class StudyRuleService {
         return getXp(studyRule.getId());
     }
 
-    public void setMission(Long id, boolean mission) {
+    public void setStatus(Long id, boolean status) {
         StudyRule studyRule = getStudyRule(id);
-        studyRule.setMission(mission);
+        studyRule.setStatus(status);
+    }
+
+    /**
+     * 하루 1회 미션 진행상태 업데이트
+     */
+    @Scheduled(cron = "0 1 0 * * *")
+    @Transactional
+    protected void setMission() {
+        LocalDate now = LocalDate.now();
+        List<StudyRule> all = getAll();
+        for (StudyRule studyRule : all) {
+            studyRule.setMission(now);
+        }
     }
 
     public void updateStudyRule(Long id, Map<String, String> updates) {
@@ -205,14 +213,14 @@ public class StudyRuleService {
         }
 
         if (todayCount >= ruleCount) {
-            setMission(studyRule.getId(), true);
+            setStatus(studyRule.getId(), true);
             AddXpReqDto addXpReqDto = new AddXpReqDto();
             addXpReqDto.setId(studyRule.getStudy().getId());
             addXpReqDto.setXp(getXp(studyRule));
             studyService.addXp(addXpReqDto);
             log.debug("study xp ++");
         } else {
-            setMission(studyRule.getId(), false);
+            setStatus(studyRule.getId(), false);
             List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
             for (MyStudy myStudy : myStudies) {
                 Long memberId = myStudy.getMember();
@@ -236,7 +244,7 @@ public class StudyRuleService {
     }
 
     public List<StudyRule> getStudyRuleFromStudy(Long studyId) {
-        return studyRuleDslRepositoryImp.getStudyRuleFromStudy(studyId);
+        return studyRuleDslRepositoryImp.findStudyRuleFromStudy(studyId);
     }
 }
 
