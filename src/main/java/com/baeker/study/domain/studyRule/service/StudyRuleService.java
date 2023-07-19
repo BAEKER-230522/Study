@@ -22,9 +22,11 @@ import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,8 +56,9 @@ public class StudyRuleService {
     public Long create(CreateStudyRuleRequest request) {
         Study study = studyService.findById(request.getStudyId());
         StudyRule studyRule = StudyRule.create(request);
+        LocalDate now = LocalDate.now();
+        studyRule.setMission(now);
         studyRule.setStudy(studyRule,study);
-
         studyRuleRepository.save(studyRule);
         return studyRule.getId();
     }
@@ -145,9 +148,22 @@ public class StudyRuleService {
         return getXp(studyRule.getId());
     }
 
-    public void setMission(Long id, boolean mission) {
+    public void setStatus(Long id, boolean status) {
         StudyRule studyRule = getStudyRule(id);
-        studyRule.setMission(mission);
+        studyRule.setStatus(status);
+    }
+
+    /**
+     * 하루 1회 미션 진행상태 업데이트
+     */
+    @Scheduled(cron = "0 1 0 * * *")
+    @Transactional
+    protected void setMission() {
+        LocalDate now = LocalDate.now();
+        List<StudyRule> all = getAll();
+        for (StudyRule studyRule : all) {
+            studyRule.setMission(now);
+        }
     }
 
     public void updateStudyRule(Long id, Map<String, String> updates) {
@@ -205,14 +221,14 @@ public class StudyRuleService {
         }
 
         if (todayCount >= ruleCount) {
-            setMission(studyRule.getId(), true);
+            setStatus(studyRule.getId(), true);
             AddXpReqDto addXpReqDto = new AddXpReqDto();
             addXpReqDto.setId(studyRule.getStudy().getId());
             addXpReqDto.setXp(getXp(studyRule));
             studyService.addXp(addXpReqDto);
             log.debug("study xp ++");
         } else {
-            setMission(studyRule.getId(), false);
+            setStatus(studyRule.getId(), false);
             List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
             for (MyStudy myStudy : myStudies) {
                 Long memberId = myStudy.getMember();

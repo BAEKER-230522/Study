@@ -1,7 +1,5 @@
 package com.baeker.study.domain.studyRule.entity;
 
-import com.baeker.study.domain.studyRule.Mission;
-import com.baeker.study.domain.studyRule.dto.StudyRuleForm;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.study.domain.entity.Study;
 import jakarta.persistence.*;
@@ -13,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -39,30 +38,49 @@ public class StudyRule {
     @LastModifiedDate
     private LocalDateTime modifyDate;
 
+    private LocalDate startDate;
+    private LocalDate deadline;
     @Enumerated(EnumType.STRING)
     private Mission mission;
 
     private Long ruleId;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
 
-    public void setMission(boolean mission) {
-        if (mission) {
-            this.mission = Mission.COMPLETE;
+    public void setStatus(boolean status) {
+        if (status) {
+            this.status = Status.COMPLETE;
         } else {
-            this.mission = Mission.FAIL;
+            this.status = Status.FAIL;
+        }
+    }
+
+    public void setMission(LocalDate date) {
+        if (date.isBefore(startDate)) {
+            this.mission = Mission.INACTIVE;
+        }
+        else if (date.isAfter(deadline)) {
+            this.mission = Mission.DONE;
+        }
+        else if ((date.isAfter(startDate) || date.isEqual(startDate))&& date.isBefore(deadline)) {
+            this.mission = Mission.ACTIVE;
         }
     }
 
     public static StudyRule create(CreateStudyRuleRequest request) {
         return builder()
                 .name(request.getName())
+                .startDate(request.getStartDate())
+                .deadline(request.getDeadline())
                 .about(request.getAbout())
                 .ruleId(request.getRuleId())
-                .mission(Mission.FAIL)
+                .status(Status.FAIL)
                 .build();
     }
 
