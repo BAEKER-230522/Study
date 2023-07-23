@@ -146,7 +146,6 @@ class StudyRuleServiceTests {
     void selectPaging() {
 
         for (int i = 101; i <= 200; i++) {
-            Long ruleId = (long) i;
             CreateStudyRuleRequest createStudyRuleRequest = setRequest(i);
             studyRuleService.create(createStudyRuleRequest);
         }

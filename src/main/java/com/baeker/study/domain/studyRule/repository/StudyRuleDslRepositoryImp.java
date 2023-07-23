@@ -20,10 +20,10 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository{
 
     @Override
     public List<StudyRule> findStudyRuleFromStudy(Long studyId) {
-        return jpaQueryFactory.select(studyRule)
-                .from(studyRule)
-                .innerJoin(study)
-                .on(studyRule.study.id.eq(study.id))
+        return jpaQueryFactory.selectFrom(studyRule)
+                .leftJoin(studyRule.study, study)
+                .leftJoin(studyRule.problems, problem)
+                .fetchJoin()
                 .where(study.id.eq(studyId))
                 .fetch();
     }

@@ -1,16 +1,17 @@
 package com.baeker.study.domain.problem;
 
 import com.baeker.study.domain.studyRule.entity.StudyRule;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.*;
 
 import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 @Getter
 @Builder
@@ -26,7 +27,7 @@ public class Problem {
     @ManyToOne(fetch = LAZY)
     private StudyRule studyRule;
 
-    public static Problem createProblem(String problemName, Integer problemNumber, StudyRule studyRule) {
+    protected static Problem createProblem(String problemName, Integer problemNumber, StudyRule studyRule) {
         return Problem.builder()
                 .problemName(problemName)
                 .problemNumber(problemNumber)
