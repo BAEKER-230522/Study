@@ -26,11 +26,11 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-#eureka:
-#  instance:
-#    preferIpAddress: true
-#  client:
-#    registerWithEureka: true
-#    fetchRegistry: true
-#    serviceUrl:
-#      defaultZone: http://${custom.server}:8761/eureka/
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${custom.server}:8761/eureka/

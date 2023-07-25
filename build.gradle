@@ -32,7 +32,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok' // Lombok
 
 	// eureka client
-//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 	// api 호출
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'

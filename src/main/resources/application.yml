@@ -43,7 +43,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -61,14 +61,14 @@ jasypt:
     bean: jasyptStringEncryptor
     password:
 
-#eureka:
-#  instance:
-#    preferIpAddress: true
-#  client:
-#    registerWithEureka: true
-#    fetchRegistry: true
-#    serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
 
 
 
@@ -83,7 +83,7 @@ server:
 custom:
   server: 101.101.208.240
   feign:
-    member: http://member/api/member
+    member: http://${custom.server}:8081 #http://member/api/member
 
 logging:
   pattern:

@@ -26,6 +26,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder(toBuilder = true)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+//@Table(name = "study_rule",
+//        indexes = {
+//        @Index(name = "study_rule_idx", columnList = "study_id")
+//        }
+//)
 public class StudyRule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
