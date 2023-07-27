@@ -8,7 +8,7 @@ spring:
     password: ENC(OH+qshDPtFh1h1gDdWExzz/t0BlOzVbo)
     url: ENC(cQUB47WfdehGJ/B1hlQxP4bpmUxFRNyGu/4MY91aS3P8AegR0zD/QPfbAOd2A5rkoG8+aIxRxkEjlzFlDmvt8EWhGC5uujEJ5+gFp6VL86BGNPkJICyY2gip6e3mk/9LoqdlLagZVrINiMAT3V32C2x67EKL8rZkch8Jc+uzhmU7Cv0vjdthuNPlASmTOFSB)
   kafka:
-    bootstrap-servers: ${custom.server}:9092
+    bootstrap-servers: ${custom.kafka}:9092
     consumer:
       group-id: study
       auto-offset-reset: earliest

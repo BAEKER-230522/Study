@@ -100,15 +100,15 @@ public class StudyRuleController {
         return RsData.of("S-1", "성공", collect);
     }
 
-//    @PostMapping("/v1/test")
-//    @Operation(summary = "테스트", description = "StudyRule 생성", tags = "StudyRule-생성")
-//    public RsData<CreateStudyRuleResponse> test(@RequestBody @Valid CreateStudyRuleRequest request) {
-//        Long studyRuleId = 0L;
-//        for (int i = 0; i < 10000; i++) {
-//            studyRuleId = studyRuleService.create(request);
-//        }
-//        CreateStudyRuleResponse createStudyRuleResponse = new CreateStudyRuleResponse();
-//        createStudyRuleResponse.setId(studyRuleId);
-//        return RsData.successOf(createStudyRuleResponse);
-//    }
+    @PostMapping("/v1/test")
+    @Operation(summary = "테스트", description = "StudyRule 생성", tags = "StudyRule-생성")
+    public RsData<CreateStudyRuleResponse> test(@RequestBody @Valid CreateStudyRuleRequest request) {
+        Long studyRuleId = 0L;
+        for (int i = 0; i < 10000; i++) {
+            studyRuleId = studyRuleService.create(request);
+        }
+        CreateStudyRuleResponse createStudyRuleResponse = new CreateStudyRuleResponse();
+        createStudyRuleResponse.setId(studyRuleId);
+        return RsData.successOf(createStudyRuleResponse);
+    }
 }
