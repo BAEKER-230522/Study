@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -182,5 +183,20 @@ public class StudyController {
 
         log.info("study 에 가입 대기 member 목록 응답 완료 study id = {} / pending count = {} / inviting count = {}", id, resDto.getPending().size(), resDto.getInviting().size());
         return RsData.of("S-1", "성공", resDto);
+    }
+
+    //-- find all studies --//
+    @GetMapping("/v1/all")
+    @Operation(summary = "모든 study 목록 조회")
+    public RsData<List<StudyResDto>> findAll() {
+        log.info("모든 study 목록 요청 확인");
+
+        List<Study> all = studyService.findAll();
+        List<StudyResDto> data = new ArrayList<>();
+
+        for (Study study : all)
+            data.add(new StudyResDto(study));
+
+        return RsData.successOf(data);
     }
 }
