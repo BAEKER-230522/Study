@@ -34,3 +34,7 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://10.22.130.253:8761/eureka/
+
+custom:
+  feign:
+    member: http://34.64.110.175:8081
