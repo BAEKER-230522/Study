@@ -76,7 +76,7 @@ public class StudyRuleController {
     }
 
     @GetMapping("/v1/search/{studyruleid}")
-    @Operation(summary = "스터디 규칙 개별조회", description = "한개씩 조회합니다.", tags = "StudyRule-조회")
+    @Operation(summary = "미션 조회", description = "디테일한 정보", tags = "StudyRule-조회")
     public RsData<StudyRuleDto> searchStudyRuleId(@Parameter(description = "조회 하고싶은 StudyRuleId 입력", example = "1") @PathVariable("studyruleid") Long studyruleid) {
         StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
         return RsData.of("S-1", String.format("%d 번 아이디 조회 결과 입니다.", studyruleid), new StudyRuleDto(studyRule));
@@ -91,12 +91,24 @@ public class StudyRuleController {
     }
 
     @GetMapping("/v1/studyrules/{studyid}")
-    @Operation(summary = "스터디 규칙 스터디로 조회", description = "스터디 아이디로 스터디 규칙리스트 조회.", tags = "StudyRule-조회")
+    @Operation(summary = "미션 studyId로 조회", description = "스터디 아이디로 스터디 규칙리스트 조회.", tags = "StudyRule-조회")
     public RsData<List<StudyRuleListDto>> studyRuleFromStudy(@PathVariable("studyid") Long studyId) {
         List<StudyRule> studyRuleList = studyRuleService.getStudyRuleFromStudy(studyId);
         List<StudyRuleListDto> collect = studyRuleList.stream()
                 .map(StudyRuleListDto::new)
                 .toList();
         return RsData.of("S-1", "성공", collect);
+    }
+
+    @PostMapping("/v1/test")
+    @Operation(summary = "테스트", description = "StudyRule 생성", tags = "StudyRule-생성")
+    public RsData<CreateStudyRuleResponse> test(@RequestBody @Valid CreateStudyRuleRequest request) {
+        Long studyRuleId = 0L;
+        for (int i = 0; i < 10000; i++) {
+            studyRuleId = studyRuleService.create(request);
+        }
+        CreateStudyRuleResponse createStudyRuleResponse = new CreateStudyRuleResponse();
+        createStudyRuleResponse.setId(studyRuleId);
+        return RsData.successOf(createStudyRuleResponse);
     }
 }

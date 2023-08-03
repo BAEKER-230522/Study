@@ -77,7 +77,7 @@ public class KafkaConsumer {
             publisher.publishEvent(new StudyRuleEvent(this, studyRuleId));
             //TODO: 이벤트 리스너
         } catch (NoSuchElementException e) {
-            throw new NotFoundException("StudyRule 데이터 없음");
+            log.error(e.getMessage());
         }
     }
 }
