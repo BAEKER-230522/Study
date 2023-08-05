@@ -29,6 +29,7 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository{
     }
 
     @Override
+    @Deprecated
     public Optional<StudyRule> findStudyRule(Long studyRuleId) {
         return Optional.ofNullable(jpaQueryFactory.selectFrom(studyRule)
                 .leftJoin(studyRule.problems, problem).fetchJoin().fetchOne());
