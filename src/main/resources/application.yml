@@ -63,6 +63,7 @@ jasypt:
 
 eureka:
   instance:
+    instance-id: ${custom.server}:${server.port}
     preferIpAddress: true
   client:
     registerWithEureka: true
@@ -82,7 +83,6 @@ server:
 
 custom:
   kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
-  server: 10.22.131.215 #101.101.208.240
   feign:
     member: http://${custom.server}:8081 #http://member/api/member
 
