@@ -100,7 +100,7 @@ public class StudyRuleService {
      */
 
     public StudyRule getStudyRule(Long studyRuleId) {
-        return studyRuleDslRepositoryImp.findStudyRule(studyRuleId)
+        return studyRuleRepository.findById(studyRuleId)
                 .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));}
 
     public StudyRule getStudyRule(String name) {
