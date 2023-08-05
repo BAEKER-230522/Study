@@ -37,4 +37,4 @@ eureka:
 
 custom:
   feign:
-    member: http://34.64.110.175:8081
+    member: http://member:8081
