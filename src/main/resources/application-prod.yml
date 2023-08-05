@@ -36,5 +36,6 @@ eureka:
       defaultZone: http://10.22.131.215:8761/eureka/
 
 custom:
+  server: study
   feign:
     member: http://member:8081
