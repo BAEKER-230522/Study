@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class KafkaProducer {
 
-    @Value(value = "${message.topic.name}")
+    @Value("${message.topic.name}")
     private String topicName;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
