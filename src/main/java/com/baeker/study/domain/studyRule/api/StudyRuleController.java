@@ -111,4 +111,12 @@ public class StudyRuleController {
         createStudyRuleResponse.setId(studyRuleId);
         return RsData.successOf(createStudyRuleResponse);
     }
+    /**
+     * kafka 대신 사용하는 로직
+     */
+    @PatchMapping("/v1/studyrules/{studyruleid}/solved")
+    @Operation(summary = "스터디 성공유무 확인 하여 경험치 갱신", description = "카프카 대신 사용하는 용도", tags = "StudyRule-수정")
+    public void studyXpUpdate(@PathVariable("studyruleid") Long studyruleid) {
+        studyRuleService.updateStudySolved(studyruleid);
+    }
 }
