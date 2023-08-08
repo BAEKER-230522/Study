@@ -12,8 +12,9 @@ import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleDslRepositoryImp;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
-import com.baeker.study.global.feign.Feign;
+import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.MemberDto;
+import com.baeker.study.global.feign.RuleClient;
 import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
@@ -48,7 +49,8 @@ public class StudyRuleService {
 
     private final StudyRuleDslRepositoryImp studyRuleDslRepositoryImp;
 
-    private final Feign feign;
+    private final MemberClient memberClient;
+    private final RuleClient ruleClient;
 
     private final ProblemService problemService;
     /**
@@ -224,7 +226,7 @@ public class StudyRuleService {
             List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
             for (MyStudy myStudy : myStudies) {
                 Long memberId = myStudy.getMember();
-                RsData<MemberDto> member = feign.getMember(memberId);
+                RsData<MemberDto> member = memberClient.getMember(memberId);
                 emailService.mailSend(new MailDto(member.getData().email(),
                         String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
             }
@@ -239,7 +241,7 @@ public class StudyRuleService {
      * @throws ParseException
      */
     public RuleDto getRule(Long id) {
-        RsData<RuleDto> rule = feign.getRule(id);
+        RsData<RuleDto> rule = ruleClient.getRule(id);
         return rule.getData();
     }
 
