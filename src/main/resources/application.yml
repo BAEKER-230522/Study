@@ -84,6 +84,7 @@ custom:
   kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
   feign:
     member: http://localhost:8081/api/member
+    rule: http://rule:8083/api/rule
 
 logging:
   pattern:

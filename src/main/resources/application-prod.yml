@@ -39,3 +39,4 @@ custom:
   server: study
   feign:
     member: http://member:8081/api/member
+    rule: http://rule:8083/api/rule

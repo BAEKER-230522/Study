@@ -44,3 +44,4 @@ custom:
 
   feign:
     member: http://${custom.server}:8081/api/member
+    rule: http://rule:8083/api/rule

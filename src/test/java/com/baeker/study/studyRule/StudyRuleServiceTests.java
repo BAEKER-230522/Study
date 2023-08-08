@@ -7,8 +7,8 @@ import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
-import com.baeker.study.global.feign.Feign;
 import com.baeker.study.global.feign.MemberClient;
+import com.baeker.study.global.feign.RuleClient;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
@@ -45,19 +45,19 @@ class StudyRuleServiceTests {
     @Autowired
     StudyService studyService;
     @MockBean
-    Feign feign;
+    RuleClient ruleClient;
     @MockBean
-    MemberClient client;
+    MemberClient memberClient;
 
     @BeforeEach
     void setFeign() {
-        when(feign.getRule(any()))
+        when(ruleClient.getRule(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
-        when(client.updateMyStudy(any()))
+        when(memberClient.updateMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
-        when(client.deleteMyStudy(any()))
+        when(memberClient.deleteMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
-        when(client.findById(any()))
+        when(memberClient.findById(any()))
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
