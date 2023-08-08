@@ -38,4 +38,4 @@ eureka:
 custom:
   server: study
   feign:
-    member: http://member:8081
+    member: http://member:8081/api/member

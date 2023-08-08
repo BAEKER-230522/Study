@@ -43,7 +43,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -83,7 +83,7 @@ server:
 custom:
   kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
   feign:
-    member: http://${custom.server}:8081 #http://member/api/member
+    member: http://localhost:8081/api/member
 
 logging:
   pattern:
