@@ -1,6 +1,7 @@
 package com.baeker.study.global.feign;
 
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
@@ -31,4 +32,7 @@ public interface MemberClient {
     //--my study 로 member 조회 --//
     @GetMapping("/get/v1/id")
     RsData<MemberResDto> findById(@RequestParam(value = "id") Long id);
+
+    @GetMapping("/get/v1/{memberId}")
+    RsData<MemberDto> getMember(@PathVariable("memberId") Long memberId);
 }
