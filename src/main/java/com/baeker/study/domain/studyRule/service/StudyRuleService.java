@@ -195,15 +195,20 @@ public class StudyRuleService {
      */
     public void updateStudySolved(Long id) throws NotFoundException {
         StudyRule studyRule = getStudyRule(id);
+        Study study = studyRule.getStudy();
+
         String studyName = studyRule.getStudy().getName();
         RuleDto rule = getRule(studyRule.getRuleId());
 
         int todayCount = 0;
         int ruleCount = rule.getCount();
         String difficulty = rule.getDifficulty();
-
-
-        List<StudySnapshot> allSnapshot = studyService.findAllSnapshot(studyRule.getStudy());
+        List<StudySnapshot> allSnapshot = null;
+        try {
+            allSnapshot = studyService.findAllSnapshot(study);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.error("스냅샷이 없습니다.");
+        }
 
         switch (difficulty) {
             case "BRONZE" -> todayCount = allSnapshot.get(0).getBronze();
@@ -242,7 +247,6 @@ public class StudyRuleService {
      */
     public RuleDto getRule(Long id) {
         RsData<RuleDto> rule = ruleClient.getRule(id);
-        log.info("rule = {}", rule);
         return rule.getData();
     }
 
