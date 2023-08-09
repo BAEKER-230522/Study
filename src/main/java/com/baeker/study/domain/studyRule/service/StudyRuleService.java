@@ -242,6 +242,7 @@ public class StudyRuleService {
      */
     public RuleDto getRule(Long id) {
         RsData<RuleDto> rule = ruleClient.getRule(id);
+        log.info("rule = {}", rule);
         return rule.getData();
     }
 
