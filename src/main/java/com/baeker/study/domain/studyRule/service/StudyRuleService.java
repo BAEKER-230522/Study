@@ -53,6 +53,7 @@ public class StudyRuleService {
     private final RuleClient ruleClient;
 
     private final ProblemService problemService;
+
     /**
      * 생성
      */
@@ -63,7 +64,7 @@ public class StudyRuleService {
         StudyRule studyRule = StudyRule.create(request);
         LocalDate now = LocalDate.now();
         studyRule.setMission(now);
-        studyRule.setStudy(studyRule,study);
+        studyRule.setStudy(studyRule, study);
         addProblem(request.getCreateProblemList(), studyRule);
         studyRuleRepository.save(studyRule);
         return studyRule.getId();
@@ -103,11 +104,13 @@ public class StudyRuleService {
 
     public StudyRule getStudyRule(Long studyRuleId) {
         return studyRuleRepository.findById(studyRuleId)
-                .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));}
+                .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));
+    }
 
     public StudyRule getStudyRule(String name) {
         return studyRuleRepository.findByName(name)
-                .orElseThrow(() -> new NotFoundException("이름을 확인해주세요"));}
+                .orElseThrow(() -> new NotFoundException("이름을 확인해주세요"));
+    }
 
     public List<StudyRule> getAll() {
         return studyRuleRepository.findAll();
@@ -189,9 +192,7 @@ public class StudyRuleService {
     }
 
     /**
-     *
      * @param id = studyRuleId
-     *
      */
     public void updateStudySolved(Long id) throws NotFoundException {
         StudyRule studyRule = getStudyRule(id);
@@ -204,10 +205,13 @@ public class StudyRuleService {
         int ruleCount = rule.getCount();
         String difficulty = rule.getDifficulty();
         List<StudySnapshot> allSnapshot = null;
+
+        allSnapshot = studyService.findAllSnapshot(study);
+
         try {
-            allSnapshot = studyService.findAllSnapshot(study);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.error("스냅샷이 없습니다.");
+            allSnapshot.get(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new NotFoundException("스냅샷이 없습니다.");
         }
 
         switch (difficulty) {
@@ -241,6 +245,7 @@ public class StudyRuleService {
 
     /**
      * Rule 받아오기
+     *
      * @param id
      * @return
      * @throws ParseException
