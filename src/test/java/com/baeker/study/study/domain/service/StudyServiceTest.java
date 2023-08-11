@@ -1,5 +1,6 @@
 package com.baeker.study.study.domain.service;
 
+import com.baeker.study.base.exception.NoPermissionException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -50,6 +52,9 @@ class StudyServiceTest {
                 .thenReturn(new RsData<>("S-1", "성공", null));
 
         when(memberClient.findById(any()))
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader", "bk1234")));
+
+        when(memberClient.findById(6L))
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
     }
 
@@ -175,8 +180,18 @@ class StudyServiceTest {
         assertThat(studyList.size()).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("백준 연동 안할경우 가입 금지")
+    public void no5() {
+        assertThatThrownBy(() -> study(6L, "my study1", "", "1"))
+                .isInstanceOf(NoPermissionException.class);
 
+        Study study = study(1L, "my study1", "", "1");
 
+        Study findStudy = studyService.findById(study.getId());
+
+        assertThat(findStudy.getName()).isEqualTo(study.getName());
+    }
 
     private Study study(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, 10));

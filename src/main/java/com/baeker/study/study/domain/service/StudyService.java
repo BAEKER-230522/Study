@@ -1,6 +1,7 @@
 package com.baeker.study.study.domain.service;
 
 import com.baeker.study.base.exception.InvalidDuplicateException;
+import com.baeker.study.base.exception.NoPermissionException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
@@ -58,6 +59,9 @@ public class StudyService {
         }
 
         MemberResDto memberDto = memberClient.findById(dto.getMember()).getData();
+
+        if (memberDto.getBaekJoonName() == null)
+            throw new NoPermissionException("백준 연동이 안된 user 입니다.");
 
         Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getNickname());
         Study saveStudy = studyRepository.save(study);
