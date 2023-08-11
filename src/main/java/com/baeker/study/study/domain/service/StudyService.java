@@ -158,7 +158,7 @@ public class StudyService {
             snapshotRepository.save(snapshot);
         }
 
-        if (snapshots.size() > 7) {
+        while (snapshots.size() > 7) {
             StudySnapshot snapshot = snapshots.get(7);
             snapshots.remove(snapshot);
             snapshotRepository.delete(snapshot);

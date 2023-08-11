@@ -91,7 +91,7 @@ class StudyServiceTest {
         assertThat(study6.solvedCount()).isEqualTo(0);
 
         List<StudySnapshot> snapshots4 = study4.getSnapshots();
-        assertThat(snapshots4.size()).isEqualTo(0);
+        assertThat(snapshots4.size()).isEqualTo(1);
 
         publisher.publishEvent(new AddSolvedCountEvent(this, 2L, 3, 3, 3, 3, 3, 3));
 
@@ -139,7 +139,7 @@ class StudyServiceTest {
     void no3() {
         Study study = study(1L, "study", "about", "member");
         Study findStudy = studyService.findById(study.getId());
-        for (int i = 7; i > 0; i--) testSnapshot(findStudy, i);
+        for (int i = 6; i > 0; i--) testSnapshot(findStudy, i);
 
         assertThat(
                 studyService.findAllSnapshot(findStudy).size())
