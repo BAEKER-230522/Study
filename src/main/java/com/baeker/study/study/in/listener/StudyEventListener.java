@@ -2,6 +2,7 @@ package com.baeker.study.study.in.listener;
 
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -17,5 +18,10 @@ public class StudyEventListener {
     @EventListener
     public void listen(AddSolvedCountEvent event) {
         studyService.addSolveCount(event);
+    }
+
+    @EventListener
+    public void listen(CreateSnapshotEvent event) {
+        studyService.createSnapshot(event);
     }
 }

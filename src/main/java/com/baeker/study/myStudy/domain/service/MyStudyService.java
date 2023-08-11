@@ -60,6 +60,11 @@ public class MyStudyService {
     @Transactional
     public MyStudy join(JoinMyStudyReqDto dto, Study study) {
 
+        MemberResDto memberDto = memberClient.findById(dto.getMember()).getData();
+
+        if (memberDto.getBaekJoonName() == null)
+            throw new NoPermissionException("백준 연동이 안된 user 입니다.");
+
         invalidCreateMyStudy(dto.getMember(), study);
 
         MyStudy myStudy = myStudyRepository.save(
