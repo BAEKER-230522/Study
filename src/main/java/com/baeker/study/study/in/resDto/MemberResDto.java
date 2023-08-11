@@ -34,6 +34,11 @@ public class MemberResDto {
     private String token;
     private boolean newMember;
 
+    public MemberResDto(String nickname, String baekJoonName) {
+        this.nickname = nickname;
+        this.baekJoonName = baekJoonName;
+    }
+
     public MemberResDto(String nickname) {
         this.nickname = nickname;
     }
