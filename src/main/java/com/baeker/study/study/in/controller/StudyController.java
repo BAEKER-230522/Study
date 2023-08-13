@@ -11,6 +11,7 @@ import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.reqDto.UpdateReqDto;
 import com.baeker.study.study.in.resDto.*;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -198,5 +199,19 @@ public class StudyController {
             data.add(new StudyResDto(study));
 
         return RsData.successOf(data);
+    }
+
+    //-- feign test --//
+    @Hidden
+    @GetMapping("/test/feign/{id}")
+    public RsData<MemberResDto> testing(
+            @PathVariable Long id
+    ) {
+        log.info("요청 확인 member id = {}", id);
+
+        MemberResDto resDto = studyService.feignTest(id);
+
+        log.info("응답 완료 id = {}, nickname = {}, baekjoon neme = {}", resDto.getId(), resDto.getNickname(), resDto.getBaekJoonName());
+        return RsData.successOf(resDto);
     }
 }
