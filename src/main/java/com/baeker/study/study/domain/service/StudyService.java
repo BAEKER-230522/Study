@@ -226,4 +226,15 @@ public class StudyService {
     public List<StudySnapshot> findAllSnapshot(Study study) {
         return snapshotQueryRepository.findAllByStudy(study);
     }
+
+
+    /**
+     * ** BUISINESS METHOD **
+     * feign test
+     */
+
+    //-- feign test --//
+    public MemberResDto feignTest(Long id) {
+        return memberClient.findById(id).getData();
+    }
 }
