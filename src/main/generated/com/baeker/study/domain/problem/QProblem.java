@@ -28,6 +28,8 @@ public class QProblem extends EntityPathBase<Problem> {
 
     public final NumberPath<Integer> problemNumber = createNumber("problemNumber", Integer.class);
 
+    public final EnumPath<com.baeker.study.domain.studyRule.entity.Status> status = createEnum("status", com.baeker.study.domain.studyRule.entity.Status.class);
+
     public final com.baeker.study.domain.studyRule.entity.QStudyRule studyRule;
 
     public QProblem(String variable) {
