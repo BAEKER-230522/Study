@@ -1,4 +1,4 @@
-package com.baeker.study.domain.problem.dto;
+package com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
