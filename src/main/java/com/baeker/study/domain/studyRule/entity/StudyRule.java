@@ -1,7 +1,7 @@
 package com.baeker.study.domain.studyRule.entity;
 
-import com.baeker.study.domain.problem.Problem;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.study.domain.entity.Study;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.baeker.study.domain.studyRule.entity.Status.FAIL;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -59,15 +60,15 @@ public class StudyRule {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @OneToMany(mappedBy = "studyRule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "studyRule", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Problem> problems = new ArrayList<>();
+    private List<PersonalStudyRule> personalStudyRules = new ArrayList<>();
 
     public void setStatus(boolean status) {
         if (status) {
             this.status = Status.COMPLETE;
         } else {
-            this.status = Status.FAIL;
+            this.status = FAIL;
         }
     }
 
@@ -90,12 +91,17 @@ public class StudyRule {
                 .deadline(request.getDeadline())
                 .about(request.getAbout())
                 .ruleId(request.getRuleId())
-                .status(Status.FAIL)
+                .status(FAIL)
                 .build();
     }
 
     public void setStudy(StudyRule studyRule, Study study) {
         this.study = study;
         study.getStudyRules().add(studyRule);
+    }
+    public void addPersonalStatus(PersonalStudyRule... personalStudyRule) {
+        for (PersonalStudyRule personal : personalStudyRule) {
+            if (personal.getStudyRule() == this) personalStudyRules.add(personal);
+        }
     }
 }

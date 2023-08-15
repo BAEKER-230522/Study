@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.baeker.study.domain.problem.QProblem.problem;
 import static com.baeker.study.domain.studyRule.entity.QStudyRule.studyRule;
+import static com.baeker.study.domain.studyRuleStatus.QPersonalStudyRule.personalStudyRule;
 import static com.baeker.study.study.domain.entity.QStudy.study;
 
 @Repository
@@ -22,18 +21,18 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository{
     public List<StudyRule> findStudyRuleFromStudy(Long studyId) {
         return jpaQueryFactory.selectFrom(studyRule)
                 .leftJoin(studyRule.study, study)
-                .leftJoin(studyRule.problems, problem)
+                .leftJoin(studyRule.personalStudyRules, personalStudyRule)
                 .fetchJoin()
                 .where(study.id.eq(studyId))
                 .fetch();
     }
 
-    @Override
-    @Deprecated
-    public Optional<StudyRule> findStudyRule(Long studyRuleId) {
-        return Optional.ofNullable(jpaQueryFactory.selectFrom(studyRule)
-                .leftJoin(studyRule.problems, problem).fetchJoin().fetchOne());
-    }
+//    @Override
+//    @Deprecated
+//    public Optional<StudyRule> findStudyRule(Long studyRuleId) {
+//        return Optional.ofNullable(jpaQueryFactory.selectFrom(studyRule)
+//                .leftJoin(studyRule.problems, problem).fetchJoin().fetchOne());
+//    }
 
 
 }

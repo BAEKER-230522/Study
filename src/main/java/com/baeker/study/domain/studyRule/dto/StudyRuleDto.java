@@ -1,7 +1,9 @@
 package com.baeker.study.domain.studyRule.dto;
 
-import com.baeker.study.domain.problem.dto.ProblemDto;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.ProblemDto;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -26,7 +28,7 @@ public class StudyRuleDto {
     private Long ruleId;
 
     @Schema(description = "StudyRule 이 가지고 있는 ProblemDto 리스트")
-    private List<ProblemDto> problemDtoList;
+    private List<PersonalStudyRuleDto> personalStudyRuleDtos;
 
     public StudyRuleDto(StudyRule studyRule) {
         this.id = studyRule.getId();
@@ -34,6 +36,15 @@ public class StudyRuleDto {
         this.about = studyRule.getAbout();
         this.study = new StudyResDto(studyRule.getStudy());
         this.ruleId = studyRule.getRuleId();
-        this.problemDtoList = studyRule.getProblems().stream().map(p -> new ProblemDto(p.getProblemName(), p.getProblemNumber())).toList();
+        this.personalStudyRuleDtos = personalStudyRuleDtos(studyRule.getPersonalStudyRules());
+    }
+
+    private List<PersonalStudyRuleDto> personalStudyRuleDtos(List<PersonalStudyRule> personalStudyRules) {
+        return personalStudyRules.stream().map(entity -> {
+            List<ProblemDto> problemDtos = entity.getProblemStatuses().stream()
+                    .map(problemStatus -> new ProblemDto(problemStatus.getProblem().getProblemName(),
+                                                    problemStatus.getProblem().getProblemNumber())).toList();
+        return new PersonalStudyRuleDto(entity.getMemberId(), entity.getStatus(), problemDtos);
+        }).toList();
     }
 }
