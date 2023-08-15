@@ -2,7 +2,7 @@ package com.baeker.study.studyRule;
 
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.domain.problem.dto.CreateProblem;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
@@ -62,7 +62,7 @@ class StudyRuleServiceTests {
     }
 
     Study createStudy(int i) {
-        CreateReqDto reqDto = CreateReqDto.createStudy(1L, "이름" + i, "소개", 1);
+        CreateReqDto reqDto = CreateReqDto.createStudy((long) i, "이름" + i, "소개", 1);
         return studyService.create(reqDto).getStudy();
     }
 
@@ -133,11 +133,13 @@ class StudyRuleServiceTests {
         assertThat(studyRule.getRuleId()).isEqualTo(1L);
 
         studyRuleService.delete(studyRule);
-
+        String msg = "";
         try {
             StudyRule studyRule1 = studyRuleService.getStudyRule(1L);
         } catch (NotFoundException e) {
+            msg = e.getMessage();
         }
+        assertThat(msg).isEqualTo("아이디를 확인해주세요");
     }
 
     @Test
@@ -157,12 +159,5 @@ class StudyRuleServiceTests {
         }
     }
 
-    @Test
-    @DisplayName("스터디 룰 리스트 리턴")
-    @Transactional
-    void studyRuleList() {
-        //TODO: 스터디 룰 리스트 테스트 코드 작성
-        studyRuleService.getStudyRuleFromStudy(1L);
-        }
 
 }

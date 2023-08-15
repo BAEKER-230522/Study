@@ -1,6 +1,6 @@
 package com.baeker.study.domain.studyRule.dto.request;
 
-import com.baeker.study.domain.problem.dto.CreateProblem;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -26,6 +26,8 @@ public class CreateStudyRuleRequest {
     @Schema(description = "StudyRule 이 반영할 규칙 (RuleId)", example = "1")
     private Long ruleId;
 
+//    @Schema(description = "studyRule 멤버, 문제별 상태")
+//    private List<StudyRuleStatus> statuses;
     @Schema(description = "미션에서 풀 문제")
     private List<CreateProblem> createProblemList;
 }

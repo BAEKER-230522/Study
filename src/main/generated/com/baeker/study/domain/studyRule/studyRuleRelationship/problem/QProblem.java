@@ -1,4 +1,4 @@
-package com.baeker.study.domain.problem;
+package com.baeker.study.domain.studyRule.studyRuleRelationship.problem;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,9 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QProblem extends EntityPathBase<Problem> {
 
-    private static final long serialVersionUID = 1196661946L;
-
-    private static final PathInits INITS = PathInits.DIRECT2;
+    private static final long serialVersionUID = 1863376192L;
 
     public static final QProblem problem = new QProblem("problem");
 
@@ -28,27 +26,18 @@ public class QProblem extends EntityPathBase<Problem> {
 
     public final NumberPath<Integer> problemNumber = createNumber("problemNumber", Integer.class);
 
-    public final com.baeker.study.domain.studyRule.entity.QStudyRule studyRule;
+    public final ListPath<com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus, com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.QProblemStatus> problemStatuses = this.<com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus, com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.QProblemStatus>createList("problemStatuses", com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus.class, com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.QProblemStatus.class, PathInits.DIRECT2);
 
     public QProblem(String variable) {
-        this(Problem.class, forVariable(variable), INITS);
+        super(Problem.class, forVariable(variable));
     }
 
     public QProblem(Path<? extends Problem> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QProblem(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QProblem(PathMetadata metadata, PathInits inits) {
-        this(Problem.class, metadata, inits);
-    }
-
-    public QProblem(Class<? extends Problem> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.studyRule = inits.isInitialized("studyRule") ? new com.baeker.study.domain.studyRule.entity.QStudyRule(forProperty("studyRule"), inits.get("studyRule")) : null;
+        super(Problem.class, metadata);
     }
 
 }

@@ -3,18 +3,22 @@ package com.baeker.study.domain.studyRule.service;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
-import com.baeker.study.domain.problem.ProblemService;
-import com.baeker.study.domain.problem.dto.CreateProblem;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleDslRepositoryImp;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatusRepository;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.global.feign.MemberClient;
-import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.RuleClient;
+import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
@@ -30,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +58,8 @@ public class StudyRuleService {
     private final RuleClient ruleClient;
 
     private final ProblemService problemService;
+    private final ProblemStatusRepository problemStatusRepository;
+    private final PersonalStudyRuleRepository personalStudyRuleRepository;
 
     /**
      * 생성
@@ -61,18 +68,60 @@ public class StudyRuleService {
     @Transactional
     public Long create(CreateStudyRuleRequest request) {
         Study study = studyService.findById(request.getStudyId());
+        //studyRule 생성
         StudyRule studyRule = StudyRule.create(request);
         LocalDate now = LocalDate.now();
         studyRule.setMission(now);
         studyRule.setStudy(studyRule, study);
-        addProblem(request.getCreateProblemList(), studyRule);
+
+        // Problem 생성
+        List<Long> problemIds = problemService.createProblem(request.getCreateProblemList());
+        //PersonalStudyRule 생성
+        List<PersonalStudyRule> personalStudyRule = createPersonalStudyRule(study.getMyStudies(), studyRule);
+        // ProblemStatus 생성
+        List<ProblemStatus> problemStatus = createProblemStatus(personalStudyRule, problemIds);
+        /**
+         * 관계 맵핑
+         * problem 엔 status 넣기
+         * personalStudyRule problemStatus 넣기
+         */
+
         studyRuleRepository.save(studyRule);
         return studyRule.getId();
     }
 
-    private void addProblem(List<CreateProblem> createProblems, StudyRule studyRule) {
-        problemService.createProblem(createProblems, studyRule);
+    @Transactional
+    public List<PersonalStudyRule> createPersonalStudyRule(List<MyStudy> myStudies, StudyRule studyRule) {
+        List<PersonalStudyRule> personalStudyRules = new ArrayList<>();
+        for (MyStudy myStudy : myStudies) {
+            PersonalStudyRule personalStudyRule = PersonalStudyRule.create(myStudy.getMember(), studyRule);
+            personalStudyRules.add(personalStudyRule);
+            personalStudyRule.addStudyRule(personalStudyRule);
+//            personalStudyRuleRepository.save(personalStudyRule);
+        }
+        return personalStudyRules;
     }
+
+    @Transactional
+    public List<ProblemStatus> createProblemStatus(List<PersonalStudyRule> personalStudyRules, List<Long> problemIds) {
+        List<ProblemStatus> problemStatuses = new ArrayList<>();
+        List<Problem> problems = new ArrayList<>();
+        for (Long problemId : problemIds) {
+            Problem problem = problemService.getProblem(problemId);
+            problems.add(problem);
+        }
+        for (Problem problem : problems) {
+            for (PersonalStudyRule personalStudyRule : personalStudyRules) {
+                ProblemStatus problemStatus = ProblemStatus.create(personalStudyRule, problem);
+                problemStatuses.add(problemStatus);
+                problemStatus.addProblem();
+                problemStatus.addPersonalStudyRule();
+//                problemStatusRepository.save(problemStatus);
+            }
+        }
+        return problemStatuses;
+    }
+
 
     /**
      * 수정

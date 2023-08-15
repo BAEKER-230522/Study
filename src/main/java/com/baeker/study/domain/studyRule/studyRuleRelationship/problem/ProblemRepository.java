@@ -1,4 +1,4 @@
-package com.baeker.study.domain.problem;
+package com.baeker.study.domain.studyRule.studyRuleRelationship.problem;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
