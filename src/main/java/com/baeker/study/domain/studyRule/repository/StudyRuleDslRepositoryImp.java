@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.baeker.study.domain.studyRule.entity.QStudyRule.studyRule;
-import static com.baeker.study.domain.studyRuleStatus.QPersonalStudyRule.personalStudyRule;
+import static com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.QPersonalStudyRule.personalStudyRule;
 import static com.baeker.study.study.domain.entity.QStudy.study;
 
 @Repository
