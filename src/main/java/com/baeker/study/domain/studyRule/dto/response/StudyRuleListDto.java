@@ -1,11 +1,8 @@
 package com.baeker.study.domain.studyRule.dto.response;
 
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.ProblemDto;
 import com.baeker.study.domain.studyRule.entity.Mission;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -44,8 +39,8 @@ public class StudyRuleListDto {
     @Schema(description = "미션 종료일", example = "2021-10-10")
     private LocalDate deadline;
 
-    @Schema(description = "미션 문제에 대한 상태")
-    private List<PersonalStudyRuleDto> personalStudyRuleDtos = new ArrayList<>();
+//    @Schema(description = "미션 문제에 대한 상태")
+//    private List<PersonalStudyRuleDto> personalStudyRuleDtos = new ArrayList<>();
 
     public StudyRuleListDto(StudyRule studyRule) {
         this.id = studyRule.getId();
@@ -58,19 +53,8 @@ public class StudyRuleListDto {
         this.status = studyRule.getStatus();
         this.startDate = studyRule.getStartDate();
         this.deadline = studyRule.getDeadline();
-        this.personalStudyRuleDtos = personalStudyRuleDtos(studyRule.getPersonalStudyRules());
+//        this.personalStudyRuleDtos = personalStudyRuleDtos(studyRule.getPersonalStudyRules());
     }
 
-    private List<PersonalStudyRuleDto> personalStudyRuleDtos(List<PersonalStudyRule> personalStudyRules) {
-        return personalStudyRules.stream()
-                .map(entity -> {
-                    List<ProblemDto> problemDtos = entity.getProblemStatuses().stream()
-                            .map(problemStatus -> new ProblemDto(problemStatus.getProblem().getProblemName(),
-                                    problemStatus.getProblem().getProblemNumber()))
-                            .toList();
-                    return new PersonalStudyRuleDto(entity.getMemberId(), entity.getStatus(), problemDtos);
-                })
-                .toList();
-    }
 
 }

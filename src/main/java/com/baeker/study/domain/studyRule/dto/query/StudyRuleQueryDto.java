@@ -1,4 +1,4 @@
-package com.baeker.study.domain.studyRule.dto;
+package com.baeker.study.domain.studyRule.dto.query;
 
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudyRuleDto {
+public class StudyRuleQueryDto {
     @Schema(description = "StudyRuleId", example = "1")
     private Long id;
     @Schema(description = "StudyRule 의 이름(name)", example = "이름")
@@ -28,28 +28,13 @@ public class StudyRuleDto {
     @Schema(description = "StudyRule 이 가지고 있는 ProblemDto 리스트")
     private List<PersonalStudyRuleDto> personalStudyRuleDtos;
 
-    public StudyRuleDto(StudyRule studyRule) {
+
+    public StudyRuleQueryDto(StudyRule studyRule, List<PersonalStudyRuleDto> personalStudyRuleDtos) {
         this.id = studyRule.getId();
         this.name = studyRule.getName();
         this.about = studyRule.getAbout();
         this.study = new StudyResDto(studyRule.getStudy());
         this.ruleId = studyRule.getRuleId();
-//        this.personalStudyRuleDtos = personalStudyRuleDtos(studyRule.getPersonalStudyRules());
+        this.personalStudyRuleDtos = personalStudyRuleDtos;
     }
-
-
-
-//    private List<PersonalStudyRuleDto> personalStudyRuleDtos(List<PersonalStudyRule> personalStudyRules) {
-//
-//        return personalStudyRules.stream().map(entity -> {
-//            List<ProblemStatusDto> problemStatusDtos = entity.getProblemStatuses().stream()
-//                    .map(problemStatus -> {
-//                        List<Problem> tempProblemDtos = new ArrayList<>();
-//
-//                        return new ProblemStatusDto(problemStatus.getStatus(), problemStatus.getProblem(), problemStatus.getPersonalStudyRule());
-//                    }).toList();
-//            return new PersonalStudyRuleDto(entity.getMemberId(), entity.getStatus(), );
-//        }).toList();
-//    }
-
 }
