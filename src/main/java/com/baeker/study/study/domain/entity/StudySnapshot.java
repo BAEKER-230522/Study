@@ -1,6 +1,7 @@
 package com.baeker.study.study.domain.entity;
 
 import com.baeker.study.base.entity.ScoreBase;
+import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -34,6 +35,22 @@ public class StudySnapshot extends ScoreBase {
                 .diamond(dto.getDiamond())
                 .ruby(dto.getRuby())
                 .platinum(dto.getPlatinum())
+                .build();
+
+        study.getSnapshots().add(0, snapshot);
+        return snapshot;
+    }
+
+    public static StudySnapshot create(Study study, CreateSnapshotEvent event, String dayOfWeek) {
+        StudySnapshot snapshot = StudySnapshot.builder()
+                .study(study)
+                .dayOfWeek(dayOfWeek)
+                .bronze(event.getBronze())
+                .silver(event.getSilver())
+                .gold(event.getGold())
+                .diamond(event.getDiamond())
+                .ruby(event.getRuby())
+                .platinum(event.getPlatinum())
                 .build();
 
         study.getSnapshots().add(0, snapshot);

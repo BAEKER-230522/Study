@@ -1,6 +1,7 @@
 package com.baeker.study.study.domain.service;
 
 import com.baeker.study.base.exception.InvalidDuplicateException;
+import com.baeker.study.base.exception.NoPermissionException;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
@@ -10,6 +11,7 @@ import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
@@ -17,6 +19,7 @@ import com.baeker.study.study.out.SnapshotRepository;
 import com.baeker.study.study.out.StudyQueryRepository;
 import com.baeker.study.study.out.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,11 +44,13 @@ public class StudyService {
     private final MyStudyService myStudyService;
     private final SnapshotRepository snapshotRepository;
     private final SnapshotQueryRepository snapshotQueryRepository;
+    private final ApplicationEventPublisher publisher;
     private final MemberClient memberClient;
 
     /**
      * ** CREATE METHOD **
      * create
+     * event : study 생성시 snapshot 생성
      */
 
     //-- create --//
@@ -59,9 +64,29 @@ public class StudyService {
 
         MemberResDto memberDto = memberClient.findById(dto.getMember()).getData();
 
-        Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getNickname());
+        if (memberDto.getBaekJoonName() == null)
+            throw new NoPermissionException("백준 연동이 안된 user 입니다.");
+
+        Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getId());
         Study saveStudy = studyRepository.save(study);
+
+        publisher.publishEvent(
+                new CreateSnapshotEvent(this, saveStudy.getId(), memberDto)
+        );
+
         return myStudyService.create(dto.getMember(), saveStudy);
+    }
+
+    public void createSnapshot(CreateSnapshotEvent event) {
+        Study study = this.findById(event.getId());
+        String today = LocalDateTime.now().getDayOfWeek().toString();
+
+        snapshotRepository.save(
+                StudySnapshot.create(study, event, today)
+        );
+        studyRepository.save(
+                study.updateSolvedCount(event)
+        );
     }
 
 
@@ -70,7 +95,7 @@ public class StudyService {
      * update name, about, capacity
      * update leader
      * add xp
-     * event : 해결한 문제 추가
+     * event : member 의 study 해결한 문제 추가
      * update snapshot
      */
 
@@ -93,8 +118,11 @@ public class StudyService {
     //-- update leader --//
     @Transactional
     public Study updateLeader(UpdateLeaderReqDto dto) {
-        Study study = this.findById(dto.getId());
-        Study modifyLeader = study.modifyLeader(dto.getLeader());
+        Study study = this.findById(dto.getStudyId());
+
+        if (study.getLeader() != dto.getOldLeader())
+            throw new NoPermissionException("스터디 장 만 스터디 장을 위임할 수 있습니다.");
+        Study modifyLeader = study.modifyLeader(dto.getNewLeader());
 
         return studyRepository.save(modifyLeader);
     }
@@ -108,7 +136,7 @@ public class StudyService {
         return study;
     }
 
-    //-- event : 해결한 문제 추가 --//
+    //-- event : member 의 study 해결한 문제 추가 --//
     public void addSolveCount(AddSolvedCountEvent event) {
         List<Study> studies = studyQueryRepository.findByMember(event.getMember());
         BaekjoonDto dto = new BaekjoonDto(event);
@@ -133,7 +161,7 @@ public class StudyService {
             snapshotRepository.save(snapshot);
         }
 
-        if (snapshots.size() > 7) {
+        while (snapshots.size() > 7) {
             StudySnapshot snapshot = snapshots.get(7);
             snapshots.remove(snapshot);
             snapshotRepository.delete(snapshot);
@@ -200,5 +228,16 @@ public class StudyService {
     //-- find all snapshot by study --//
     public List<StudySnapshot> findAllSnapshot(Study study) {
         return snapshotQueryRepository.findAllByStudy(study);
+    }
+
+
+    /**
+     * ** BUISINESS METHOD **
+     * feign test
+     */
+
+    //-- feign test --//
+    public MemberResDto feignTest(Long id) {
+        return memberClient.findById(id).getData();
     }
 }

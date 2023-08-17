@@ -4,6 +4,7 @@ import com.baeker.study.base.entity.ScoreBase;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -25,7 +26,7 @@ public class Study extends ScoreBase {
 
     private String name;
     private String about;
-    private String leader;
+    private Long leader;
     private Integer capacity;
     private Integer xp;
 
@@ -43,7 +44,7 @@ public class Study extends ScoreBase {
 
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, String nickname) {
+    public static Study createStudy(String name, String about, Integer capacity, Long nickname) {
         return builder()
                 .name(name)
                 .about(about)
@@ -67,7 +68,7 @@ public class Study extends ScoreBase {
     }
 
     // 리더 변경 //
-    public Study modifyLeader(String leader) {
+    public Study modifyLeader(Long leader) {
         return this.toBuilder()
                 .leader(leader)
                 .modifyDate(LocalDateTime.now())
@@ -81,6 +82,17 @@ public class Study extends ScoreBase {
 
     // 백준 점수 최신화 //
     public Study updateSolvedCount(AddSolvedCountEvent event) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + event.getBronze())
+                .silver(this.getSilver() + event.getSilver())
+                .gold(this.getGold() + event.getGold())
+                .diamond(this.getDiamond() + event.getDiamond())
+                .ruby(this.getRuby() + event.getRuby())
+                .platinum(this.getPlatinum() + event.getPlatinum())
+                .build();
+    }
+
+    public Study updateSolvedCount(CreateSnapshotEvent event) {
         return this.toBuilder()
                 .bronze(this.getBronze() + event.getBronze())
                 .silver(this.getSilver() + event.getSilver())
