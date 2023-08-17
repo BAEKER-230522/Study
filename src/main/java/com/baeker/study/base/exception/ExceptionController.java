@@ -13,26 +13,26 @@ public class ExceptionController {
 
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> notFoundExceptionHandler(NotFoundException e) {
+    public ResponseEntity<ErrorMsg> notFoundExceptionHandler(NotFoundException e) {
         log.error(e.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity.badRequest().body(new ErrorMsg(e.getMessage()));
     }
 
     @ExceptionHandler(InvalidDuplicateException.class)
-    public ResponseEntity<ErrorResponse> invalidDuplicateHandler(NotFoundException e) {
+    public ResponseEntity<ErrorMsg> invalidDuplicateHandler(NotFoundException e) {
         log.error(e.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity.badRequest().body(new ErrorMsg(e.getMessage()));
     }
 
     @ExceptionHandler(NumberInputException.class)
-    public ResponseEntity<ErrorResponse> numberInputExceptionHandler(NumberInputException e) {
+    public ResponseEntity<ErrorMsg> numberInputExceptionHandler(NumberInputException e) {
         log.error(e.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity.badRequest().body(new ErrorMsg(e.getMessage()));
     }
 
     @ExceptionHandler(NoPermissionException.class)
-    public ResponseEntity<ErrorResponse> numberInputExceptionHandler(NoPermissionException e) {
+    public ResponseEntity<ErrorMsg> numberInputExceptionHandler(NoPermissionException e) {
         log.error(e.getMessage());
-        return ResponseEntity.status(FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity.status(FORBIDDEN).body(new ErrorMsg(e.getMessage()));
     }
 }

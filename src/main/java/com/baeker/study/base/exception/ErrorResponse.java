@@ -1,13 +1,16 @@
 package com.baeker.study.base.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ErrorResponse {
+public enum ErrorResponse {
+    NOT_FOUND_STUDY_RULE("해당 스터디 룰을 찾을 수 없습니다.", 404);
 
-    protected String errorMsg;
+    private final String errorMsg;
+    private final int status;
+
+    ErrorResponse(String errorMsg, int status) {
+        this.errorMsg = errorMsg;
+        this.status = status;
+    }
 }

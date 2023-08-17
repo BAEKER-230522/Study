@@ -3,6 +3,7 @@ package com.baeker.study.domain.studyRule.service;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
@@ -155,6 +156,10 @@ public class StudyRuleService {
         return studyRuleRepository.findById(studyRuleId)
                 .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));
     }
+    public StudyRuleQueryDto getStudyRuleQueryDto(Long studyRuleId) {
+        return studyRuleDslRepositoryImp.findStudyRule(studyRuleId);
+    }
+
 
     public StudyRule getStudyRule(String name) {
         return studyRuleRepository.findByName(name)
