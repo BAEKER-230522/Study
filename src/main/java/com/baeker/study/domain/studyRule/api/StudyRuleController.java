@@ -108,6 +108,7 @@ public class StudyRuleController {
         return RsData.of("S-1", "성공", collect);
     }
 
+
     @PostMapping("/v1/test")
     @Operation(summary = "테스트", description = "StudyRule 생성", tags = "StudyRule-생성")
     public RsData<CreateStudyRuleResponse> test(@RequestBody @Valid CreateStudyRuleRequest request) {
