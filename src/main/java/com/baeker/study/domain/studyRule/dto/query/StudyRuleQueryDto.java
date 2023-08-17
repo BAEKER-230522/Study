@@ -1,5 +1,7 @@
 package com.baeker.study.domain.studyRule.dto.query;
 
+import com.baeker.study.domain.studyRule.entity.Mission;
+import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
@@ -8,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -25,6 +28,17 @@ public class StudyRuleQueryDto {
     @Schema(description = "StudyRule 이 의존하는 RuleId", example = "1")
     private Long ruleId;
 
+    @Schema(description = "미션 성공실패 여부")
+    private Status status;
+
+    @Schema(description = "미션 시작 일", example = "2021-10-10")
+    private LocalDate startDate;
+
+    @Schema(description = "미션 종료 일", example = "2021-10-10")
+    private LocalDate deadline;
+
+    @Schema(description = "미션 활성화 여부")
+    private Mission mission;
     @Schema(description = "StudyRule 이 가지고 있는 ProblemDto 리스트")
     private List<PersonalStudyRuleDto> personalStudyRuleDtos;
 
@@ -35,6 +49,10 @@ public class StudyRuleQueryDto {
         this.about = studyRule.getAbout();
         this.study = new StudyResDto(studyRule.getStudy());
         this.ruleId = studyRule.getRuleId();
+        this.mission = studyRule.getMission();
+        this.status = studyRule.getStatus();
+        this.startDate = studyRule.getStartDate();
+        this.deadline = studyRule.getDeadline();
         this.personalStudyRuleDtos = personalStudyRuleDtos;
     }
 }
