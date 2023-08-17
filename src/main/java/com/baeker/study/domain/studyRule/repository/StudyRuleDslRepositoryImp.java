@@ -50,10 +50,12 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository {
         StudyRule serviceStudyRule = studyRuleRepository.findById(studyRuleId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_STUDY_RULE.getErrorMsg()));
         List<Long> problemIds = new ArrayList<>();
-        serviceStudyRule.getPersonalStudyRules().get(0)
-                .getProblemStatuses().forEach(
-                        o -> problemIds.add(o.getProblem().getId())
-                );
+        serviceStudyRule.getPersonalStudyRules().forEach(
+                personal -> personal.getProblemStatuses().forEach(
+                        o -> problemIds.add(o.getId())
+                )
+        );
+
         List<ProblemStatusQueryDto> problemStatuses = findProblemStatus(problemIds);
 
         List<PersonalStudyRule> personalStudyRules = serviceStudyRule.getPersonalStudyRules();
