@@ -26,7 +26,7 @@ public class Study extends ScoreBase {
 
     private String name;
     private String about;
-    private String leader;
+    private Long leader;
     private Integer capacity;
     private Integer xp;
 
@@ -44,7 +44,7 @@ public class Study extends ScoreBase {
 
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, String nickname) {
+    public static Study createStudy(String name, String about, Integer capacity, Long nickname) {
         return builder()
                 .name(name)
                 .about(about)
@@ -68,7 +68,7 @@ public class Study extends ScoreBase {
     }
 
     // 리더 변경 //
-    public Study modifyLeader(String leader) {
+    public Study modifyLeader(Long leader) {
         return this.toBuilder()
                 .leader(leader)
                 .modifyDate(LocalDateTime.now())
