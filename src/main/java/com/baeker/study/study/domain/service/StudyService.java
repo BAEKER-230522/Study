@@ -67,7 +67,7 @@ public class StudyService {
         if (memberDto.getBaekJoonName() == null)
             throw new NoPermissionException("백준 연동이 안된 user 입니다.");
 
-        Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getNickname());
+        Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getId());
         Study saveStudy = studyRepository.save(study);
 
         publisher.publishEvent(
@@ -118,8 +118,11 @@ public class StudyService {
     //-- update leader --//
     @Transactional
     public Study updateLeader(UpdateLeaderReqDto dto) {
-        Study study = this.findById(dto.getId());
-        Study modifyLeader = study.modifyLeader(dto.getLeader());
+        Study study = this.findById(dto.getStudyId());
+
+        if (study.getLeader() != dto.getOldLeader())
+            throw new NoPermissionException("스터디 장 만 스터디 장을 위임할 수 있습니다.");
+        Study modifyLeader = study.modifyLeader(dto.getNewLeader());
 
         return studyRepository.save(modifyLeader);
     }

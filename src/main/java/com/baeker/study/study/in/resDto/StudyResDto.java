@@ -20,7 +20,7 @@ public class StudyResDto {
     @Schema(example = "스터디 소개")
     private String about;
     @Schema(example = "스터디 리더")
-    private String leader;
+    private Long leader;
     @Schema(example = "10")
     private Integer capacity;
     @Schema(example = "10")
