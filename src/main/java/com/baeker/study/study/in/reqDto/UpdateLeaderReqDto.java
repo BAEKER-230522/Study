@@ -7,7 +7,9 @@ import lombok.Data;
 public class UpdateLeaderReqDto {
 
     @Schema(example = "1")
-    private Long id;
-    @Schema(example = "스터디 리더")
-    private String leader;
+    private Long studyId;
+    @Schema(example = "기존 리더")
+    private Long oldLeader;
+    @Schema(example = "새로운 리더")
+    private Long newLeader;
 }

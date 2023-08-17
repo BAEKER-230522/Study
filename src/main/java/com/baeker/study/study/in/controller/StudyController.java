@@ -59,7 +59,7 @@ public class StudyController {
     @PostMapping("/v1/leader")
     @Operation(summary = "업데이트 leader")
     public RsData<UpdateResDto> updateLeader(@RequestBody @Valid UpdateLeaderReqDto dto) {
-        log.info("리더 수정 요청 확인 id = {}", dto.getId());
+        log.info("리더 수정 요청 확인 study id = {} / 기존 leader = {} / 새로운 leader = {}", dto.getStudyId(), dto.getOldLeader(), dto.getNewLeader());
 
         Study study = studyService.updateLeader(dto);
         UpdateResDto resDto = new UpdateResDto(study.getId());

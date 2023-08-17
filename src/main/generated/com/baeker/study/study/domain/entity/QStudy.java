@@ -41,7 +41,7 @@ public class QStudy extends EntityPathBase<Study> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
-    public final StringPath leader = createString("leader");
+    public final NumberPath<Long> leader = createNumber("leader", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifyDate = _super.modifyDate;
