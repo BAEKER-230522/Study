@@ -1,6 +1,8 @@
 package com.baeker.study.study.in.controller;
 
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
+import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
@@ -31,6 +33,7 @@ public class StudyController {
 
     private final StudyService studyService;
     private final MyStudyService myStudyService;
+    private final StudyRuleService studyRuleService;
 
     //-- create study --//
     @PostMapping("/v1/create")
@@ -213,5 +216,16 @@ public class StudyController {
 
         log.info("응답 완료 id = {}, nickname = {}, baekjoon neme = {}", resDto.getId(), resDto.getNickname(), resDto.getBaekJoonName());
         return RsData.successOf(resDto);
+    }
+
+
+    @PostMapping("/v1/mission/{memberid}")
+    @Operation(summary = "개인별 status 갱신", description = "카프카 사용하는 용도 문제별로 확인")
+    public void personalMissionUpdate(@PathVariable("memberid") Long memberId, @RequestBody List<ProblemNumberDto> problemDtos) {
+        // memberId 이벤트 리스너 로 updateProblemStatus 호출
+        List<Study> byMember = studyService.findByMember(memberId, 1);
+        for (Study study : byMember) {
+            studyRuleService.updateProblemStatus(study.getId(), problemDtos);
+        }
     }
 }

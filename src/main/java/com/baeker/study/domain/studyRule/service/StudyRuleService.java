@@ -341,7 +341,7 @@ public class StudyRuleService {
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
                 for (ProblemStatus problemStatus : personalStudyRule.getProblemStatuses()) {
                     for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
-                        setProblemStatus(problemStatus, problemNumberDto);
+                        if (setProblemStatus(problemStatus, problemNumberDto)) break;
                     }
                 }
             }
@@ -349,10 +349,12 @@ public class StudyRuleService {
         }
     }
 
-    private void setProblemStatus(ProblemStatus problemStatus, ProblemNumberDto problemNumberDto) {
+    private boolean setProblemStatus(ProblemStatus problemStatus, ProblemNumberDto problemNumberDto) {
         if (problemStatus.getProblem().getProblemNumber() == Integer.parseInt(problemNumberDto.problemId())) {
             problemStatus.updateStatus(true);
+            return true;
         }
+        return false;
     }
 }
 
