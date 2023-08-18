@@ -3,7 +3,9 @@ package com.baeker.study.domain.studyRule.service;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
+import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
@@ -199,9 +201,26 @@ public class StudyRuleService {
         return getXp(studyRule.getId());
     }
 
-    public void setStatus(Long id, boolean status) {
-        StudyRule studyRule = getStudyRule(id);
-        studyRule.setStatus(status);
+    /**
+     * study 에있는 멤버들 status 확인하여
+     * StudyStatus 갱신
+     * @param studyRuleId
+     */
+    public boolean isPersonalMissionStatus(Long studyRuleId) {
+        boolean status = true;
+        StudyRule studyRule = getStudyRule(studyRuleId);
+        List<PersonalStudyRule> personalStudyRules = studyRule.getPersonalStudyRules();
+        for (PersonalStudyRule personalStudyRule : personalStudyRules) {
+            if (personalStudyRule.getStatus().equals(Status.FAIL)) {
+                status = false;
+                break;
+            }
+        }
+        return status;
+    }
+    public void setStatus(Long studyRuleId) {
+        StudyRule studyRule = getStudyRule(studyRuleId);
+        studyRule.setStatus(isPersonalMissionStatus(studyRuleId));
     }
 
     /**
@@ -246,10 +265,10 @@ public class StudyRuleService {
     }
 
     /**
-     * @param id = studyRuleId
+     * @param studyRuleId = studyRuleId
      */
-    public void updateStudySolved(Long id) throws NotFoundException {
-        StudyRule studyRule = getStudyRule(id);
+    public void updateStudySolved(Long studyRuleId) throws NotFoundException {
+        StudyRule studyRule = getStudyRule(studyRuleId);
         Study study = studyRule.getStudy();
 
         String studyName = studyRule.getStudy().getName();
@@ -276,14 +295,14 @@ public class StudyRuleService {
         }
 
         if (todayCount >= ruleCount) {
-            setStatus(studyRule.getId(), true);
+            setStatus(studyRule.getId());
             AddXpReqDto addXpReqDto = new AddXpReqDto();
             addXpReqDto.setId(studyRule.getStudy().getId());
             addXpReqDto.setXp(getXp(studyRule));
             studyService.addXp(addXpReqDto);
             log.debug("study xp ++");
         } else {
-            setStatus(studyRule.getId(), false);
+            setStatus(studyRule.getId());
             List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
             for (MyStudy myStudy : myStudies) {
                 Long memberId = myStudy.getMember();
@@ -309,6 +328,31 @@ public class StudyRuleService {
 
     public List<StudyRule> getStudyRuleFromStudy(Long studyId) {
         return studyRuleDslRepositoryImp.findStudyRuleFromStudy(studyId);
+    }
+
+    /**
+     * member -> studyId -> studyRule -> personalStudyRule -> problemStatus
+     * 위 순서로 get 하고 개인별 문제 갱신
+     * @param studyId
+     */
+    public void updateProblemStatus(Long studyId, List<ProblemNumberDto> problemNumberDtos) {
+        List<StudyRule> studyRuleFromStudy = getStudyRuleFromStudy(studyId);
+        for (StudyRule studyRule : studyRuleFromStudy) {
+            for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
+                for (ProblemStatus problemStatus : personalStudyRule.getProblemStatuses()) {
+                    for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
+                        setProblemStatus(problemStatus, problemNumberDto);
+                    }
+                }
+            }
+            setStatus(studyRule.getId());
+        }
+    }
+
+    private void setProblemStatus(ProblemStatus problemStatus, ProblemNumberDto problemNumberDto) {
+        if (problemStatus.getProblem().getProblemNumber() == Integer.parseInt(problemNumberDto.problemId())) {
+            problemStatus.updateStatus(true);
+        }
     }
 }
 

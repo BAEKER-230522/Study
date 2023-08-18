@@ -120,6 +120,7 @@ public class StudyRuleController {
         createStudyRuleResponse.setId(studyRuleId);
         return RsData.successOf(createStudyRuleResponse);
     }
+
     /**
      * kafka 대신 사용하는 로직
      */
@@ -128,4 +129,5 @@ public class StudyRuleController {
     public void studyXpUpdate(@PathVariable("studyruleid") Long studyruleid) {
         studyRuleService.updateStudySolved(studyruleid);
     }
+
 }
