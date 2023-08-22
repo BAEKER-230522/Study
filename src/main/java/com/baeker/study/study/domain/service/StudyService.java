@@ -177,7 +177,7 @@ public class StudyService {
      * find all
      * find by id
      * find by member
-     * find all snapshot by study
+     * find all snapshot by study / 삭제 예정
      * find study order by xp
      */
 
@@ -232,7 +232,7 @@ public class StudyService {
         return studyQueryRepository.findAllOrderByXp(page, content);
     }
 
-    //-- find all snapshot by study --//
+    //-- find all snapshot by study / 삭제 예정--//
     public List<StudySnapshot> findAllSnapshot(Study study) {
         return snapshotQueryRepository.findAllByStudy(study);
     }

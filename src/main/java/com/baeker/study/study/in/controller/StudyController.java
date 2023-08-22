@@ -126,12 +126,17 @@ public class StudyController {
     public RsData<List<SnapshotResDto>> findAllSnapshot(@RequestParam @Valid Long id) {
         log.info("Study Snapshot list 요청 확인 Study id = {}", id);
 
-        Study study = studyService.findById(id);
-        List<SnapshotResDto> resDtoList = studyService
-                .findAllSnapshot(study)
+        List<SnapshotResDto> resDtoList = studyService.findById(id)
+                .getSnapshots()
                 .stream()
                 .map(s -> new SnapshotResDto(s))
                 .toList();
+
+//        List<SnapshotResDto> resDtoList = studyService
+//                .findAllSnapshot(study)
+//                .stream()
+//                .map(s -> new SnapshotResDto(s))
+//                .toList();
 
         log.info("Study Snapshot list 응답 완료 count = {}", resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
