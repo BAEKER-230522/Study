@@ -214,4 +214,19 @@ public class StudyController {
         log.info("응답 완료 id = {}, nickname = {}, baekjoon neme = {}", resDto.getId(), resDto.getNickname(), resDto.getBaekJoonName());
         return RsData.successOf(resDto);
     }
+
+    //-- study list order by xp --//
+    @GetMapping("/v1/ranking")
+    @Operation(summary = "스터디 랭킹으로 목록 조회 / page = 페이지, content = page 당 data 숫자")
+    public RsData<List<StudyResDto>> ranking(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int content
+    ){
+        log.info("스터디 랭킹으로 목록 조회 요청 확인 page = {}, content = {}", page, content);
+
+        List<StudyResDto> dtoList = studyService.findAllOrderByXp(page, content);
+
+        log.info("스터디 랭킹 목록 응답 완료");
+        return RsData.successOf(dtoList);
+    }
 }
