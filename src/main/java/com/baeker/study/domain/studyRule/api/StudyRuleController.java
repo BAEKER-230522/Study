@@ -108,6 +108,7 @@ public class StudyRuleController {
         return RsData.of("S-1", "성공", collect);
     }
 
+
     @PostMapping("/v1/test")
     @Operation(summary = "테스트", description = "StudyRule 생성", tags = "StudyRule-생성")
     public RsData<CreateStudyRuleResponse> test(@RequestBody @Valid CreateStudyRuleRequest request) {
@@ -119,6 +120,7 @@ public class StudyRuleController {
         createStudyRuleResponse.setId(studyRuleId);
         return RsData.successOf(createStudyRuleResponse);
     }
+
     /**
      * kafka 대신 사용하는 로직
      */
@@ -127,4 +129,5 @@ public class StudyRuleController {
     public void studyXpUpdate(@PathVariable("studyruleid") Long studyruleid) {
         studyRuleService.updateStudySolved(studyruleid);
     }
+
 }
