@@ -14,6 +14,7 @@ import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
 import com.baeker.study.study.out.SnapshotRepository;
 import com.baeker.study.study.out.StudyQueryRepository;
@@ -176,7 +177,8 @@ public class StudyService {
      * find all
      * find by id
      * find by member
-     * find all snapshot by study
+     * find all snapshot by study / 삭제 예정
+     * find study order by xp
      */
 
     //-- find by name --//
@@ -225,7 +227,12 @@ public class StudyService {
         return studyQueryRepository.findByMember(member, studyStatus);
     }
 
-    //-- find all snapshot by study --//
+    //-- find study order by xp --//
+    public List<StudyResDto> findAllOrderByXp(int page, int content) {
+        return studyQueryRepository.findAllOrderByXp(page, content);
+    }
+
+    //-- find all snapshot by study / 삭제 예정--//
     public List<StudySnapshot> findAllSnapshot(Study study) {
         return snapshotQueryRepository.findAllByStudy(study);
     }

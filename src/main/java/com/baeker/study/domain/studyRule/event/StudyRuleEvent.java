@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 /**
  * param
- * StudyRuleId
+ * memberId
  */
 @Getter
 public class StudyRuleEvent extends ApplicationEvent {
@@ -16,4 +16,5 @@ public class StudyRuleEvent extends ApplicationEvent {
         super(source);
         this.studyRuleId = studyRuleId;
     }
+
 }
