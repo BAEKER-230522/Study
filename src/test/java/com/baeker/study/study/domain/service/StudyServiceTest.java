@@ -198,13 +198,11 @@ class StudyServiceTest {
     @Test
     @DisplayName("xp 내림차순 스터디 목록 조회")
     public void no6() {
-        for (int i = 1; i < 6; i++)
-            study((long) i, "study" + i, "", "");
-
         AddXpReqDto dto = new AddXpReqDto();
 
         for (int i = 1; i < 6; i++) {
-            dto.setId((long) i);
+            Study study = study((long) i, "study" + i, "", "");
+            dto.setId(study.getId());
             dto.setXp(i * 2);
             studyService.addXp(dto);
         }
