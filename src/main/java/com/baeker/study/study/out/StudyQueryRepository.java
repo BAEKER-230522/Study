@@ -1,13 +1,11 @@
 package com.baeker.study.study.out;
 
-import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.QMyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.QStudy;
 import com.baeker.study.study.domain.entity.Study;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
+import com.baeker.study.study.in.resDto.QStudyResDto;
+import com.baeker.study.study.in.resDto.StudyResDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -43,6 +41,32 @@ public class StudyQueryRepository {
         return query
                 .selectFrom(study)
                 .where(study.myStudies.any().member.eq(member))
+                .fetch();
+    }
+
+    //-- find all order by study
+    public List<StudyResDto> findAllOrderByXp(int page, int content) {
+        return query
+                .select(new QStudyResDto(
+                                study.id,
+                                study.createDate,
+                                study.modifyDate,
+                                study.name,
+                                study.about,
+                                study.leader,
+                                study.capacity,
+                                study.xp,
+                                study.bronze,
+                                study.silver,
+                                study.gold,
+                                study.diamond,
+                                study.ruby,
+                                study.platinum
+                        ))
+                .from(study)
+                .orderBy(study.xp.desc())
+                .offset(page * content)
+                .limit(content)
                 .fetch();
     }
 }

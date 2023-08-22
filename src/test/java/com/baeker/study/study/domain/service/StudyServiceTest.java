@@ -10,9 +10,11 @@ import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -192,6 +194,26 @@ class StudyServiceTest {
 
         assertThat(findStudy.getName()).isEqualTo(study.getName());
     }
+
+    @Test
+    @DisplayName("xp 내림차순 스터디 목록 조회")
+    public void no6() {
+        AddXpReqDto dto = new AddXpReqDto();
+
+        for (int i = 1; i < 6; i++) {
+            Study study = study((long) i, "study" + i, "", "");
+            dto.setId(study.getId());
+            dto.setXp(i * 2);
+            studyService.addXp(dto);
+        }
+
+        List<StudyResDto> page1 = studyService.findAllOrderByXp(0, 2);
+        assertThat(page1.get(0).getName()).isEqualTo("study5");
+
+        List<StudyResDto> page2 = studyService.findAllOrderByXp(2, 2);
+        assertThat(page2.get(0).getName()).isEqualTo("study1");
+    }
+
 
     private Study study(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, 10));
