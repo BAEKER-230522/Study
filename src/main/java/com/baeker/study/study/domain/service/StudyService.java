@@ -71,10 +71,6 @@ public class StudyService {
         Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getId());
         Study saveStudy = studyRepository.save(study);
 
-        publisher.publishEvent(
-                new CreateSnapshotEvent(this, saveStudy.getId(), memberDto)
-        );
-
         return myStudyService.create(dto.getMember(), saveStudy);
     }
 
@@ -179,6 +175,7 @@ public class StudyService {
      * find by member
      * find all snapshot by study / 삭제 예정
      * find study order by xp
+     * find by input
      */
 
     //-- find by name --//
@@ -237,6 +234,11 @@ public class StudyService {
         return snapshotQueryRepository.findAllByStudy(study);
     }
 
+
+    //-- find by input --//
+    public List<StudyResDto> findByInput(String input, int page, int content) {
+        return studyQueryRepository.findByInput(input, page, content);
+    }
 
     /**
      * ** BUISINESS METHOD **

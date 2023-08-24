@@ -24,6 +24,8 @@ public class StudyResDto {
     private Long leader;
     @Schema(example = "10")
     private Integer capacity;
+    @Schema(example = "5")
+    private Integer studyMember;
     @Schema(example = "10")
     private Integer xp;
     @Schema(example = "1")
@@ -58,10 +60,11 @@ public class StudyResDto {
         this.ruby = study.getRuby();
         this.platinum = study.getPlatinum();
         this.solvedCount = study.solvedCount();
+        this.studyMember = study.getMyStudies().size();
     }
 
     @QueryProjection
-    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum) {
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Long studyMember) {
         this.id = id;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -69,6 +72,7 @@ public class StudyResDto {
         this.about = about;
         this.leader = leader;
         this.capacity = capacity;
+        this.studyMember = Math.toIntExact(studyMember);
         this.xp = xp;
         this.bronze = bronze;
         this.silver = silver;
