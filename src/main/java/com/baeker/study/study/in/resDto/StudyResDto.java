@@ -82,4 +82,23 @@ public class StudyResDto {
         this.platinum = platinum;
         this.solvedCount = bronze + silver + gold + diamond + ruby + platinum;
     }
+
+    @QueryProjection
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum) {
+        this.id = id;
+        this.createDate = createDate;
+        this.modifyDate = modifyDate;
+        this.name = name;
+        this.about = about;
+        this.leader = leader;
+        this.capacity = capacity;
+        this.xp = xp;
+        this.bronze = bronze;
+        this.silver = silver;
+        this.gold = gold;
+        this.diamond = diamond;
+        this.ruby = ruby;
+        this.platinum = platinum;
+        this.solvedCount = bronze + silver + gold + diamond + ruby + platinum;
+    }
 }
