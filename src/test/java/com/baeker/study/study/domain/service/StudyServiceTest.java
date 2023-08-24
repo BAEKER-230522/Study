@@ -205,13 +205,22 @@ class StudyServiceTest {
             dto.setId(study.getId());
             dto.setXp(i * 2);
             studyService.addXp(dto);
+
+            if (i == 1) {
+                myStudyService.accept(
+                        myStudyService.join(new JoinMyStudyReqDto(study.getId(), 2L, ""), study)
+                );
+                myStudyService.join(new JoinMyStudyReqDto(study.getId(), 3L, ""), study);
+            }
         }
 
         List<StudyResDto> page1 = studyService.findAllOrderByXp(0, 2);
         assertThat(page1.get(0).getName()).isEqualTo("study5");
+        assertThat(page1.get(0).getStudyMember()).isEqualTo(1);
 
         List<StudyResDto> page2 = studyService.findAllOrderByXp(2, 2);
         assertThat(page2.get(0).getName()).isEqualTo("study1");
+        assertThat(page2.get(0).getStudyMember()).isEqualTo(2);
     }
 
 
