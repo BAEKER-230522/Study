@@ -234,4 +234,20 @@ public class StudyController {
         log.info("스터디 랭킹 목록 응답 완료");
         return RsData.successOf(dtoList);
     }
+
+    //-- find study by input --//
+    @GetMapping("/v1/{input}")
+    @Operation(summary = "검색어로 study 찾기")
+    public RsData<List<StudyResDto>> findByInput(
+            @PathVariable String input,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int content
+    ) {
+        log.info("검색어로 study 검색 요청 확인 input = {} / page = {} / content = {}", input, page, content);
+
+        List<StudyResDto> dtoList = studyService.findByInput(input, page, content);
+
+        log.info("검색어로 study 찾기 응답 완료");
+        return RsData.successOf(dtoList);
+    }
 }
