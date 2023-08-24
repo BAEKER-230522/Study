@@ -86,4 +86,39 @@ public class StudyQueryRepository {
                 .limit(content)
                 .fetch();
     }
+
+    //-- find by input --//
+    public List<StudyResDto> findByInput(String input, int page, int content) {
+        Expression<Long> studyMembers = ExpressionUtils.as(
+                JPAExpressions
+                        .select(myStudy.count())
+                        .from(myStudy)
+                        .where(myStudy.study.eq(study).and(myStudy.status.eq(MEMBER))),
+                "studyMember"
+        );
+
+        return query
+                .select(new QStudyResDto(
+                        study.id,
+                        study.createDate,
+                        study.modifyDate,
+                        study.name,
+                        study.about,
+                        study.leader,
+                        study.capacity,
+                        study.xp,
+                        study.bronze,
+                        study.silver,
+                        study.gold,
+                        study.diamond,
+                        study.ruby,
+                        study.platinum,
+                        studyMembers
+                ))
+                .from(study)
+                .where(study.name.like("%" + input + "%"))
+                .offset(page * content)
+                .limit(content)
+                .fetch();
+    }
 }
