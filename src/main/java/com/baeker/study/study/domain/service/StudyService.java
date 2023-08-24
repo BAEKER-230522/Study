@@ -71,10 +71,6 @@ public class StudyService {
         Study study = Study.createStudy(dto.getName(), dto.getAbout(), dto.getCapacity(), memberDto.getId());
         Study saveStudy = studyRepository.save(study);
 
-        publisher.publishEvent(
-                new CreateSnapshotEvent(this, saveStudy.getId(), memberDto)
-        );
-
         return myStudyService.create(dto.getMember(), saveStudy);
     }
 
