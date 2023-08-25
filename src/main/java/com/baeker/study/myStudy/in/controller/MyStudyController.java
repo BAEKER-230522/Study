@@ -1,7 +1,6 @@
 package com.baeker.study.myStudy.in.controller;
 
 import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.myStudy.in.reqDto.*;
@@ -15,8 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -135,10 +132,4 @@ public class MyStudyController {
         return RsData.of("S-1", "성공");
     }
 
-
-    @PostMapping("/v1/mission/{memberid}")
-    @Operation(summary = "개인별 status 갱신", description = "카프카 사용하는 용도 문제별로 확인")
-    public void personalMissionUpdate(@PathVariable("memberid") Long memberId, @RequestBody List<ProblemNumberDto> problemDtos) {
-        // memberId 이벤트 리스너 로 updateProblemStatus 호출
-    }
 }
