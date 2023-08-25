@@ -10,9 +10,11 @@ import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,8 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -91,7 +92,7 @@ class StudyServiceTest {
         assertThat(study6.solvedCount()).isEqualTo(0);
 
         List<StudySnapshot> snapshots4 = study4.getSnapshots();
-        assertThat(snapshots4.size()).isEqualTo(1);
+        assertThat(snapshots4.size()).isEqualTo(0);
 
         publisher.publishEvent(new AddSolvedCountEvent(this, 2L, 3, 3, 3, 3, 3, 3));
 
@@ -139,7 +140,7 @@ class StudyServiceTest {
     void no3() {
         Study study = study(1L, "study", "about", "member");
         Study findStudy = studyService.findById(study.getId());
-        for (int i = 6; i > 0; i--) testSnapshot(findStudy, i);
+        for (int i = 7; i > 0; i--) testSnapshot(findStudy, i);
 
         assertThat(
                 studyService.findAllSnapshot(findStudy).size())
@@ -191,6 +192,55 @@ class StudyServiceTest {
         Study findStudy = studyService.findById(study.getId());
 
         assertThat(findStudy.getName()).isEqualTo(study.getName());
+    }
+
+    @Test
+    @DisplayName("xp 내림차순 스터디 목록 조회")
+    public void no6() {
+        AddXpReqDto dto = new AddXpReqDto();
+
+        for (int i = 1; i < 6; i++) {
+            Study study = study((long) i, "study" + i, "", "");
+            dto.setId(study.getId());
+            dto.setXp(i * 2);
+            studyService.addXp(dto);
+
+            if (i == 1) {
+                myStudyService.accept(
+                        myStudyService.join(new JoinMyStudyReqDto(study.getId(), 2L, ""), study)
+                );
+                myStudyService.join(new JoinMyStudyReqDto(study.getId(), 3L, ""), study);
+            }
+        }
+
+        List<StudyResDto> page1 = studyService.findAllOrderByXp(0, 2);
+        assertThat(page1.get(0).getName()).isEqualTo("study5");
+        assertThat(page1.get(0).getStudyMember()).isEqualTo(1);
+
+        List<StudyResDto> page2 = studyService.findAllOrderByXp(2, 2);
+        assertThat(page2.get(0).getName()).isEqualTo("study1");
+        assertThat(page2.get(0).getStudyMember()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("검색어로 study 찾기")
+    public void no7() {
+        Study study1 = study(1L, "abc", "about", "member1");
+        Study study2 = study(1L, "bcd", "about", "member1");
+        Study study3 = study(1L, "cde", "about", "member1");
+        Study study4 = study(1L, "def", "about", "member1");
+        Study study5 = study(1L, "efg", "about", "member1");
+        Study study6 = study(1L, "fgh", "about", "member1");
+
+        List<StudyResDto> findByC = studyService.findByInput("c", 0, 10);
+        assertThat(findByC.size()).isEqualTo(3);
+        assertThat(findByC.get(0).getName()).isEqualTo(study1.getName());
+
+        List<StudyResDto> findByCD = studyService.findByInput("cd", 0, 10);
+        assertThat(findByCD.size()).isEqualTo(2);
+
+        List<StudyResDto> findByA = studyService.findByInput("A", 0, 10);
+        assertThat(findByA.size()).isEqualTo(0);
     }
 
     private Study study(Long member, String name, String about, String leader) {

@@ -22,7 +22,7 @@ public class SnapshotQueryRepository {
     }
 
 
-    //-- find all by study --//
+    //-- find all by study  / 삭제 예정--//
     public List<StudySnapshot> findAllByStudy(Study study) {
         return query
                 .selectFrom(snapshot)
