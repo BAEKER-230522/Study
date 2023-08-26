@@ -25,8 +25,6 @@ public class StudyRuleListDto {
     private LocalDateTime createDate;
     @Schema(description = "미션 수정일", example = "2021-10-10 10:10:10")
     private LocalDateTime modifyDate;
-    @Schema(description = "적용한 규칙 아이디", example = "1")
-    private Long ruleId;
 
     @Schema(description = "미션 활성화 여부", example = "ACTIVE")
     private Mission mission;
@@ -48,7 +46,6 @@ public class StudyRuleListDto {
         this.about = studyRule.getAbout();
         this.createDate = studyRule.getCreateDate();
         this.modifyDate = studyRule.getModifyDate();
-        this.ruleId = studyRule.getRuleId();
         this.mission = studyRule.getMission();
         this.status = studyRule.getStatus();
         this.startDate = studyRule.getStartDate();

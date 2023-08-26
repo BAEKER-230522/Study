@@ -69,7 +69,6 @@ class StudyRuleServiceTests {
     CreateStudyRuleRequest setRequest(int i) {
         Study study = createStudy(i);
         CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
-        cr.setRuleId(1L);
         cr.setName("이름" + i);
         cr.setAbout("소개" + i);
         cr.setStudyId(study.getId());
@@ -92,7 +91,7 @@ class StudyRuleServiceTests {
         Long studyRuleId = studyRuleService.create(request);
         StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
 
-        assertThat(studyRule.getRuleId()).isEqualTo(1L);
+        assertThat(studyRule.getId()).isEqualTo(studyRuleId);
     }
 
     @Test
@@ -103,23 +102,19 @@ class StudyRuleServiceTests {
         Long studyRuleId = studyRuleService.create(cr);
         StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
 
-        assertThat(studyRule.getRuleId()).isEqualTo(1L);
-
-        ModifyStudyRuleRequest request = new ModifyStudyRuleRequest("수정이름", "수정소개", 2L);
+        assertThat(studyRule.getName()).isEqualTo("이름1");
+        ModifyStudyRuleRequest request = new ModifyStudyRuleRequest("수정이름", "수정소개");
         studyRuleService.modify(studyRule, request);
 
         assertThat(studyRule.getName()).isEqualTo("수정이름");
-        assertThat(studyRule.getRuleId()).isEqualTo(2L);
 
         Map<String ,String> map = new HashMap<>();
         map.put("name", "이름수정");
         map.put("없는소개", "소개수정");
-        map.put("ruleId", "3");
 
         studyRuleService.updateStudyRule(studyRuleId, map);
         assertThat(studyRule.getName()).isEqualTo("이름수정");
         assertThat(studyRule.getAbout()).isEqualTo("수정소개");
-        assertThat(studyRule.getRuleId()).isEqualTo(3L);
     }
 
     @Test
@@ -130,7 +125,6 @@ class StudyRuleServiceTests {
         Long studyRuleId = studyRuleService.create(request);
         StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
 
-        assertThat(studyRule.getRuleId()).isEqualTo(1L);
 
         studyRuleService.delete(studyRule);
         String msg = "";

@@ -24,11 +24,15 @@ public class QProblemStatus extends EntityPathBase<ProblemStatus> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Integer> memory = createNumber("memory", Integer.class);
+
     public final com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.QPersonalStudyRule personalStudyRule;
 
     public final com.baeker.study.domain.studyRule.studyRuleRelationship.problem.QProblem problem;
 
     public final EnumPath<com.baeker.study.domain.studyRule.entity.Status> status = createEnum("status", com.baeker.study.domain.studyRule.entity.Status.class);
+
+    public final NumberPath<Integer> time = createNumber("time", Integer.class);
 
     public QProblemStatus(String variable) {
         this(ProblemStatus.class, forVariable(variable), INITS);

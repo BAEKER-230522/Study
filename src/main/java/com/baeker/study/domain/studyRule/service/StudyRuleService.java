@@ -1,33 +1,28 @@
 package com.baeker.study.domain.studyRule.service;
 
 import com.baeker.study.base.exception.NotFoundException;
-import com.baeker.study.base.exception.NumberInputException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
-import com.baeker.study.domain.studyRule.entity.Status;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
-import com.baeker.study.domain.email.EmailService;
-import com.baeker.study.domain.email.MailDto;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
+import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleDslRepositoryImp;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatusRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.RuleClient;
-import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.domain.service.StudyService;
-import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -135,7 +130,6 @@ public class StudyRuleService {
         StudyRule modifyRule = studyRule.toBuilder()
                 .name(request.getName())
                 .about(request.getAbout())
-                .ruleId(request.getRuleId())
                 .build();
         studyRuleRepository.save(modifyRule);
         RsData.of("S-1", "수정되었습니다.", modifyRule);
@@ -190,16 +184,17 @@ public class StudyRuleService {
      * xp 반환
      * param studyRuleId
      */
-    public Integer getXp(Long id) {
-        StudyRule studyRule = getStudyRule(id);
-        Long ruleId = studyRule.getRuleId();
-        RuleDto rule = getRule(ruleId);
-        return rule.getXp();
-    }
+//    public Integer getXp(Long id) {
+//        StudyRule studyRule = getStudyRule(id);
+//        Long ruleId = studyRule.getRuleId();
+//        RuleDto rule = getRule(ruleId);
+//        return rule.getXp();
+//    }
 
-    public Integer getXp(StudyRule studyRule) {
-        return getXp(studyRule.getId());
-    }
+
+//    public Integer getXp(StudyRule studyRule) {
+//        return getXp(studyRule.getId());
+//    }
 
     /**
      * study 에있는 멤버들 status 확인하여
@@ -242,11 +237,9 @@ public class StudyRuleService {
 
         request.setName(studyRule.getName());
         request.setAbout(studyRule.getAbout());
-        request.setRuleId(studyRule.getRuleId());
 
         String name = updates.get("name");
         String about = updates.get("about");
-        String ruleId = updates.get("ruleId");
 
         if (name != null) {
             request.setName(name);
@@ -254,65 +247,57 @@ public class StudyRuleService {
         if (about != null) {
             request.setAbout(about);
         }
-        if (ruleId != null) {
-            try {
-                request.setRuleId(Long.parseLong(ruleId));
-            } catch (NumberFormatException e) {
-                throw new NumberInputException("숫자로 입력해주세요");
-            }
-        }
         modify(studyRule, request);
     }
 
     /**
      * @param studyRuleId = studyRuleId
      */
-    public void updateStudySolved(Long studyRuleId) throws NotFoundException {
-        StudyRule studyRule = getStudyRule(studyRuleId);
-        Study study = studyRule.getStudy();
-
-        String studyName = studyRule.getStudy().getName();
-        RuleDto rule = getRule(studyRule.getRuleId());
-
-        int todayCount = 0;
-        int ruleCount = rule.getCount();
-        String difficulty = rule.getDifficulty();
-        List<StudySnapshot> allSnapshot = allSnapshot = studyService.findAllSnapshot(study);
-        StudySnapshot studySnapshot = null;
-        try {
-            studySnapshot = allSnapshot.get(0);
-        } catch (IndexOutOfBoundsException e) {
-            throw new NotFoundException("스냅샷이 없습니다.");
-        }
-
-        switch (difficulty) {
-            case "BRONZE" -> todayCount = studySnapshot.getBronze();
-            case "SILVER" -> todayCount = studySnapshot.getSilver(); //TODO: 오타 수정되면 다시
-            case "GOLD" -> todayCount = studySnapshot.getGold();
-            case "PLATINUM" -> todayCount = studySnapshot.getPlatinum();
-            case "DIAMOND" -> todayCount = studySnapshot.getDiamond();
-            case "RUBY" -> todayCount = studySnapshot.getRuby();
-        }
-
-        if (todayCount >= ruleCount) {
-            setStatus(studyRule.getId());
-            AddXpReqDto addXpReqDto = new AddXpReqDto();
-            addXpReqDto.setId(studyRule.getStudy().getId());
-            addXpReqDto.setXp(getXp(studyRule));
-            studyService.addXp(addXpReqDto);
-            log.debug("study xp ++");
-        } else {
-            setStatus(studyRule.getId());
-            List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
-            for (MyStudy myStudy : myStudies) {
-                Long memberId = myStudy.getMember();
-                RsData<MemberDto> member = memberClient.getMember(memberId);
-                emailService.mailSend(new MailDto(member.getData().email(),
-                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
-            }
-            log.debug("xp 추가안됨 ");
-        }
-    }
+//    public void updateStudySolved(Long studyRuleId) throws NotFoundException {
+//        StudyRule studyRule = getStudyRule(studyRuleId);
+//        Study study = studyRule.getStudy();
+//
+//        String studyName = studyRule.getStudy().getName();
+//
+//        int todayCount = 0;
+//        int ruleCount = rule.getCount();
+//        String difficulty = rule.getDifficulty();
+//        List<StudySnapshot> allSnapshot = allSnapshot = studyService.findAllSnapshot(study);
+//        StudySnapshot studySnapshot = null;
+//        try {
+//            studySnapshot = allSnapshot.get(0);
+//        } catch (IndexOutOfBoundsException e) {
+//            throw new NotFoundException("스냅샷이 없습니다.");
+//        }
+//
+//        switch (difficulty) {
+//            case "BRONZE" -> todayCount = studySnapshot.getBronze();
+//            case "SILVER" -> todayCount = studySnapshot.getSilver(); //TODO: 오타 수정되면 다시
+//            case "GOLD" -> todayCount = studySnapshot.getGold();
+//            case "PLATINUM" -> todayCount = studySnapshot.getPlatinum();
+//            case "DIAMOND" -> todayCount = studySnapshot.getDiamond();
+//            case "RUBY" -> todayCount = studySnapshot.getRuby();
+//        }
+//
+//        if (todayCount >= ruleCount) {
+//            setStatus(studyRule.getId());
+//            AddXpReqDto addXpReqDto = new AddXpReqDto();
+//            addXpReqDto.setId(studyRule.getStudy().getId());
+//            addXpReqDto.setXp(getXp(studyRule));
+//            studyService.addXp(addXpReqDto);
+//            log.debug("study xp ++");
+//        } else {
+//            setStatus(studyRule.getId());
+//            List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+//            for (MyStudy myStudy : myStudies) {
+//                Long memberId = myStudy.getMember();
+//                RsData<MemberDto> member = memberClient.getMember(memberId);
+//                emailService.mailSend(new MailDto(member.getData().email(),
+//                        String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
+//            }
+//            log.debug("xp 추가안됨 ");
+//        }
+//    }
 
     /**
      * Rule 받아오기

@@ -25,8 +25,6 @@ public class StudyRuleQueryDto {
     private String about;
     @Schema(description = "StudyRule 과 양방향 맵핑 되어있는 Study 의 정보")
     private StudyResDto study;
-    @Schema(description = "StudyRule 이 의존하는 RuleId", example = "1")
-    private Long ruleId;
 
     @Schema(description = "미션 성공실패 여부")
     private Status status;
@@ -48,7 +46,6 @@ public class StudyRuleQueryDto {
         this.name = studyRule.getName();
         this.about = studyRule.getAbout();
         this.study = new StudyResDto(studyRule.getStudy());
-        this.ruleId = studyRule.getRuleId();
         this.mission = studyRule.getMission();
         this.status = studyRule.getStatus();
         this.startDate = studyRule.getStartDate();
