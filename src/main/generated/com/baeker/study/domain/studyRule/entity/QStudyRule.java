@@ -38,8 +38,6 @@ public class QStudyRule extends EntityPathBase<StudyRule> {
 
     public final ListPath<com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule, com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.QPersonalStudyRule> personalStudyRules = this.<com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule, com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.QPersonalStudyRule>createList("personalStudyRules", com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule.class, com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.QPersonalStudyRule.class, PathInits.DIRECT2);
 
-    public final NumberPath<Long> ruleId = createNumber("ruleId", Long.class);
-
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 
     public final EnumPath<Status> status = createEnum("status", Status.class);
