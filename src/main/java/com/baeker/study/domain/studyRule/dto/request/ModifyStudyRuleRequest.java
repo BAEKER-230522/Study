@@ -17,7 +17,4 @@ public class ModifyStudyRuleRequest {
     @Schema(description = "변경하고싶은 StudyRule 의 소개(about) 작성", example = "소개수정")
     @NotEmpty
     private String about;
-    @NotEmpty
-    @Schema(description = "변경하고싶은 StudyRule 의 규칙(RuleId) 입력", example = "2")
-    private Long ruleId;
 }

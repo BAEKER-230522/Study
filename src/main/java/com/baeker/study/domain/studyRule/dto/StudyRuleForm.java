@@ -21,6 +21,4 @@ public class StudyRuleForm {
 
     @NotEmpty
     private Study study;
-    @NotEmpty
-    private Long ruleId;
 }

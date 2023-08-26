@@ -52,7 +52,6 @@ public class StudyRule {
     @Enumerated(EnumType.STRING)
     private Mission mission;
 
-    private Long ruleId;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -90,7 +89,6 @@ public class StudyRule {
                 .startDate(request.getStartDate())
                 .deadline(request.getDeadline())
                 .about(request.getAbout())
-                .ruleId(request.getRuleId())
                 .status(FAIL)
                 .build();
     }

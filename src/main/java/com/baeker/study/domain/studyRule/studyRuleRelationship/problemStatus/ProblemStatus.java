@@ -32,6 +32,9 @@ public class ProblemStatus {
     @JoinColumn(name = "study_rule_status_id")
     private PersonalStudyRule personalStudyRule;
 
+    private int time;
+    private int memory;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
@@ -54,5 +57,13 @@ public class ProblemStatus {
     public void updateStatus(boolean success) {
         if (success) this.status = COMPLETE;
         else this.status = FAIL;
+    }
+
+    public void addMemory(int memory) {
+        this.memory = memory;
+    }
+
+    public void addTime(int time) {
+        this.time = time;
     }
 }
