@@ -23,8 +23,7 @@ public class CreateStudyRuleRequest {
     private LocalDate deadline;
     @Schema(description = "StudyRule 이 만들어질 스터디의 아이디(StudyId)", example = "1")
     private Long studyId;
-    @Schema(description = "StudyRule 이 반영할 규칙 (RuleId)", example = "1")
-    private Long ruleId;
+
 
 //    @Schema(description = "studyRule 멤버, 문제별 상태")
 //    private List<StudyRuleStatus> statuses;

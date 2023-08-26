@@ -22,8 +22,6 @@ public class StudyRuleDto {
     private String about;
     @Schema(description = "StudyRule 과 양방향 맵핑 되어있는 Study 의 정보")
     private StudyResDto study;
-    @Schema(description = "StudyRule 이 의존하는 RuleId", example = "1")
-    private Long ruleId;
 
     @Schema(description = "StudyRule 이 가지고 있는 ProblemDto 리스트")
     private List<PersonalStudyRuleDto> personalStudyRuleDtos;
@@ -33,7 +31,6 @@ public class StudyRuleDto {
         this.name = studyRule.getName();
         this.about = studyRule.getAbout();
         this.study = new StudyResDto(studyRule.getStudy());
-        this.ruleId = studyRule.getRuleId();
 //        this.personalStudyRuleDtos = personalStudyRuleDtos(studyRule.getPersonalStudyRules());
     }
 
