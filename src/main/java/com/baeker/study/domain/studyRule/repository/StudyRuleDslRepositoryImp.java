@@ -91,7 +91,9 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository {
                                 p.getPersonalStudyRule().getMemberId(),
                                 p.getProblem().getProblemNumber(),
                                 p.getProblem().getProblemName(),
-                                p.getStatus()))
+                                p.getStatus(),
+                                p.getTime(),
+                                p.getMemory()))
                 .toList();
     }
 
