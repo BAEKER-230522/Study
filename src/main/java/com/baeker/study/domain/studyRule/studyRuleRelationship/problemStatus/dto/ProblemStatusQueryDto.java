@@ -6,7 +6,10 @@ public record ProblemStatusQueryDto(
         Long memberId,
         Integer problemNumber,
         String problemName,
-        Status problemStatus
+        Status problemStatus,
+        int time,
+        int memory
+
 )
 {
 
