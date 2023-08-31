@@ -51,6 +51,7 @@ public class StudyRule {
     private LocalDate deadline;
     @Enumerated(EnumType.STRING)
     private Mission mission;
+    private boolean sendMail;
 
 
     @Enumerated(EnumType.STRING)
@@ -101,5 +102,9 @@ public class StudyRule {
         for (PersonalStudyRule personal : personalStudyRule) {
             if (personal.getStudyRule() == this) personalStudyRules.add(personal);
         }
+    }
+
+    public void setSendMail() {
+        this.sendMail = true;
     }
 }

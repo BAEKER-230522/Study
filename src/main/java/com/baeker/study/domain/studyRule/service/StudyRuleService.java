@@ -3,10 +3,12 @@ package com.baeker.study.domain.studyRule.service;
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.email.EmailService;
+import com.baeker.study.domain.email.MailDto;
 import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
+import com.baeker.study.domain.studyRule.entity.Mission;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleDslRepositoryImp;
@@ -19,6 +21,7 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.P
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.RuleClient;
+import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
@@ -323,6 +326,13 @@ public class StudyRuleService {
     public void updateProblemStatus(Long studyId, List<ProblemNumberDto> problemNumberDtos) {
         List<StudyRule> studyRuleFromStudy = getStudyRuleFromStudy(studyId);
         for (StudyRule studyRule : studyRuleFromStudy) {
+            Mission mission = studyRule.getMission();
+            if (mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail()) {
+                sendMail(studyRule);
+                continue;
+            }
+            else if (mission.equals(Mission.ACTIVE)) continue;
+
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
                 for (ProblemStatus problemStatus : personalStudyRule.getProblemStatuses()) {
                     for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
@@ -344,6 +354,17 @@ public class StudyRuleService {
         return false;
     }
 
+    private void sendMail(StudyRule studyRule) {
+        List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+        String studyName = studyRule.getName();
+        for (MyStudy myStudy : myStudies) {
+            Long memberId = myStudy.getMember();
+            RsData<MemberDto> member = memberClient.getMember(memberId);
+            emailService.mailSend(new MailDto(member.getData().email(),
+                    String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
+        }
+        studyRule.setSendMail();
+    }
 
 }
 
