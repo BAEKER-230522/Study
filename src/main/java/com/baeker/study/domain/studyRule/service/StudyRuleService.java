@@ -226,7 +226,7 @@ public class StudyRuleService {
      */
     @Scheduled(cron = "0 1 0 * * *")
     @Transactional
-    protected void setMission() {
+    public void setMission() {
         LocalDate now = LocalDate.now();
         List<StudyRule> all = getAll();
         for (StudyRule studyRule : all) {
@@ -327,11 +327,12 @@ public class StudyRuleService {
         List<StudyRule> studyRuleFromStudy = getStudyRuleFromStudy(studyId);
         for (StudyRule studyRule : studyRuleFromStudy) {
             Mission mission = studyRule.getMission();
+            // 미션 상태가 종료되고 메일이 아직 안보내졌다면 메일 보내고 무시
             if (mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail()) {
                 sendMail(studyRule);
                 continue;
             }
-            else if (mission.equals(Mission.ACTIVE)) continue;
+            else if (!mission.equals(Mission.ACTIVE)) continue; // 활성화 상태가 아니라면 무시
 
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
                 for (ProblemStatus problemStatus : personalStudyRule.getProblemStatuses()) {
