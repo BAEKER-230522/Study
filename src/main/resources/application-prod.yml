@@ -35,6 +35,7 @@ eureka:
     serviceUrl:
       defaultZone: http://34.64.137.210:8761/eureka/
 
+
 custom:
   server: study
   feign:
