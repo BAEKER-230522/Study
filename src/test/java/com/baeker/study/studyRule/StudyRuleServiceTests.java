@@ -2,17 +2,20 @@ package com.baeker.study.studyRule;
 
 import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
+import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
+import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.RuleClient;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +68,7 @@ class StudyRuleServiceTests {
         CreateReqDto reqDto = CreateReqDto.createStudy((long) i, "이름" + i, "소개", 1);
         return studyService.create(reqDto).getStudy();
     }
-
+    /* 현재 진행중인 스터디 */
     CreateStudyRuleRequest setRequest(int i) {
         Study study = createStudy(i);
         CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
@@ -73,7 +76,7 @@ class StudyRuleServiceTests {
         cr.setAbout("소개" + i);
         cr.setStudyId(study.getId());
         List<CreateProblem> createProblems = new ArrayList<>();
-        CreateProblem createProblem = new CreateProblem("문제이름", 1);
+        CreateProblem createProblem = new CreateProblem("A+B", 1000);
         createProblems.add(createProblem);
         cr.setCreateProblemList(createProblems);
         LocalDate startDate = LocalDate.now();
@@ -108,7 +111,7 @@ class StudyRuleServiceTests {
 
         assertThat(studyRule.getName()).isEqualTo("수정이름");
 
-        Map<String ,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("name", "이름수정");
         map.put("없는소개", "소개수정");
 
@@ -149,9 +152,24 @@ class StudyRuleServiceTests {
         assertThat(all.size()).isEqualTo(100);
         long i = 101;
         for (StudyRule studyRule : all) {
-            assertThat(studyRule.getName()).isEqualTo("이름"+i++);
+            assertThat(studyRule.getName()).isEqualTo("이름" + i++);
         }
     }
 
+    @Test
+    @DisplayName("PersonalStudyRule 에서의 Status 가 COMPLETE 로 변경되는지 확인")
+    void updateProblemStatusTest() {
+        CreateStudyRuleRequest request = setRequest(1);
+        Long studyRuleId = studyRuleService.create(request);
+        StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
+        Long studyId = studyRule.getStudy().getId();
+        List<ProblemNumberDto> problemNumberDtos = new ArrayList<>();
+        problemNumberDtos.add(new ProblemNumberDto("1000", "10", "1000"));
 
+//        when(studyRuleService.sendMail(any())).thenReturn()
+        studyRuleService.updateProblemStatus(studyId,problemNumberDtos);
+        studyRule.getPersonalStudyRules().forEach(
+                (personal) -> Assertions.assertEquals(Status.COMPLETE, personal.getStatus())
+        );
+    }
 }
