@@ -323,6 +323,7 @@ public class StudyRuleService {
      * 위 순서로 get 하고 개인별 문제 갱신
      * @param studyId
      */
+    @Transactional
     public void updateProblemStatus(Long studyId, List<ProblemNumberDto> problemNumberDtos) {
         List<StudyRule> studyRuleFromStudy = getStudyRuleFromStudy(studyId);
         for (StudyRule studyRule : studyRuleFromStudy) {
@@ -340,6 +341,7 @@ public class StudyRuleService {
                         if (setProblemStatus(problemStatus, problemNumberDto)) break;
                     }
                 }
+                personalStudyRule.isSuccess();
             }
             setStatus(studyRule.getId());
         }
