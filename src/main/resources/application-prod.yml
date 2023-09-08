@@ -33,7 +33,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://10.22.131.215:8761/eureka/
+      defaultZone: http://34.64.137.210:8761/eureka/
 
 custom:
   server: study
