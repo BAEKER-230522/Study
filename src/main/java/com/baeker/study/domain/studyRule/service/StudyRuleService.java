@@ -329,18 +329,24 @@ public class StudyRuleService {
         for (StudyRule studyRule : studyRuleFromStudy) {
             Mission mission = studyRule.getMission();
             // 미션 상태가 종료되고 메일이 아직 안보내졌다면 메일 보내고 무시
+            log.info("1");
             if (mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail()) {
+                log.info("send mail");
                 sendMail(studyRule);
                 continue;
             }
             else if (!mission.equals(Mission.ACTIVE)) continue; // 활성화 상태가 아니라면 무시
 
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
+                log.info("2");
                 for (ProblemStatus problemStatus : personalStudyRule.getProblemStatuses()) {
+                    log.info("3");
                     for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
+                        log.info("4");
                         if (setProblemStatus(problemStatus, problemNumberDto)) break;
                     }
                 }
+                // 문제들 확인 후 문제들 다 풀었는지 체크
                 personalStudyRule.isSuccess();
             }
             setStatus(studyRule.getId());

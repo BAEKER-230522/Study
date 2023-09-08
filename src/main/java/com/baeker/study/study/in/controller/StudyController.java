@@ -228,8 +228,10 @@ public class StudyController {
     @Operation(summary = "개인별 status 갱신", description = "카프카 사용하는 용도 문제별로 확인")
     public void personalMissionUpdate(@PathVariable("memberid") Long memberId, @RequestBody List<ProblemNumberDto> problemDtos) {
         // memberId 이벤트 리스너 로 updateProblemStatus 호출
+        log.info("solved 요청 받음");
         List<Study> byMember = studyService.findByMember(memberId, 1);
         for (Study study : byMember) {
+            log.info(study.getName() + "스터디 진행");
             studyRuleService.updateProblemStatus(study.getId(), problemDtos);
         }
     }
