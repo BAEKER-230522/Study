@@ -33,11 +33,11 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://34.64.137.210:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
 
 
 custom:
   server: study
   feign:
-    member: http://member:8081/api/member
-    rule: http://rule:8083/api/rule
+    member: https://member:8081/api/member
+    rule: https://rule:8083/api/rule
