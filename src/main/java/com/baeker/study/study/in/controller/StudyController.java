@@ -244,7 +244,7 @@ public class StudyController {
     ){
         log.info("스터디 랭킹으로 목록 조회 요청 확인 page = {}, content = {}", page, content);
 
-        List<StudyResDto> dtoList = studyService.findAllOrderByXp(page, content);
+        List<StudyResDto> dtoList = studyService.findAllOrderByRanking(page, content);
 
         log.info("스터디 랭킹 목록 응답 완료");
         return RsData.successOf(dtoList);

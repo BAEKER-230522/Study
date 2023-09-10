@@ -3,7 +3,6 @@ package com.baeker.study.study.domain.service;
 import com.baeker.study.base.exception.InvalidDuplicateException;
 import com.baeker.study.base.exception.NoPermissionException;
 import com.baeker.study.base.exception.NotFoundException;
-import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
@@ -94,6 +93,7 @@ public class StudyService {
      * add xp
      * event : member 의 study 해결한 문제 추가
      * update snapshot
+     * update ranking
      */
 
     //-- update name, about, capacity --//
@@ -165,6 +165,15 @@ public class StudyService {
         }
     }
 
+    //-- ranking 수동 업데이트 --//
+    @Transactional
+    public void updateRanking() {
+        List<Study> studyList = studyQueryRepository.findStudyRanking();
+
+        for (int i = 0; i < studyList.size(); i++)
+            studyList.get(i).updateRanking(i + 1);
+    }
+
 
     /**
      * ** SELECT METHOD **
@@ -174,7 +183,7 @@ public class StudyService {
      * find by id
      * find by member
      * find all snapshot by study / 삭제 예정
-     * find study order by xp
+     * find study order by ranking
      * find by input
      */
 
@@ -224,9 +233,9 @@ public class StudyService {
         return studyQueryRepository.findByMember(member, studyStatus);
     }
 
-    //-- find study order by xp --//
-    public List<StudyResDto> findAllOrderByXp(int page, int content) {
-        return studyQueryRepository.findAllOrderByXp(page, content);
+    //-- find study order by ranking --//
+    public List<StudyResDto> findAllOrderByRanking(int page, int content) {
+        return studyQueryRepository.findAllOrderByRanking(page, content);
     }
 
     //-- find all snapshot by study / 삭제 예정--//
