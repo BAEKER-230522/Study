@@ -39,5 +39,5 @@ eureka:
 custom:
   server: study
   feign:
-    member: https://member:8081/api/member
-    rule: https://rule:8083/api/rule
+    member: http://member:8081/api/member
+    rule: http://rule:8083/api/rule
