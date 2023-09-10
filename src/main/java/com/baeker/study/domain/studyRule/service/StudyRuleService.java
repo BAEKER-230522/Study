@@ -26,6 +26,7 @@ import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -368,8 +369,8 @@ public class StudyRuleService {
         String studyName = studyRule.getName();
         for (MyStudy myStudy : myStudies) {
             Long memberId = myStudy.getMember();
-            RsData<MemberDto> member = memberClient.getMember(memberId);
-            emailService.mailSend(new MailDto(member.getData().email(),
+            RsData<MemberResDto> member = memberClient.findById(memberId);
+            emailService.mailSend(new MailDto(member.getData().getEmail(),
                     String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
         }
         studyRule.setSendMail();
