@@ -29,6 +29,7 @@ public class Study extends ScoreBase {
     private Long leader;
     private Integer capacity;
     private Integer xp;
+    private Integer ranking;
 
     @Builder.Default
     @OneToMany(mappedBy = "study")
@@ -78,6 +79,11 @@ public class Study extends ScoreBase {
     // 경험치 상승 //
     public void xpUp(Integer addXp) {
         this.xp += addXp;
+    }
+
+    // ranking update //
+    public void updateRanking(Integer ranking) {
+        this.ranking = ranking;
     }
 
     // 백준 점수 최신화 //

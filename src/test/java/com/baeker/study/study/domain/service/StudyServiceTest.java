@@ -195,34 +195,6 @@ class StudyServiceTest {
     }
 
     @Test
-    @DisplayName("xp 내림차순 스터디 목록 조회")
-    public void no6() {
-        AddXpReqDto dto = new AddXpReqDto();
-
-        for (int i = 1; i < 6; i++) {
-            Study study = study((long) i, "study" + i, "", "");
-            dto.setId(study.getId());
-            dto.setXp(i * 2);
-            studyService.addXp(dto);
-
-            if (i == 1) {
-                myStudyService.accept(
-                        myStudyService.join(new JoinMyStudyReqDto(study.getId(), 2L, ""), study)
-                );
-                myStudyService.join(new JoinMyStudyReqDto(study.getId(), 3L, ""), study);
-            }
-        }
-
-        List<StudyResDto> page1 = studyService.findAllOrderByXp(0, 2);
-        assertThat(page1.get(0).getName()).isEqualTo("study5");
-        assertThat(page1.get(0).getStudyMember()).isEqualTo(1);
-
-        List<StudyResDto> page2 = studyService.findAllOrderByXp(2, 2);
-        assertThat(page2.get(0).getName()).isEqualTo("study1");
-        assertThat(page2.get(0).getStudyMember()).isEqualTo(2);
-    }
-
-    @Test
     @DisplayName("검색어로 study 찾기")
     public void no7() {
         Study study1 = study(1L, "abc", "about", "member1");
@@ -242,6 +214,32 @@ class StudyServiceTest {
         List<StudyResDto> findByA = studyService.findByInput("A", 0, 10);
         assertThat(findByA.size()).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("ranking 확인")
+    void no8() {
+        for (int i = 0; i < 5; i++) {
+            Study study = study(1L, "study" + i, "about", "member1");
+            AddXpReqDto dto = new AddXpReqDto();
+            dto.setId(study.getId());
+            dto.setXp(i * 10);
+            studyService.addXp(dto);
+        }
+
+        List<StudyResDto> studies = studyService.findAllOrderByRanking(0, 5);
+        for (StudyResDto study : studies)
+            assertThat(study.getRanking()).isNull();
+
+        studyService.updateRanking();
+
+        studies = studyService.findAllOrderByRanking(0, 5);
+        assertThat(studies.get(0).getRanking()).isEqualTo(1);
+        assertThat(studies.get(1).getRanking()).isEqualTo(2);
+        assertThat(studies.get(2).getRanking()).isEqualTo(3);
+        assertThat(studies.get(3).getRanking()).isEqualTo(4);
+        assertThat(studies.get(4).getRanking()).isEqualTo(5);
+    }
+
 
     private Study study(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, 10));

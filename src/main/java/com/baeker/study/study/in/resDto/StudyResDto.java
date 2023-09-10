@@ -42,6 +42,7 @@ public class StudyResDto {
     int platinum;
     @Schema(example = "6")
     int solvedCount;
+    Integer ranking;
 
 
     public StudyResDto(Study study) {
@@ -61,10 +62,11 @@ public class StudyResDto {
         this.platinum = study.getPlatinum();
         this.solvedCount = study.solvedCount();
         this.studyMember = study.getMyStudies().size();
+        this.ranking = study.getRanking();
     }
 
     @QueryProjection
-    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Long studyMember) {
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Long studyMember, Integer ranking) {
         this.id = id;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -81,10 +83,11 @@ public class StudyResDto {
         this.ruby = ruby;
         this.platinum = platinum;
         this.solvedCount = bronze + silver + gold + diamond + ruby + platinum;
+        this.ranking = ranking;
     }
 
     @QueryProjection
-    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum) {
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Integer ranking) {
         this.id = id;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -100,5 +103,6 @@ public class StudyResDto {
         this.ruby = ruby;
         this.platinum = platinum;
         this.solvedCount = bronze + silver + gold + diamond + ruby + platinum;
+        this.ranking = ranking;
     }
 }
