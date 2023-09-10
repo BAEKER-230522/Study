@@ -6,10 +6,8 @@ import com.baeker.study.study.domain.entity.QStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.QStudyResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.core.types.*;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -51,8 +49,8 @@ public class StudyQueryRepository {
                 .fetch();
     }
 
-    //-- find all order by study
-    public List<StudyResDto> findAllOrderByXp(int page, int content) {
+    //-- find all order by ranking --//
+    public List<StudyResDto> findAllOrderByRanking(int page, int content) {
 
         Expression<Long> studyMembers = ExpressionUtils.as(
                 JPAExpressions
@@ -78,13 +76,18 @@ public class StudyQueryRepository {
                         study.diamond,
                         study.ruby,
                         study.platinum,
-                        studyMembers
+                        studyMembers,
+                        study.ranking
                 ))
                 .from(study)
-                .orderBy(study.xp.desc())
+                .orderBy(nullsLast(study.ranking), study.ranking.desc())
                 .offset(page * content)
                 .limit(content)
                 .fetch();
+    }
+
+    private <T extends Comparable> OrderSpecifier<T> nullsLast(Path<T> path) {
+        return new OrderSpecifier<>(Order.ASC, path, OrderSpecifier.NullHandling.NullsLast);
     }
 
     //-- find by input --//
@@ -113,12 +116,21 @@ public class StudyQueryRepository {
                         study.diamond,
                         study.ruby,
                         study.platinum,
-                        studyMembers
+                        studyMembers,
+                        study.ranking
                 ))
                 .from(study)
                 .where(study.name.like("%" + input + "%"))
                 .offset(page * content)
                 .limit(content)
+                .fetch();
+    }
+
+    //-- xp 순으로 정렬한 모든 member 목록 --//
+    public List<Study> findStudyRanking() {
+        return query
+                .selectFrom(study)
+                .orderBy(study.xp.desc())
                 .fetch();
     }
 }

@@ -53,6 +53,8 @@ public class QStudy extends EntityPathBase<Study> {
     //inherited
     public final NumberPath<Integer> platinum = _super.platinum;
 
+    public final NumberPath<Integer> ranking = createNumber("ranking", Integer.class);
+
     //inherited
     public final NumberPath<Integer> ruby = _super.ruby;
 
