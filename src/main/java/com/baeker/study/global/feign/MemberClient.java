@@ -1,6 +1,7 @@
 package com.baeker.study.global.feign;
 
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.config.FeignConfiguration;
 import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Qualifier
-@FeignClient(name = "member", url = "${custom.feign.member}")
+@FeignClient(name = "member", url = "${custom.feign.member}", configuration = FeignConfiguration.class)
 public interface MemberClient {
 
 

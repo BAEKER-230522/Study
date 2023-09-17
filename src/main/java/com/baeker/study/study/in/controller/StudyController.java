@@ -82,6 +82,19 @@ public class StudyController {
         return RsData.successOf(resDto);
     }
 
+    //-- solved count 최신화 --//
+    @Operation(summary = "study solved count 최신화")
+    @PostMapping("/v1/solved")
+    public RsData updateSolved(
+            @RequestBody @Valid SolvedCountReqDto dto
+    ) {
+        log.info("solved count 최신화 요청 확인 member id = {}", dto.getMemberId());
+        studyService.addSolveCount(dto);
+
+        log.info("solved count 최신화 완료 member id = {}", dto.getMemberId());
+        return RsData.of("S-1", "성공");
+    }
+
     //-- find list --//
     @GetMapping("/v1/list")
     @Operation(summary = "모든 스터디 조회 + 페이징")
@@ -134,12 +147,6 @@ public class StudyController {
                 .stream()
                 .map(s -> new SnapshotResDto(s))
                 .toList();
-
-//        List<SnapshotResDto> resDtoList = studyService
-//                .findAllSnapshot(study)
-//                .stream()
-//                .map(s -> new SnapshotResDto(s))
-//                .toList();
 
         log.info("Study Snapshot list 응답 완료 count = {}", resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
@@ -265,4 +272,7 @@ public class StudyController {
         log.info("검색어로 study 찾기 응답 완료");
         return RsData.successOf(dtoList);
     }
+
+    //-- update solved count --//
+
 }
