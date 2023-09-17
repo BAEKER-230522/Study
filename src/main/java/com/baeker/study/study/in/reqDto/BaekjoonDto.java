@@ -1,5 +1,6 @@
 package com.baeker.study.study.in.reqDto;
 
+import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,14 @@ public class BaekjoonDto {
         this.diamond = event.getDiamond();
         this.ruby = event.getRuby();
         this.platinum = event.getPlatinum();
+    }
+
+    public BaekjoonDto(Study study) {
+        this.bronze = study.getBronze();
+        this.silver = study.getSilver();
+        this.gold = study.getGold();
+        this.diamond = study.getDiamond();
+        this.ruby = study.getRuby();
+        this.platinum = study.getPlatinum();
     }
 }

@@ -135,12 +135,6 @@ public class StudyController {
                 .map(s -> new SnapshotResDto(s))
                 .toList();
 
-//        List<SnapshotResDto> resDtoList = studyService
-//                .findAllSnapshot(study)
-//                .stream()
-//                .map(s -> new SnapshotResDto(s))
-//                .toList();
-
         log.info("Study Snapshot list 응답 완료 count = {}", resDtoList.size());
         return RsData.of("S-1", "count - " + resDtoList.size(), resDtoList);
     }
@@ -265,4 +259,7 @@ public class StudyController {
         log.info("검색어로 study 찾기 응답 완료");
         return RsData.successOf(dtoList);
     }
+
+    //-- update solved count --//
+
 }

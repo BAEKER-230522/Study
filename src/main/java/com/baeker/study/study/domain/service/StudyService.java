@@ -136,17 +136,21 @@ public class StudyService {
     //-- event : member 의 study 해결한 문제 추가 --//
     public void addSolveCount(AddSolvedCountEvent event) {
         List<Study> studies = studyQueryRepository.findByMember(event.getMember());
+        String today = LocalDateTime.now().getDayOfWeek().toString();
         BaekjoonDto dto = new BaekjoonDto(event);
 
         for (Study study : studies) {
             Study saveStudy = studyRepository.save(study.updateSolvedCount(event));
-            this.updateSnapshot(saveStudy, dto);
+            this.updateSnapshot(saveStudy, dto, today);
         }
     }
 
+    public void updateSnapshotTest(Study study, BaekjoonDto dto, String today) {
+        updateSnapshot(study, dto, today);
+    }
+
     // update snapshot //
-    private void updateSnapshot(Study study, BaekjoonDto dto) {
-        String today = LocalDateTime.now().getDayOfWeek().toString();
+    private void updateSnapshot(Study study, BaekjoonDto dto, String today) {
         List<StudySnapshot> snapshots = study.getSnapshots();
 
         if (snapshots.size() == 0 || !snapshots.get(0).getDayOfWeek().equals(today)) {
