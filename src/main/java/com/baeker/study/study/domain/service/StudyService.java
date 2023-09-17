@@ -10,7 +10,6 @@ import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
-import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
@@ -74,18 +73,6 @@ public class StudyService {
         return myStudyService.create(dto.getMember(), saveStudy);
     }
 
-    public void createSnapshot(CreateSnapshotEvent event) {
-        Study study = this.findById(event.getId());
-        String today = LocalDateTime.now().getDayOfWeek().toString();
-
-        snapshotRepository.save(
-                StudySnapshot.create(study, event, today)
-        );
-        studyRepository.save(
-                study.updateSolvedCount(event)
-        );
-    }
-
 
     /**
      * ** UPDATE METHOD **
@@ -135,6 +122,7 @@ public class StudyService {
     }
 
     //-- study 해결한 문제 업데이트 --//
+    @Transactional
     public void addSolveCount(SolvedCountReqDto dto) {
         publisher.publishEvent(new AddSolvedCountEvent(this, dto));
     }
@@ -170,7 +158,7 @@ public class StudyService {
             snapshotRepository.save(snapshot);
         }
 
-        while (snapshots.size() > 7) {
+        if (snapshots.size() == 8) {
             StudySnapshot snapshot = snapshots.get(7);
             snapshots.remove(snapshot);
             snapshotRepository.delete(snapshot);
