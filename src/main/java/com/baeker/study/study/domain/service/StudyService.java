@@ -13,6 +13,7 @@ import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
 import com.baeker.study.study.out.SnapshotRepository;
@@ -133,9 +134,16 @@ public class StudyService {
         return study;
     }
 
+    //-- study 해결한 문제 업데이트 --//
+    public void addSolveCount(SolvedCountReqDto dto) {
+        publisher.publishEvent(new AddSolvedCountEvent(this, dto));
+    }
+
     //-- event : member 의 study 해결한 문제 추가 --//
     public void addSolveCount(AddSolvedCountEvent event) {
         List<Study> studies = studyQueryRepository.findByMember(event.getMember());
+        if (studies.size() == 0) return;
+
         String today = LocalDateTime.now().getDayOfWeek().toString();
         BaekjoonDto dto = new BaekjoonDto(event);
 

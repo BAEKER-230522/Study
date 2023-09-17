@@ -82,6 +82,19 @@ public class StudyController {
         return RsData.successOf(resDto);
     }
 
+    //-- solved count 최신화 --//
+    @Operation(summary = "study solved count 최신화")
+    @PostMapping("/v1/solved")
+    public RsData updateSolved(
+            @RequestBody @Valid SolvedCountReqDto dto
+    ) {
+        log.info("solved count 최신화 요청 확인 member id = {}", dto.getMemberId());
+        studyService.addSolveCount(dto);
+
+        log.info("solved count 최신화 완료 member id = {}", dto.getMemberId());
+        return RsData.of("S-1", "성공");
+    }
+
     //-- find list --//
     @GetMapping("/v1/list")
     @Operation(summary = "모든 스터디 조회 + 페이징")
