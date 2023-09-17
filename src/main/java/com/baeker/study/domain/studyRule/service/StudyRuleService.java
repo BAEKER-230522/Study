@@ -21,7 +21,6 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.P
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.RuleClient;
-import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
@@ -334,6 +333,7 @@ public class StudyRuleService {
             if (mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail()) {
                 log.info("send mail");
                 sendMail(studyRule);
+                studyRule.setSendMail();
                 continue;
             }
             else if (!mission.equals(Mission.ACTIVE)) continue; // 활성화 상태가 아니라면 무시
