@@ -32,6 +32,7 @@ public class MemberResDto {
     private String provider;
     private String email;
     private String token;
+    private Integer ranking;
     private boolean newMember;
 
     public MemberResDto(String nickname, String baekJoonName) {
