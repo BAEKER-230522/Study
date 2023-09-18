@@ -59,7 +59,7 @@ public class PersonalStudyRule {
     /**
      * 미션에 있는 문제 모두 성공시 COMPLETE
      */
-    public void isSuccess() {
+    public void isSuccessCheck() {
         long count = problemStatuses.stream()
                 .map(ProblemStatus::getStatus)
                 .filter(status -> status.equals(FAIL)).count();

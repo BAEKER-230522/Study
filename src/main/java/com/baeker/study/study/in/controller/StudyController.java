@@ -239,7 +239,7 @@ public class StudyController {
         List<Study> byMember = studyService.findByMember(memberId, 1);
         for (Study study : byMember) {
             log.info(study.getName() + "스터디 진행");
-            studyRuleService.updateProblemStatus(study.getId(), problemDtos);
+            studyRuleService.updateProblemStatus(study.getId(), memberId,problemDtos);
         }
     }
     //-- study list order by xp --//
