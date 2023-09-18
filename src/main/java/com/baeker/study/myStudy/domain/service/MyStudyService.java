@@ -9,7 +9,6 @@ import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.in.reqDto.AcceptDto;
 import com.baeker.study.myStudy.in.reqDto.DropReqDto;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
@@ -243,4 +242,5 @@ public class MyStudyService {
         myStudyRepository.delete(myStudy);
         memberClient.deleteMyStudy(new DeleteMyStudyReqDto(myStudy.getMember(), myStudy.getId()));
     }
+
 }

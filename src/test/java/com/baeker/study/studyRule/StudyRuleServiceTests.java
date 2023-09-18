@@ -11,14 +11,13 @@ import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.RuleClient;
+import com.baeker.study.myStudy.domain.service.MyStudyService;
+import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -26,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -47,6 +47,8 @@ class StudyRuleServiceTests {
     StudyRuleService studyRuleService;
     @Autowired
     StudyService studyService;
+    @Autowired
+    MyStudyService myStudyService;
     @MockBean
     RuleClient ruleClient;
     @MockBean
@@ -64,12 +66,41 @@ class StudyRuleServiceTests {
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader", "bk1234")));
     }
 
+
+
     Study createStudy(int i) {
-        CreateReqDto reqDto = CreateReqDto.createStudy((long) i, "이름" + i, "소개", 1);
+        CreateReqDto reqDto = CreateReqDto.createStudy((long) i, "이름" + i, "소개", 10);
         return studyService.create(reqDto).getStudy();
     }
+
+    void joinStudy(Long studyId, Long memberId) {
+        JoinMyStudyReqDto dto = new JoinMyStudyReqDto(studyId, memberId, "");
+        Study byId = studyService.findById(studyId);
+        myStudyService.join(dto,byId);
+    }
+
     /* 현재 진행중인 스터디 */
     CreateStudyRuleRequest setRequest(int i) {
+        Study study = createStudy(1);
+        for (int j = 0; j < i; j++) {
+            joinStudy(study.getId(), (long) j);
+        }
+        CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
+        cr.setName("이름" + i);
+        cr.setAbout("소개" + i);
+        cr.setStudyId(study.getId());
+        List<CreateProblem> createProblems = new ArrayList<>();
+        CreateProblem createProblem = new CreateProblem("A+B", 1000);
+        createProblems.add(createProblem);
+        cr.setCreateProblemList(createProblems);
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(1);
+        cr.setStartDate(startDate);
+        cr.setDeadline(endDate);
+        return cr;
+    }
+
+    CreateStudyRuleRequest pagingRequest(int i) {
         Study study = createStudy(i);
         CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
         cr.setName("이름" + i);
@@ -88,7 +119,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("생성 메서드")
-    @Transactional
+    @Rollback
     void createTest() {
         CreateStudyRuleRequest request = setRequest(1);
         Long studyRuleId = studyRuleService.create(request);
@@ -99,7 +130,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("수정 메서드")
-    @Transactional
+    @Rollback
     void modifyTest() {
         CreateStudyRuleRequest cr = setRequest(1);
         Long studyRuleId = studyRuleService.create(cr);
@@ -122,7 +153,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("삭제 메서드")
-    @Transactional
+    @Rollback
     void delete() {
         CreateStudyRuleRequest request = setRequest(1);
         Long studyRuleId = studyRuleService.create(request);
@@ -141,11 +172,11 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("조회/페이징")
-    @Transactional
+    @Rollback
     void selectPaging() {
 
         for (int i = 101; i <= 200; i++) {
-            CreateStudyRuleRequest createStudyRuleRequest = setRequest(i);
+            CreateStudyRuleRequest createStudyRuleRequest = pagingRequest(i);
             studyRuleService.create(createStudyRuleRequest);
         }
         List<StudyRule> all = studyRuleService.getAll();
@@ -158,6 +189,7 @@ class StudyRuleServiceTests {
 
     @Test
     @DisplayName("PersonalStudyRule 에서의 Status 가 COMPLETE 로 변경되는지 확인")
+    @Rollback
     void updateProblemStatusTest() {
         CreateStudyRuleRequest request = setRequest(1);
         Long studyRuleId = studyRuleService.create(request);
@@ -167,9 +199,15 @@ class StudyRuleServiceTests {
         problemNumberDtos.add(new ProblemNumberDto("1000", "10", "1000"));
 
 //        when(studyRuleService.sendMail(any())).thenReturn()
-        studyRuleService.updateProblemStatus(studyId,problemNumberDtos);
+        studyRuleService.updateProblemStatus(studyId, 1L,problemNumberDtos);
         studyRule.getPersonalStudyRules().forEach(
-                (personal) -> Assertions.assertEquals(Status.COMPLETE, personal.getStatus())
+                (personal) ->{
+                    if (personal.getMemberId().equals(1L)){
+                        Assertions.assertEquals(Status.COMPLETE, personal.getStatus());
+                    }else {
+                        Assertions.assertEquals(Status.FAIL, personal.getStatus());
+                    }
+                }
         );
     }
 }

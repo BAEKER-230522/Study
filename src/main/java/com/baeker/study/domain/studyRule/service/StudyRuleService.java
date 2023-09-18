@@ -324,13 +324,16 @@ public class StudyRuleService {
      * @param studyId
      */
     @Transactional
-    public void updateProblemStatus(Long studyId, List<ProblemNumberDto> problemNumberDtos) {
+    public void updateProblemStatus(Long studyId,Long memberId, List<ProblemNumberDto> problemNumberDtos) {
+        // studyId 와 푼문제 -> studyRule -> personalStudyRule memberid 와 같다면 갱신 -> problemStatus
         List<StudyRule> studyRuleFromStudy = getStudyRuleFromStudy(studyId);
         for (StudyRule studyRule : studyRuleFromStudy) {
             Mission mission = studyRule.getMission();
             // 미션 상태가 종료되고 메일이 아직 안보내졌다면 메일 보내고 무시
             log.info("1");
-            if (mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail()) {
+            boolean isSendMail = mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail();
+
+            if (isSendMail) {
                 log.info("send mail");
                 sendMail(studyRule);
                 studyRule.setSendMail();
@@ -339,29 +342,33 @@ public class StudyRuleService {
             else if (!mission.equals(Mission.ACTIVE)) continue; // 활성화 상태가 아니라면 무시
 
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
-                log.info("2");
-                for (ProblemStatus problemStatus : personalStudyRule.getProblemStatuses()) {
-                    log.info("3");
-                    for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
-                        log.info("4");
-                        if (setProblemStatus(problemStatus, problemNumberDto)) break;
-                    }
+                if (personalStudyRule.getMemberId().equals(memberId)){
+                    updateLoopProblemStatus(personalStudyRule.getProblemStatuses(), problemNumberDtos);
                 }
-                // 문제들 확인 후 문제들 다 풀었는지 체크
-                personalStudyRule.isSuccess();
+                personalStudyRule.isSuccessCheck();
             }
             setStatus(studyRule.getId());
         }
     }
 
-    private boolean setProblemStatus(ProblemStatus problemStatus, ProblemNumberDto problemNumberDto) {
+    private void updateLoopProblemStatus(List<ProblemStatus> problemStatuses, List<ProblemNumberDto> problemNumberDtos){
+        log.info("2");
+        for (ProblemStatus problemStatus : problemStatuses) {
+            log.info("3");
+            for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
+                log.info("4");
+                isProblemStatusSuccess(problemStatus, problemNumberDto);
+            }
+        }
+        // 문제들 확인 후 문제들 다 풀었는지 체크
+    }
+
+    private void isProblemStatusSuccess(ProblemStatus problemStatus, ProblemNumberDto problemNumberDto) {
         if (problemStatus.getProblem().getProblemNumber() == Integer.parseInt(problemNumberDto.problemNumber())) {
             problemStatus.addMemory(Integer.parseInt(problemNumberDto.memory()));
             problemStatus.addTime(Integer.parseInt(problemNumberDto.time()));
             problemStatus.updateStatus(true);
-            return true;
         }
-        return false;
     }
 
     private void sendMail(StudyRule studyRule) {
@@ -375,6 +382,5 @@ public class StudyRuleService {
         }
         studyRule.setSendMail();
     }
-
 }
 
