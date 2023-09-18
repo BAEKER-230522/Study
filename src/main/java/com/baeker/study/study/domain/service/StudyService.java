@@ -10,9 +10,9 @@ import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
-import com.baeker.study.study.in.event.CreateSnapshotEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
 import com.baeker.study.study.out.SnapshotRepository;
@@ -73,18 +73,6 @@ public class StudyService {
         return myStudyService.create(dto.getMember(), saveStudy);
     }
 
-    public void createSnapshot(CreateSnapshotEvent event) {
-        Study study = this.findById(event.getId());
-        String today = LocalDateTime.now().getDayOfWeek().toString();
-
-        snapshotRepository.save(
-                StudySnapshot.create(study, event, today)
-        );
-        studyRepository.save(
-                study.updateSolvedCount(event)
-        );
-    }
-
 
     /**
      * ** UPDATE METHOD **
@@ -133,20 +121,32 @@ public class StudyService {
         return study;
     }
 
+    //-- study 해결한 문제 업데이트 --//
+    @Transactional
+    public void addSolveCount(SolvedCountReqDto dto) {
+        publisher.publishEvent(new AddSolvedCountEvent(this, dto));
+    }
+
     //-- event : member 의 study 해결한 문제 추가 --//
     public void addSolveCount(AddSolvedCountEvent event) {
         List<Study> studies = studyQueryRepository.findByMember(event.getMember());
+        if (studies.size() == 0) return;
+
+        String today = LocalDateTime.now().getDayOfWeek().toString();
         BaekjoonDto dto = new BaekjoonDto(event);
 
         for (Study study : studies) {
             Study saveStudy = studyRepository.save(study.updateSolvedCount(event));
-            this.updateSnapshot(saveStudy, dto);
+            this.updateSnapshot(saveStudy, dto, today);
         }
     }
 
+    public void updateSnapshotTest(Study study, BaekjoonDto dto, String today) {
+        updateSnapshot(study, dto, today);
+    }
+
     // update snapshot //
-    private void updateSnapshot(Study study, BaekjoonDto dto) {
-        String today = LocalDateTime.now().getDayOfWeek().toString();
+    private void updateSnapshot(Study study, BaekjoonDto dto, String today) {
         List<StudySnapshot> snapshots = study.getSnapshots();
 
         if (snapshots.size() == 0 || !snapshots.get(0).getDayOfWeek().equals(today)) {
@@ -158,7 +158,7 @@ public class StudyService {
             snapshotRepository.save(snapshot);
         }
 
-        while (snapshots.size() > 7) {
+        if (snapshots.size() == 8) {
             StudySnapshot snapshot = snapshots.get(7);
             snapshots.remove(snapshot);
             snapshotRepository.delete(snapshot);
@@ -258,4 +258,5 @@ public class StudyService {
     public MemberResDto feignTest(Long id) {
         return memberClient.findById(id).getData();
     }
+
 }

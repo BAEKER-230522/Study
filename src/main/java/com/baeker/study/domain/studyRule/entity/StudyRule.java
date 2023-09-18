@@ -79,7 +79,7 @@ public class StudyRule {
         else if (date.isAfter(deadline)) {
             this.mission = Mission.DONE;
         }
-        else if ((date.isAfter(startDate) || date.isEqual(startDate))&& date.isBefore(deadline)) {
+        else {
             this.mission = Mission.ACTIVE;
         }
     }

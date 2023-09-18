@@ -9,7 +9,6 @@ import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.in.reqDto.AcceptDto;
 import com.baeker.study.myStudy.in.reqDto.DropReqDto;
 import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
@@ -125,6 +124,7 @@ public class MyStudyService {
      * find by member & study
      * find by id
      * find by member study
+     * find member by member id
      * 정회원 목록 조회
      * 가입 대기 회원 목록 조회
      * find all
@@ -160,6 +160,11 @@ public class MyStudyService {
             throw new NotFoundException("가입한 회원이 없습니다.");
 
         return rsData.getData();
+    }
+
+    //-- find member by member id --//
+    public MemberResDto findMemberByMemberId(Long memberId) {
+        return memberClient.findById(memberId).getData();
     }
 
     //-- 가입 대기 회원 목록 조회 --//
@@ -237,4 +242,5 @@ public class MyStudyService {
         myStudyRepository.delete(myStudy);
         memberClient.deleteMyStudy(new DeleteMyStudyReqDto(myStudy.getMember(), myStudy.getId()));
     }
+
 }
