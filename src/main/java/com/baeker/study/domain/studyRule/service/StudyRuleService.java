@@ -331,7 +331,9 @@ public class StudyRuleService {
             Mission mission = studyRule.getMission();
             // 미션 상태가 종료되고 메일이 아직 안보내졌다면 메일 보내고 무시
             log.info("1");
-            if (mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail()) {
+            boolean isSendMail = mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail();
+
+            if (isSendMail) {
                 log.info("send mail");
                 sendMail(studyRule);
                 studyRule.setSendMail();
@@ -380,6 +382,5 @@ public class StudyRuleService {
         }
         studyRule.setSendMail();
     }
-
 }
 

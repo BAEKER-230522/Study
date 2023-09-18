@@ -258,4 +258,5 @@ public class StudyService {
     public MemberResDto feignTest(Long id) {
         return memberClient.findById(id).getData();
     }
+
 }

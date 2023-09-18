@@ -4,6 +4,7 @@ import com.baeker.study.base.entity.ScoreBase;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
@@ -34,7 +35,7 @@ public class Study extends ScoreBase {
     private List<MyStudy> myStudies = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
     private List<StudyRule> studyRules = new ArrayList<>();
 
     @Builder.Default
