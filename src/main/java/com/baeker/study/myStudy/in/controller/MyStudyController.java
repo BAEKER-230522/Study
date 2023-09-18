@@ -8,6 +8,7 @@ import com.baeker.study.myStudy.in.resDto.CreateMyStudyDto;
 import com.baeker.study.myStudy.in.resDto.MyStudyResDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
+import com.baeker.study.study.in.resDto.MemberResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,7 +38,8 @@ public class MyStudyController {
 
         Study study = studyService.findById(studyId);
         MyStudy myStudy = myStudyService.duplicationCheck(memberId, study);
-        MyStudyResDto resDto = new MyStudyResDto(myStudy);
+        MemberResDto member = myStudyService.findMemberByMemberId(memberId);
+        MyStudyResDto resDto = new MyStudyResDto(myStudy, member, study);
 
         log.info("my study 응답 완료 my study id = {}", resDto.getId());
         return RsData.successOf(resDto);

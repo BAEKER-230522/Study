@@ -109,7 +109,7 @@ class StudyServiceTest {
         assertThat(study4.solvedCount()).isEqualTo(18);
 
         List<StudySnapshot> snapshots1 = study1.getSnapshots();
-        String today = LocalDateTime.now().getDayOfWeek().toString();
+        String today = dayCalculator(0);
 
         assertThat(snapshots1.size()).isEqualTo(1);
         assertThat(snapshots1.get(0).getDayOfWeek()).isEqualTo(today);
@@ -117,44 +117,31 @@ class StudyServiceTest {
     }
 
     @Test
-    @DisplayName("Snapshot 날짜별 저장")
-    void no2() {
-        Study study = study(1L, "study", "about", "member");
-        Study findStudy = studyService.findById(study.getId());
-
-        for (int i = 6; i > 0; i--)testSnapshot(findStudy, i);
-        publisher.publishEvent(new AddSolvedCountEvent(this, 1L, 1, 1, 1, 1, 1, 1));
-
-        assertThat(
-                studyService.findAllSnapshot(findStudy).size())
-                .isEqualTo(7);
-
-        List<StudySnapshot> snapshots = findStudy.getSnapshots();
-
-        for (StudySnapshot snapshot : snapshots)
-            System.out.println(snapshot.getDayOfWeek());
-    }
-
-    @Test
-    @DisplayName("Snapshot 7일만 보관")
+    @DisplayName("Snapshot 테스트")
     void no3() {
         Study study = study(1L, "study", "about", "member");
-        Study findStudy = studyService.findById(study.getId());
-        for (int i = 7; i > 0; i--) testSnapshot(findStudy, i);
 
-        assertThat(
-                studyService.findAllSnapshot(findStudy).size())
-                .isEqualTo(7);
+        for (int i = 0; i < 7; i++)
+            updateSnapshot(study, i);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 1L, 1, 1, 1, 1, 1, 1));
-        assertThat(
-                studyService.findAllSnapshot(findStudy).size())
-                .isEqualTo(7);
+        List<StudySnapshot> list1 = study.getSnapshots();
+        assertThat(list1.size()).isEqualTo(7);
 
-        List<StudySnapshot> snapshots = findStudy.getSnapshots();
-        String today = LocalDateTime.now().getDayOfWeek().toString();
+        String day = dayCalculator(0);
+        assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
 
-        assertThat(snapshots.get(0).getDayOfWeek()).isEqualTo(today);
+        day = dayCalculator(-1);
+        assertThat(list1.get(0).getDayOfWeek()).isEqualTo(day);
+
+        updateSnapshot(study, 0);
+        List<StudySnapshot> list2 = study.getSnapshots();
+        assertThat(list2.size()).isEqualTo(7);
+
+        day = dayCalculator(1);
+        assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
+
+        day = dayCalculator(0);
+        assertThat(list1.get(0).getDayOfWeek()).isEqualTo(day);
     }
 
     @Test
@@ -248,10 +235,13 @@ class StudyServiceTest {
     }
 
     // test 용 스냅샷 생성 //
-    private void testSnapshot(Study study, int lastDay) {
-        String day = LocalDateTime.now().minusDays(lastDay).getDayOfWeek().toString();
-        BaekjoonDto dto = new BaekjoonDto(study.getId(), 1, 1, 1, 1, 1, 1);
-        StudySnapshot snapshot = StudySnapshot.create(study, dto, day);
-        snapshotRepository.save(snapshot);
+    private void updateSnapshot(Study study, int addDay) {
+        String today = dayCalculator(addDay);
+        BaekjoonDto dto = new BaekjoonDto(study);
+        studyService.updateSnapshotTest(study, dto, today);
+    }
+
+    String dayCalculator(int addDate) {
+        return LocalDateTime.now().plusDays(addDate).getDayOfWeek().toString();
     }
 }
