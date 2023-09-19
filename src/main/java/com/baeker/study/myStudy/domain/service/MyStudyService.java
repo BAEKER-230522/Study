@@ -1,9 +1,9 @@
 package com.baeker.study.myStudy.domain.service;
 
-import com.baeker.study.base.exception.InvalidDuplicateException;
-import com.baeker.study.base.exception.NoPermissionException;
-import com.baeker.study.base.exception.NotFoundException;
-import com.baeker.study.base.exception.OverLimitedException;
+import com.baeker.study.global.exception.InvalidDuplicateException;
+import com.baeker.study.global.exception.NoPermissionException;
+import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.OverLimitedException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.CandidateResDto;

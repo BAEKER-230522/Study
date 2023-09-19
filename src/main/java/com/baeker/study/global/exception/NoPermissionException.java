@@ -1,4 +1,4 @@
-package com.baeker.study.base.exception;
+package com.baeker.study.global.exception;
 
 public class NoPermissionException extends RuntimeException {
 

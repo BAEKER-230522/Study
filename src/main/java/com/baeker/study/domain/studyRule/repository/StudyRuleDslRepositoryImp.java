@@ -1,6 +1,6 @@
 package com.baeker.study.domain.studyRule.repository;
 
-import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.global.exception.NotFoundException;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.baeker.study.base.exception.ErrorResponse.NOT_FOUND_STUDY_RULE;
+import static com.baeker.study.global.exception.ErrorResponse.NOT_FOUND_STUDY_RULE;
 import static com.baeker.study.domain.studyRule.entity.QStudyRule.studyRule;
 import static com.baeker.study.domain.studyRule.studyRuleRelationship.problem.QProblem.problem;
 import static com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.QProblemStatus.problemStatus;

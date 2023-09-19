@@ -1,5 +1,6 @@
 package com.baeker.study.global.jwt;
 
+import com.baeker.study.global.exception.InvalidJwtException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.security.Keys;
@@ -18,7 +19,6 @@ public class JwtDecrypt {
     @Value("${custom.jwt.secret-key}")
     private String secretKeyPlain;
     private SecretKey cachedSecretKey;
-    private Long memberId;
 
 
     public SecretKey getSecretKey() {
@@ -48,16 +48,12 @@ public class JwtDecrypt {
         try {
             return new ObjectMapper().readValue(jsonStr, LinkedHashMap.class);
         } catch (JsonProcessingException e) {
-            return null;
+            throw new InvalidJwtException("JWT 복호화에 실패");
         }
     }
 
     public Long getMemberId(String token) {
-        if (this.memberId == null) {
-            Map<String, Object> claims = getClaims(token);
-            this.memberId = (long) claims.get("id");
-        }
-
-        return this.memberId;
+        Map<String, Object> claims = getClaims(token);
+        return (long) claims.get("id");
     }
 }

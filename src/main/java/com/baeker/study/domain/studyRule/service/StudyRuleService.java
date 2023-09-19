@@ -1,6 +1,6 @@
 package com.baeker.study.domain.studyRule.service;
 
-import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.global.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;

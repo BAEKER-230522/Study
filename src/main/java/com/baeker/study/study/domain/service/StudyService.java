@@ -1,8 +1,8 @@
 package com.baeker.study.study.domain.service;
 
-import com.baeker.study.base.exception.InvalidDuplicateException;
-import com.baeker.study.base.exception.NoPermissionException;
-import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.global.exception.InvalidDuplicateException;
+import com.baeker.study.global.exception.NoPermissionException;
+import com.baeker.study.global.exception.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
@@ -12,7 +12,6 @@ import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
-import com.baeker.study.study.in.resDto.SnapshotResDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
