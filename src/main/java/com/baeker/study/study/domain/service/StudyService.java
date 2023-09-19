@@ -12,6 +12,7 @@ import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.SnapshotResDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.out.SnapshotQueryRepository;
@@ -154,7 +155,7 @@ public class StudyService {
             snapshotRepository.save(snapshot);
 
         }else{
-            StudySnapshot snapshot = snapshots.get(0).update(dto);
+            StudySnapshot snapshot = snapshots.get(0).modify(dto);
             snapshotRepository.save(snapshot);
         }
 

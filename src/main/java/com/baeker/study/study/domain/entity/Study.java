@@ -44,11 +44,12 @@ public class Study extends ScoreBase {
 
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, Long nickname) {
+    public static Study createStudy(String name, String about, Integer capacity, Long id) {
         return builder()
+                .createDate(LocalDateTime.now())
                 .name(name)
                 .about(about)
-                .leader(nickname)
+                .leader(id)
                 .capacity(capacity)
                 .xp(0)
                 .build();

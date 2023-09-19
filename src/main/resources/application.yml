@@ -85,6 +85,12 @@ custom:
   feign:
     member: http://localhost:8081/api/member
     rule: http://rule:8083/api/rule
+  mapping:
+    study:
+      web: /web/study
+      api: /api/study
+  jwt:
+    secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
 
 logging:
   pattern:

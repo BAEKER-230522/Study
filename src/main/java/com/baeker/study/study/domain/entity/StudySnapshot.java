@@ -41,7 +41,7 @@ public class StudySnapshot extends ScoreBase {
     }
 
     //-- update snapshot --//
-    public StudySnapshot update(BaekjoonDto dto) {
+    public StudySnapshot modify(BaekjoonDto dto) {
         return this.toBuilder()
                 .bronze(this.getBronze() + dto.getBronze())
                 .silver(this.getSilver() + dto.getSilver())
