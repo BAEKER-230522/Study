@@ -342,29 +342,28 @@ public class StudyRuleService {
             else if (!mission.equals(Mission.ACTIVE)) continue; // 활성화 상태가 아니라면 무시
 
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
-                if (personalStudyRule.getMemberId().equals(memberId)){
+                boolean sameMember = personalStudyRule.getMemberId().equals(memberId);
+                if (sameMember) {
                     updateLoopProblemStatus(personalStudyRule.getProblemStatuses(), problemNumberDtos);
+                    personalStudyRule.isSuccessCheck();
                 }
-                personalStudyRule.isSuccessCheck();
             }
             setStatus(studyRule.getId());
         }
     }
 
     private void updateLoopProblemStatus(List<ProblemStatus> problemStatuses, List<ProblemNumberDto> problemNumberDtos){
-        log.info("2");
         for (ProblemStatus problemStatus : problemStatuses) {
-            log.info("3");
             for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
-                log.info("4");
                 isProblemStatusSuccess(problemStatus, problemNumberDto);
             }
         }
-        // 문제들 확인 후 문제들 다 풀었는지 체크
     }
 
     private void isProblemStatusSuccess(ProblemStatus problemStatus, ProblemNumberDto problemNumberDto) {
-        if (problemStatus.getProblem().getProblemNumber() == Integer.parseInt(problemNumberDto.problemNumber())) {
+        boolean ifSameProblemNumber = problemStatus.getProblem().getProblemNumber().equals(Integer.parseInt(problemNumberDto.problemNumber()));
+
+        if (ifSameProblemNumber) {
             problemStatus.addMemory(Integer.parseInt(problemNumberDto.memory()));
             problemStatus.addTime(Integer.parseInt(problemNumberDto.time()));
             problemStatus.updateStatus(true);
