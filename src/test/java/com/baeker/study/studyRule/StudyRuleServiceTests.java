@@ -63,7 +63,7 @@ class StudyRuleServiceTests {
         when(memberClient.deleteMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(memberClient.findById(any()))
-                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader", "bk1234")));
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto(1L , "leader", "bk1234")));
     }
 
 
