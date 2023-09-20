@@ -35,7 +35,8 @@ public class MemberResDto {
     private Integer ranking;
     private boolean newMember;
 
-    public MemberResDto(String nickname, String baekJoonName) {
+    public MemberResDto(Long id, String nickname, String baekJoonName) {
+        this.id = id;
         this.nickname = nickname;
         this.baekJoonName = baekJoonName;
     }

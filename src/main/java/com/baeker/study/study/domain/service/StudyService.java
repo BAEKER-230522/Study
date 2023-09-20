@@ -259,4 +259,33 @@ public class StudyService {
         return memberClient.findById(id).getData();
     }
 
+    //-- delete study --//
+    @Transactional
+    public void delete(DeleteStudyReqDto dto) {
+        Study study = this.findById(dto.getStudyId());
+        isStudyLeader(dto.getMemberId(), study);
+
+        deleteSnapshot(study);
+        deleteMyStudy(study);
+        studyRepository.delete(study);
+    }
+
+    private void isStudyLeader(Long memberId, Study study) {
+        if (study.getLeader() != memberId)
+            throw new NoPermissionException("권한이 없습니다.");
+    }
+
+    private void deleteSnapshot(Study study) {
+        List<StudySnapshot> snapshots = study.getSnapshots();
+        for (StudySnapshot snapshot : snapshots)
+            snapshotRepository.delete(snapshot);
+
+        snapshots.clear();
+    }
+
+    private void deleteMyStudy(Study study) {
+        List<MyStudy> myStudies = study.getMyStudies();
+        for (MyStudy myStudy : myStudies)
+            myStudyService.delete(myStudy);
+    }
 }
