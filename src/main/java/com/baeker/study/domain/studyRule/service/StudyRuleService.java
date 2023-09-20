@@ -234,6 +234,10 @@ public class StudyRuleService {
         }
     }
 
+    private void addStudyXp(StudyRule studyRule) {
+        if (studyRule.getStatus().equals(Status.COMPLETE)) studyRule.addXp();
+    }
+
     public void updateStudyRule(Long id, Map<String, String> updates) {
         StudyRule studyRule = getStudyRule(id);
         ModifyStudyRuleRequest request = new ModifyStudyRuleRequest();

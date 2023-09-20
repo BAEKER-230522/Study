@@ -46,6 +46,8 @@ public class QStudyRule extends EntityPathBase<StudyRule> {
 
     public final com.baeker.study.study.domain.entity.QStudy study;
 
+    public final NumberPath<Double> xp = createNumber("xp", Double.class);
+
     public QStudyRule(String variable) {
         this(StudyRule.class, forVariable(variable), INITS);
     }

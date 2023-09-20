@@ -110,4 +110,8 @@ public class StudyRule {
     public void setSendMail() {
         this.sendMail = true;
     }
+
+    public void addXp() {
+        this.study.xpUp(this.xp.intValue());
+    }
 }
