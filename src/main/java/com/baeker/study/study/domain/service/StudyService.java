@@ -149,17 +149,17 @@ public class StudyService {
     private void updateSnapshot(Study study, BaekjoonDto dto, String today) {
         List<StudySnapshot> snapshots = study.getSnapshots();
 
-        if (snapshots.size() == 0 || !snapshots.get(0).getDayOfWeek().equals(today)) {
+        if (snapshots.size() == 0 || !snapshots.get(snapshots.size() - 1).getDayOfWeek().equals(today)) {
             StudySnapshot snapshot = StudySnapshot.create(study, dto, today);
             snapshotRepository.save(snapshot);
 
         }else{
-            StudySnapshot snapshot = snapshots.get(0).update(dto);
+            StudySnapshot snapshot = snapshots.get(snapshots.size() - 1).update(dto);
             snapshotRepository.save(snapshot);
         }
 
         if (snapshots.size() == 8) {
-            StudySnapshot snapshot = snapshots.get(7);
+            StudySnapshot snapshot = snapshots.get(0);
             snapshots.remove(snapshot);
             snapshotRepository.delete(snapshot);
         }
