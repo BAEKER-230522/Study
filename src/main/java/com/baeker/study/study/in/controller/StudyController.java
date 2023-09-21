@@ -85,10 +85,10 @@ public class StudyController {
     public RsData updateSolved(
             @RequestBody @Valid SolvedCountReqDto dto
     ) {
-        log.info("solved count 최신화 요청 확인 member id = {}", dto.getMemberId());
+        log.info("solved count 최신화 요청 확인 member id = {}", dto.getId());
         studyService.addSolveCount(dto);
 
-        log.info("solved count 최신화 완료 member id = {}", dto.getMemberId());
+        log.info("solved count 최신화 완료 member id = {}", dto.getId());
         return RsData.of("S-1", "성공");
     }
 

@@ -9,7 +9,6 @@ import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
-import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
@@ -19,7 +18,6 @@ import com.baeker.study.study.out.SnapshotRepository;
 import com.baeker.study.study.out.StudyQueryRepository;
 import com.baeker.study.study.out.StudyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +42,6 @@ public class StudyService {
     private final MyStudyService myStudyService;
     private final SnapshotRepository snapshotRepository;
     private final SnapshotQueryRepository snapshotQueryRepository;
-    private final ApplicationEventPublisher publisher;
     private final MemberClient memberClient;
 
     /**
@@ -124,20 +121,15 @@ public class StudyService {
     //-- study 해결한 문제 업데이트 --//
     @Transactional
     public void addSolveCount(SolvedCountReqDto dto) {
-        publisher.publishEvent(new AddSolvedCountEvent(this, dto));
-    }
-
-    //-- event : member 의 study 해결한 문제 추가 --//
-    public void addSolveCount(AddSolvedCountEvent event) {
-        List<Study> studies = studyQueryRepository.findByMember(event.getMember());
+        List<Study> studies = studyQueryRepository.findByMember(dto.getId());
         if (studies.size() == 0) return;
 
         String today = LocalDateTime.now().getDayOfWeek().toString();
-        BaekjoonDto dto = new BaekjoonDto(event);
+        BaekjoonDto resDto = new BaekjoonDto(dto);
 
         for (Study study : studies) {
-            Study saveStudy = studyRepository.save(study.updateSolvedCount(event));
-            this.updateSnapshot(saveStudy, dto, today);
+            Study saveStudy = studyRepository.save(study.updateSolvedCount(dto));
+            this.updateSnapshot(saveStudy, resDto, today);
         }
     }
 
