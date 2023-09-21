@@ -10,12 +10,12 @@ import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
-import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.reqDto.DeleteStudyReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,7 +89,7 @@ class StudyServiceTest {
         assertThat(all.size()).isEqualTo(6);
         assertThat(study1.solvedCount()).isEqualTo(0);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 1L, 1, 1, 1, 1, 1, 1));
+        studyService.addSolveCount(new SolvedCountReqDto(1L, 1, 1, 1, 1, 1, 1));
 
         assertThat(study1.solvedCount()).isEqualTo(6);
         assertThat(study2.solvedCount()).isEqualTo(6);
@@ -101,14 +101,14 @@ class StudyServiceTest {
         List<StudySnapshot> snapshots4 = study4.getSnapshots();
         assertThat(snapshots4.size()).isEqualTo(0);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 2L, 3, 3, 3, 3, 3, 3));
+        studyService.addSolveCount(new SolvedCountReqDto(2L, 3, 3, 3, 3, 3, 3));
 
         assertThat(study1.solvedCount()).isEqualTo(6);
         assertThat(study4.solvedCount()).isEqualTo(18);
         assertThat(study5.solvedCount()).isEqualTo(18);
         assertThat(study6.solvedCount()).isEqualTo(18);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 1L, 1, 1, 1, 1, 1, 1));
+        studyService.addSolveCount(new SolvedCountReqDto(1L, 1, 1, 1, 1, 1, 1));
 
         assertThat(study1.solvedCount()).isEqualTo(12);
         assertThat(study2.solvedCount()).isEqualTo(12);
