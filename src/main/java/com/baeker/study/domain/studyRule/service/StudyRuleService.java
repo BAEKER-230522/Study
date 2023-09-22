@@ -8,17 +8,13 @@ import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
-import com.baeker.study.domain.studyRule.entity.Mission;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
-import com.baeker.study.domain.studyRule.repository.StudyRuleDslRepositoryImp;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatusRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.RuleClient;
 import com.baeker.study.global.feign.dto.RuleDto;
@@ -26,7 +22,6 @@ import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.resDto.MemberResDto;
-import com.baeker.study.study.out.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -38,6 +33,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,16 +47,12 @@ public class StudyRuleService {
 
     private final EmailService emailService;
 
-    private final SnapshotRepository snapshotRepository;
-
-    private final StudyRuleDslRepositoryImp studyRuleDslRepositoryImp;
 
     private final MemberClient memberClient;
     private final RuleClient ruleClient;
 
     private final ProblemService problemService;
-    private final ProblemStatusRepository problemStatusRepository;
-    private final PersonalStudyRuleRepository personalStudyRuleRepository;
+
 
     /**
      * 생성
@@ -155,8 +147,9 @@ public class StudyRuleService {
         return studyRuleRepository.findById(studyRuleId)
                 .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));
     }
-    public StudyRuleQueryDto getStudyRuleQueryDto(Long studyRuleId) {
-        return studyRuleDslRepositoryImp.findStudyRule(studyRuleId);
+
+    public StudyRuleQueryDto getStudyRuleQueryDto(StudyRule studyRule) {
+        return studyRuleRepository.findStudyRuleDetail(studyRule);
     }
 
 
@@ -202,6 +195,7 @@ public class StudyRuleService {
     /**
      * study 에있는 멤버들 status 확인하여
      * StudyStatus 갱신
+     *
      * @param studyRuleId
      */
     public boolean isPersonalMissionStatus(Long studyRuleId) {
@@ -216,6 +210,7 @@ public class StudyRuleService {
         }
         return status;
     }
+
     public void setStatus(Long studyRuleId) {
         StudyRule studyRule = getStudyRule(studyRuleId);
         studyRule.setStatus(isPersonalMissionStatus(studyRuleId));
@@ -318,33 +313,22 @@ public class StudyRuleService {
         return rule.getData();
     }
 
-    public List<StudyRule> getStudyRuleFromStudy(Long studyId) {
-        return studyRuleDslRepositoryImp.findStudyRuleFromStudy(studyId);
+    public List<StudyRule> getStudyRuleActiveFromStudy(Long studyId) {
+        return studyRuleRepository.findStudyRuleActiveFromStudy(studyId)
+                .orElseThrow(() -> new NotFoundException("스터디 룰이 없습니다."));
     }
 
     /**
      * member -> studyId -> studyRule -> personalStudyRule -> problemStatus
      * 위 순서로 get 하고 개인별 문제 갱신
+     *
      * @param studyId
      */
     @Transactional
-    public void updateProblemStatus(Long studyId,Long memberId, List<ProblemNumberDto> problemNumberDtos) {
+    public void updateProblemStatus(Long studyId, Long memberId, List<ProblemNumberDto> problemNumberDtos) {
         // studyId 와 푼문제 -> studyRule -> personalStudyRule memberid 와 같다면 갱신 -> problemStatus
-        List<StudyRule> studyRuleFromStudy = getStudyRuleFromStudy(studyId);
+        List<StudyRule> studyRuleFromStudy = getStudyRuleActiveFromStudy(studyId);
         for (StudyRule studyRule : studyRuleFromStudy) {
-            Mission mission = studyRule.getMission();
-            // 미션 상태가 종료되고 메일이 아직 안보내졌다면 메일 보내고 무시
-            log.info("1");
-            boolean isSendMail = mission.equals(Mission.DONE) && studyRule.getStatus().equals(Status.FAIL) && !studyRule.isSendMail();
-
-            if (isSendMail) {
-                log.info("send mail");
-                sendMail(studyRule);
-                studyRule.setSendMail();
-                continue;
-            }
-            else if (!mission.equals(Mission.ACTIVE)) continue; // 활성화 상태가 아니라면 무시
-
             for (PersonalStudyRule personalStudyRule : studyRule.getPersonalStudyRules()) {
                 boolean sameMember = personalStudyRule.getMemberId().equals(memberId);
                 if (sameMember) {
@@ -353,10 +337,13 @@ public class StudyRuleService {
                 }
             }
             setStatus(studyRule.getId());
+            if (studyRule.getStatus().equals(Status.COMPLETE)) {
+                addStudyXp(studyRule);
+            }
         }
     }
 
-    private void updateLoopProblemStatus(List<ProblemStatus> problemStatuses, List<ProblemNumberDto> problemNumberDtos){
+    private void updateLoopProblemStatus(List<ProblemStatus> problemStatuses, List<ProblemNumberDto> problemNumberDtos) {
         for (ProblemStatus problemStatus : problemStatuses) {
             for (ProblemNumberDto problemNumberDto : problemNumberDtos) {
                 isProblemStatusSuccess(problemStatus, problemNumberDto);
@@ -384,6 +371,18 @@ public class StudyRuleService {
                     String.format("%s 미션 실패 메일입니다.", studyName), "오늘 하루도 화이팅 입니다 :)"));
         }
         studyRule.setSendMail();
+    }
+
+    @Scheduled(cron = "0 0 18 * * *")
+    public void missionDoneStudyRuleSendMail() {
+        Optional<List<StudyRule>> opStudyRule = studyRuleRepository.findAllAndNotYetSendMail();
+        List<StudyRule> studyRules;
+        if (opStudyRule.isEmpty()) return;
+        studyRules = opStudyRule.get();
+        for (StudyRule studyRule : studyRules) {
+            sendMail(studyRule);
+        }
+
     }
 }
 
