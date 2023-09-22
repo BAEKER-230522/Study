@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -63,9 +65,8 @@ class StudyRuleServiceTests {
         when(memberClient.deleteMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(memberClient.findById(any()))
-                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto(1L , "leader", "bk1234")));
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto(1L, "leader", "bk1234")));
     }
-
 
 
     Study createStudy(int i) {
@@ -76,7 +77,7 @@ class StudyRuleServiceTests {
     void joinStudy(Long studyId, Long memberId) {
         JoinMyStudyReqDto dto = new JoinMyStudyReqDto(studyId, memberId, "");
         Study byId = studyService.findById(studyId);
-        myStudyService.join(dto,byId);
+        myStudyService.join(dto, byId);
     }
 
     /* 현재 진행중인 스터디 */
@@ -92,6 +93,7 @@ class StudyRuleServiceTests {
         List<CreateProblem> createProblems = new ArrayList<>();
         CreateProblem createProblem = new CreateProblem("A+B", 1000);
         createProblems.add(createProblem);
+        cr.setXp(10.0);
         cr.setCreateProblemList(createProblems);
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(1);
@@ -105,6 +107,7 @@ class StudyRuleServiceTests {
         CreateStudyRuleRequest cr = new CreateStudyRuleRequest();
         cr.setName("이름" + i);
         cr.setAbout("소개" + i);
+        cr.setXp(10.0);
         cr.setStudyId(study.getId());
         List<CreateProblem> createProblems = new ArrayList<>();
         CreateProblem createProblem = new CreateProblem("A+B", 1000);
@@ -199,15 +202,40 @@ class StudyRuleServiceTests {
         problemNumberDtos.add(new ProblemNumberDto("1000", "10", "1000"));
 
 //        when(studyRuleService.sendMail(any())).thenReturn()
-        studyRuleService.updateProblemStatus(studyId, 1L,problemNumberDtos);
+        studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
         studyRule.getPersonalStudyRules().forEach(
-                (personal) ->{
-                    if (personal.getMemberId().equals(1L)){
+                (personal) -> {
+                    if (personal.getMemberId().equals(1L)) {
                         Assertions.assertEquals(Status.COMPLETE, personal.getStatus());
-                    }else {
+                    } else {
                         Assertions.assertEquals(Status.FAIL, personal.getStatus());
                     }
                 }
         );
+    }
+
+    @Test
+    @DisplayName("모두 성공했을때 studt xp 상승 한다.")
+    void addStudyXpTest() {
+        CreateStudyRuleRequest request = setRequest(1);
+        Long studyRuleId = studyRuleService.create(request);
+        StudyRule studyRule = studyRuleService.getStudyRule(studyRuleId);
+        Long studyId = studyRule.getStudy().getId();
+        List<ProblemNumberDto> problemNumberDtos = new ArrayList<>();
+        problemNumberDtos.add(new ProblemNumberDto("1000", "10", "1000"));
+
+        studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
+        studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
+        Study study = studyRule.getStudy();
+        Assertions.assertEquals(10, study.getXp());
+    }
+
+    @Test
+    @DisplayName("미션 실패한 List 가 없을때 NotFoundException 발생")
+    void emptyList_NotFoundException() {
+        NotFoundException thrown = assertThrows(
+                NotFoundException.class,
+                () -> studyRuleService.getNotYetSendMail(), "아직 메일을 보낼 스터디 룰이 없습니다.");
+        assertEquals("아직 메일을 보낼 스터디 룰이 없습니다.", thrown.getMessage());
     }
 }

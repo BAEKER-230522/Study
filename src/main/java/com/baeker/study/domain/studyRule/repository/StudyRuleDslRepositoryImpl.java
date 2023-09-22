@@ -1,20 +1,22 @@
 package com.baeker.study.domain.studyRule.repository;
 
-import com.baeker.study.base.exception.NotFoundException;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
+import com.baeker.study.domain.studyRule.entity.Mission;
+import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.dto.ProblemStatusQueryDto;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.baeker.study.base.exception.ErrorResponse.NOT_FOUND_STUDY_RULE;
 import static com.baeker.study.domain.studyRule.entity.QStudyRule.studyRule;
 import static com.baeker.study.domain.studyRule.studyRuleRelationship.problem.QProblem.problem;
 import static com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.QProblemStatus.problemStatus;
@@ -23,32 +25,26 @@ import static com.baeker.study.study.domain.entity.QStudy.study;
 
 @Repository
 @RequiredArgsConstructor
-public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository {
+public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
 
-    private final StudyRuleRepository studyRuleRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<StudyRule> findStudyRuleFromStudy(Long studyId) {
-        // studyId -> StudyRule 조회
-        return jpaQueryFactory.selectFrom(studyRule)
+    public Optional<List<StudyRule>> findStudyRuleActiveFromStudy(Long studyId) {
+        return Optional.of(jpaQueryFactory.selectFrom(studyRule)
                 .leftJoin(studyRule.study, study)
-//                .leftJoin(studyRule.personalStudyRules, personalStudyRule)
                 .fetchJoin()
-                .where(study.id.eq(studyId))
-                .fetch();
+                .where(study.id.eq(studyId), missionEqActive())
+                .fetch());
     }
 
-    /**
-     * StudyRule Id 로 전부 조회
-     *
-     * @param studyRuleId
-     * @return
-     */
+    private BooleanExpression missionEqActive() {
+        return studyRule.mission.eq(Mission.ACTIVE);
+    }
+
+
     @Override
-    public StudyRuleQueryDto findStudyRule(Long studyRuleId) {
-        StudyRule serviceStudyRule = studyRuleRepository.findById(studyRuleId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STUDY_RULE.getErrorMsg()));
+    public StudyRuleQueryDto findStudyRuleDetail(StudyRule serviceStudyRule) {
         List<Long> problemIds = new ArrayList<>();
         serviceStudyRule.getPersonalStudyRules().forEach(
                 personal -> personal.getProblemStatuses().forEach(
@@ -72,14 +68,24 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository {
         return new StudyRuleQueryDto(serviceStudyRule, personalStudyRuleDtos);
     }
 
+    @Override
+    public List<StudyRule> findAllAndNotYetSendMail() {
+        return jpaQueryFactory.selectFrom(studyRule)
+                .leftJoin(studyRule.study, study)
+                .fetchJoin()
+                .where(notYetSendMail())
+                .fetch();
+    }
+    private BooleanExpression notYetSendMail() {
+        return studyRule.mission.eq(Mission.DONE)
+                .and(studyRule.sendMail.eq(false))
+                .and(studyRule.status.eq(Status.FAIL));
+    }
 
 
     private List<ProblemStatusQueryDto> findProblemStatus(List<Long> problemStatusIds) {
         List<ProblemStatus> problemStatuses = jpaQueryFactory.select
                         (problemStatus)
-//                        (problemStatus.personalStudyRule.id,
-//                                problemStatus.problem.problemNumber,
-//                                problemStatus.status)
                 .from(problemStatus)
                 .join(problem)
                 .join(personalStudyRule)
@@ -98,13 +104,4 @@ public class StudyRuleDslRepositoryImp implements StudyRuleDslRepository {
     }
 
 }
-
-//    @Override
-//    @Deprecated
-//    public Optional<StudyRule> findStudyRule(Long studyRuleId) {
-//        return Optional.ofNullable(jpaQueryFactory.selectFrom(studyRule)
-//                .leftJoin(studyRule.problems, problem).fetchJoin().fetchOne());
-//    }
-
-
 
