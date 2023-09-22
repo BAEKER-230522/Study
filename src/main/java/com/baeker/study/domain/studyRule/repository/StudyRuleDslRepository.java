@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface StudyRuleDslRepository {
     Optional<List<StudyRule>> findStudyRuleActiveFromStudy(Long studyId);
     StudyRuleQueryDto findStudyRuleDetail(StudyRule studyRule);
-    Optional<List<StudyRule>> findAllAndNotYetSendMail();
+    List<StudyRule> findAllAndNotYetSendMail();
 
 //    Optional<StudyRule> findStudyRule(Long studyRuleId);
 }

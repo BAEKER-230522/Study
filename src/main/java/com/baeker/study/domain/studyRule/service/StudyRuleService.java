@@ -33,7 +33,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -372,17 +371,20 @@ public class StudyRuleService {
         }
         studyRule.setSendMail();
     }
+    public List<StudyRule> getNotYetSendMail() {
+        List<StudyRule> allAndNotYetSendMail = studyRuleRepository.findAllAndNotYetSendMail();
+        if (allAndNotYetSendMail.isEmpty()) throw new NotFoundException("아직 메일을 보낼 스터디 룰이 없습니다.");
+        return allAndNotYetSendMail;
+    }
 
     @Scheduled(cron = "0 0 18 * * *")
     public void missionDoneStudyRuleSendMail() {
-        Optional<List<StudyRule>> opStudyRule = studyRuleRepository.findAllAndNotYetSendMail();
-        List<StudyRule> studyRules;
-        if (opStudyRule.isEmpty()) return;
-        studyRules = opStudyRule.get();
-        for (StudyRule studyRule : studyRules) {
-            sendMail(studyRule);
-        }
-
+        try {
+            List<StudyRule> studyRules = getNotYetSendMail();
+            for (StudyRule studyRule : studyRules) {
+                sendMail(studyRule);
+            }
+        } catch (NotFoundException ignored) {}
     }
 }
 

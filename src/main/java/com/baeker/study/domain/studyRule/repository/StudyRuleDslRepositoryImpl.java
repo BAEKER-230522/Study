@@ -69,12 +69,12 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
     }
 
     @Override
-    public Optional<List<StudyRule>> findAllAndNotYetSendMail() {
-        return Optional.of(jpaQueryFactory.selectFrom(studyRule)
+    public List<StudyRule> findAllAndNotYetSendMail() {
+        return jpaQueryFactory.selectFrom(studyRule)
                 .leftJoin(studyRule.study, study)
                 .fetchJoin()
                 .where(notYetSendMail())
-                .fetch());
+                .fetch();
     }
     private BooleanExpression notYetSendMail() {
         return studyRule.mission.eq(Mission.DONE)

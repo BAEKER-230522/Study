@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -226,5 +228,14 @@ class StudyRuleServiceTests {
         studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
         Study study = studyRule.getStudy();
         Assertions.assertEquals(10, study.getXp());
+    }
+
+    @Test
+    @DisplayName("미션 실패한 List 가 없을때 NotFoundException 발생")
+    void emptyList_NotFoundException() {
+        NotFoundException thrown = assertThrows(
+                NotFoundException.class,
+                () -> studyRuleService.getNotYetSendMail(), "아직 메일을 보낼 스터디 룰이 없습니다.");
+        assertEquals("아직 메일을 보낼 스터디 룰이 없습니다.", thrown.getMessage());
     }
 }
