@@ -86,7 +86,8 @@ public class StudyRuleController {
     @GetMapping("/v2/search/{studyruleid}")
     @Operation(summary = "미션 조회", description = "디테일한 정보", tags = "StudyRule-조회")
     public RsData<StudyRuleQueryDto> searchQueryDto(@Parameter(description = "조회 하고싶은 StudyRuleId 입력", example = "1") @PathVariable("studyruleid") Long studyruleid) {
-        StudyRuleQueryDto studyRuleQueryDto = studyRuleService.getStudyRuleQueryDto(studyruleid);
+        StudyRule studyRule = studyRuleService.getStudyRule(studyruleid);
+        StudyRuleQueryDto studyRuleQueryDto = studyRuleService.getStudyRuleQueryDto(studyRule);
         return RsData.of("S-1", String.format("%d 번 아이디 조회 결과 입니다.", studyruleid), studyRuleQueryDto);
     }
 
@@ -101,7 +102,7 @@ public class StudyRuleController {
     @GetMapping("/v1/studyrules/{studyid}")
     @Operation(summary = "미션 studyId로 조회", description = "스터디 아이디로 스터디 규칙리스트 조회.", tags = "StudyRule-조회")
     public RsData<List<StudyRuleListDto>> studyRuleFromStudy(@PathVariable("studyid") Long studyId) {
-        List<StudyRule> studyRuleList = studyRuleService.getStudyRuleFromStudy(studyId);
+        List<StudyRule> studyRuleList = studyRuleService.getStudyRuleActiveFromStudy(studyId);
         List<StudyRuleListDto> collect = studyRuleList.stream()
                 .map(StudyRuleListDto::new)
                 .toList();
