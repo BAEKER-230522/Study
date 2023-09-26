@@ -1,8 +1,8 @@
 package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.global.jwt.JwtDecrypt;
+import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyCreateUseCase;
-import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class StudyCreateController {
     @PostMapping("/v2/study")
     public ResponseEntity create(
             @RequestHeader("Authorization") String token,
-            @RequestBody CreateReqDto dto
+            @RequestBody StudyCreateReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         CreateResDto resDto = studyCreateUseCase.study(memberId, dto);

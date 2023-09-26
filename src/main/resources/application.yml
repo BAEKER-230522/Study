@@ -1,7 +1,20 @@
+custom:
+  server: localhost
+  eureka:
+    server: ${custom.server}:8761
+
+  feign:
+    member: http://localhost:8081/api/member
+
+#  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
+
+server:
+  port: 8082
+
 spring:
   profiles:
     default: dev
-      
+
   application:
     name: study
 
@@ -18,18 +31,6 @@ spring:
           starttls:
             enable: true
 
-#  kafka:
-#    bootstrap-servers: ${custom.kafka}:9092
-#    consumer:
-#      group-id: study
-#      auto-offset-reset: earliest
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      linger:
-#        ms: 10
   mvc:
     hidden-method:
       filter:
@@ -49,7 +50,29 @@ spring:
         format_sql: true
         show_sql: true
 
+#  kafka:
+#    bootstrap-servers: ${custom.kafka}:9092
+#    consumer:
+#      group-id: study
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      linger:
+#        ms: 10
 
+#message:
+#  topic:
+#    studyRule: "studyRule"
+#    solved-member: "solved-member"
+#    name: "study"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${custom.eureka.server}/eureka/
 
 logging.level:
   org.hibernate:
@@ -60,6 +83,12 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     password:
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
 
 eureka:
   instance:
@@ -68,32 +97,3 @@ eureka:
   client:
     registerWithEureka: true
     fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
-message:
-  topic:
-    studyRule: "studyRule"
-    solved-member: "solved-member"
-    name: "study"
-
-server:
-  port: 8082
-
-custom:
-  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
-  feign:
-    member: http://localhost:8081/api/member
-    rule: http://rule:8083/api/rule
-  mapping:
-    study:
-      web: /web/study
-      api: /api/study
-  jwt:
-    secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
-
-logging:
-  pattern:
-    console:
-
-

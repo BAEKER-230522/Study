@@ -55,6 +55,18 @@ public class Study extends ScoreBase {
                 .build();
     }
 
+    public static Study createStudy(Long studyId, String name, String about, Integer capacity, Long id) {
+        return builder()
+                .id(studyId)
+                .createDate(LocalDateTime.now())
+                .name(name)
+                .about(about)
+                .leader(id)
+                .capacity(capacity)
+                .xp(0)
+                .build();
+    }
+
 
     //-- business logic --//
 

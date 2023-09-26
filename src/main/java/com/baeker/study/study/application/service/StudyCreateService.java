@@ -3,11 +3,10 @@ package com.baeker.study.study.application.service;
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
-import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyCreateUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class StudyCreateService implements StudyCreateUseCase {
     private final MyStudyCreateUseCase myStudyCreateUseCase;
 
     @Override
-    public CreateResDto study(Long memberId, CreateReqDto dto) {
+    public CreateResDto study(Long memberId, StudyCreateReqDto dto) {
         permissionCheck(memberId);
 
         Study study = repository.save(
@@ -32,9 +31,9 @@ public class StudyCreateService implements StudyCreateUseCase {
                         dto.getName(), dto.getAbout(),
                         dto.getCapacity(), memberId
                 ));
-        MyStudy myStudy = myStudyCreateUseCase.myStudy(memberId, study);
+        Long myStudyId = myStudyCreateUseCase.myStudy(memberId, study);
 
-        return new CreateResDto(study.getId(), myStudy.getId());
+        return new CreateResDto(study.getId(), myStudyId);
     }
 
     private void permissionCheck(Long memberId) {
