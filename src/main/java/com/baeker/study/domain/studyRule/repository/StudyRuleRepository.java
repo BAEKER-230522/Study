@@ -9,4 +9,3 @@ public interface StudyRuleRepository extends JpaRepository<StudyRule, Long>, Stu
 
     Optional<StudyRule> findByName(String name);
 }
-

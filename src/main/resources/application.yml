@@ -1,7 +1,6 @@
 custom:
   server: localhost
-  eureka:
-    server: ${custom.server}:8761
+
 
   feign:
     member: http://localhost:8081/api/member
@@ -90,10 +89,3 @@ spring:
     activate:
       on-profile: dev
 
-eureka:
-  instance:
-    instance-id: ${custom.server}:${server.port}
-    preferIpAddress: true
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
