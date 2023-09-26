@@ -36,7 +36,3 @@ spring:
 #      linger:
 #        ms: 10
 
-eureka:
-  instance:
-    preferIpAddress: false
-    hostname: ${custom.eureka.client}
