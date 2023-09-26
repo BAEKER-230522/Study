@@ -1,34 +1,112 @@
 package com.baeker.study.study.adapter.out.persistence;
 
+import com.baeker.study.myStudy.domain.entity.QMyStudy;
+import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.application.port.out.persistence.StudyQueryRepositoryPort;
+import com.baeker.study.study.domain.entity.QStudy;
+import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.QStudyResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
+import com.querydsl.core.types.*;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
+
 @Repository
 public class StudyQueryRepositoryAdapter implements StudyQueryRepositoryPort {
 
     private final JPAQueryFactory query;
+    private QStudy study = QStudy.study;
+    private QMyStudy myStudy = QMyStudy.myStudy;
 
     public StudyQueryRepositoryAdapter(EntityManager em) {
         this.query = new JPAQueryFactory(em);
     }
 
     @Override
-    public List<StudyResDto> byMemberId(Long memberId, int status) {
-        return null;
+    public List<StudyResDto> byMemberId(Long memberId, StudyStatus studyStatus) {
+        return query
+                .select(studyResDto())
+                .from(study)
+                .innerJoin(study.myStudies, myStudy)
+                .where(myStudy.member.eq(memberId)
+                        .and(myStudy.status.eq(studyStatus)))
+                .fetch();
+    }
+
+    @Override
+    public List<Long> byMemberList(Study study, StudyStatus status) {
+        return query
+                .select(myStudy.member)
+                .from(myStudy)
+                .where(myStudy.study.eq(study)
+                        .and(myStudy.status.eq(status)))
+                .fetch();
     }
 
     @Override
     public List<StudyResDto> allOrderByRanking(int page, int content) {
-        return null;
+        return query
+                .select(studyResDto())
+                .from(study)
+                .orderBy(nullsLast(study.ranking), study.ranking.desc())
+                .offset(page * content)
+                .limit(content)
+                .fetch();
     }
+
+    private <T extends Comparable> OrderSpecifier<T> nullsLast(Path<T> path) {
+        return new OrderSpecifier<>(Order.ASC, path, OrderSpecifier.NullHandling.NullsLast);
+    }
+
 
     @Override
     public List<StudyResDto> byInput(String input, int page, int content) {
-        return null;
+        return query
+                .select(studyResDto())
+                .from(study)
+                .where(study.name.like("%" + input + "%"))
+                .offset(page * content)
+                .limit(content)
+                .fetch();
+    }
+
+    private QStudyResDto studyResDto() {
+        return new QStudyResDto(
+                study.id,
+                study.createDate,
+                study.modifyDate,
+                study.name,
+                study.about,
+                study.leader,
+                study.capacity,
+                study.xp,
+                study.bronze,
+                study.silver,
+                study.gold,
+                study.diamond,
+                study.ruby,
+                study.platinum,
+                studyMemberCounter(),
+                study.ranking
+        );
+    }
+
+    private Expression<Long> studyMemberCounter() {
+        return ExpressionUtils.as(
+                JPAExpressions
+                        .select(myStudy.count())
+                        .from(myStudy)
+                        .where(myStudy.study.eq(study)
+                                .and(myStudy.status.eq(MEMBER)))
+                , "studyMember"
+        );
     }
 }
