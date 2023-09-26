@@ -1,6 +1,19 @@
+custom:
+  server: localhost
+  eureka: ${custom.server}:8761
+
+  feign:
+    member: http://localhost:8081/api/member
+    rule: http://rule:8083/api/rule
+
+#  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
+
+server:
+  port: 8082
+
 spring:
   profiles:
-    default: dev
+    default:
       
   application:
     name: study
@@ -18,18 +31,6 @@ spring:
           starttls:
             enable: true
 
-#  kafka:
-#    bootstrap-servers: ${custom.kafka}:9092
-#    consumer:
-#      group-id: study
-#      auto-offset-reset: earliest
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      linger:
-#        ms: 10
   mvc:
     hidden-method:
       filter:
@@ -49,7 +50,34 @@ spring:
         format_sql: true
         show_sql: true
 
+#  kafka:
+#    bootstrap-servers: ${custom.kafka}:9092
+#    consumer:
+#      group-id: study
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      linger:
+#        ms: 10
 
+#message:
+#  topic:
+#    studyRule: "studyRule"
+#    solved-member: "solved-member"
+#    name: "study"
+
+eureka:
+  instance:
+    instance-id: ${custom.server}:${server.port}
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http:/${custom.eureka}/eureka/
 
 logging.level:
   org.hibernate:
@@ -60,34 +88,3 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     password:
-
-eureka:
-  instance:
-    instance-id: ${custom.server}:${server.port}
-    preferIpAddress: true
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
-message:
-  topic:
-    studyRule: "studyRule"
-    solved-member: "solved-member"
-    name: "study"
-
-server:
-  port: 8082
-
-custom:
-  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
-  feign:
-    member: http://localhost:8081/api/member
-    rule: http://rule:8083/api/rule
-
-logging:
-  pattern:
-    console:
-
-
