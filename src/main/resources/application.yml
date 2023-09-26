@@ -1,6 +1,7 @@
 custom:
   server: localhost
 
+
   feign:
     member: http://localhost:8081/api/member
 
@@ -87,3 +88,4 @@ spring:
   config:
     activate:
       on-profile: dev
+
