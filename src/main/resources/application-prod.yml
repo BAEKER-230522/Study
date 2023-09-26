@@ -1,6 +1,9 @@
 custom:
   server: study
-  eureka: bk-e.1ll.ca
+
+  eureka:
+    server: bk-e.1ll.ca
+    client: bk-s.1ll.ca
 
   feign:
     member: http://bk-m.1ll.ca/api/member
@@ -32,3 +35,8 @@ spring:
 #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 #      linger:
 #        ms: 10
+
+eureka:
+  instance:
+    preferIpAddress: false
+    hostname: ${custom.eureka.client}
