@@ -2,6 +2,7 @@ package com.baeker.study.study.application.service;
 
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.study.adapter.in.reqDto.StudyModifyResDto;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
@@ -30,7 +31,7 @@ public class StudyModifyService implements StudyModifyUseCase {
     private final ApplicationEventPublisher publisher;
 
     @Override
-    public UpdateResDto info(Study study, Long memberId, UpdateReqDto dto) {
+    public UpdateResDto info(Study study, Long memberId, StudyModifyResDto dto) {
         if (study.getLeader() != memberId)
             throw new NoPermissionException("권한이 없습니다.");
 
