@@ -4,7 +4,6 @@ custom:
 
   feign:
     member: http://localhost:8081/api/member
-    rule: http://rule:8083/api/rule
 
 #  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
 
@@ -13,7 +12,7 @@ server:
 
 spring:
   profiles:
-    default:
+    default: dev
       
   application:
     name: study
@@ -88,3 +87,9 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     password:
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
