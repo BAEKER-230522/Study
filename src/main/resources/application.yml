@@ -77,7 +77,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http:/${custom.eureka}/eureka/
+      defaultZone: http://${custom.eureka}/eureka/
 
 logging.level:
   org.hibernate:
