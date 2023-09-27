@@ -5,10 +5,13 @@ import com.baeker.study.study.application.port.out.persistence.StudySnapshotRepo
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
+import com.baeker.study.study.in.resDto.SnapshotResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,11 +22,12 @@ public class SnapshotService implements SnapshotUseCase {
     private final StudySnapshotRepositoryPort repository;
 
     @Override
-    public void updateSnapshot(Study study, BaekjoonDto dto, String today) {
+    public void updateSnapshot(Study study, BaekjoonDto dto, int addDate) {
         List<StudySnapshot> snapshots = study.getSnapshots();
+        String today = LocalDate.now().plusDays(addDate).getDayOfWeek().toString();
 
         if (isNew(today, snapshots))
-            createSnapshot(study, dto, today);
+            createSnapshot(study, dto, addDate);
 
         else
             modifySnapshot(snapshots.get(0), dto);
@@ -34,7 +38,9 @@ public class SnapshotService implements SnapshotUseCase {
     }
 
     @Override
-    public void createSnapshot(Study study, BaekjoonDto dto, String today) {
+    public void createSnapshot(Study study, BaekjoonDto dto, int addDate) {
+        String today = LocalDate.now().plusDays(addDate).getDayOfWeek().toString();
+
         repository.save(
                 StudySnapshot.create(study, dto, today)
         );
@@ -54,4 +60,13 @@ public class SnapshotService implements SnapshotUseCase {
         );
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<SnapshotResDto> getSnapshotOfWeek(Study study) {
+        List<StudySnapshot> snapshots = study.getSnapshots();
+        return snapshots
+                .stream()
+                .map(s -> new SnapshotResDto(s))
+                .toList();
+    }
 }

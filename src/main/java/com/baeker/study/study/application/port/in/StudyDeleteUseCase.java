@@ -1,8 +1,8 @@
 package com.baeker.study.study.application.port.in;
 
-import org.springframework.http.ResponseEntity;
+import com.baeker.study.study.domain.entity.Study;
 
 public interface StudyDeleteUseCase {
 
-    ResponseEntity<Long> study(Long study);
+    void study(Study study, Long memberId);
 }
