@@ -1,7 +1,7 @@
 package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.global.jwt.JwtDecrypt;
-import com.baeker.study.study.adapter.in.reqDto.StudyModifyResDto;
+import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
@@ -26,7 +26,7 @@ public class StudyModifyController {
     @PatchMapping("/v2/info")
     public ResponseEntity update(
             @RequestHeader("Authorization") String token,
-            @RequestBody StudyModifyResDto dto
+            @RequestBody StudyModifyReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(dto.getId());

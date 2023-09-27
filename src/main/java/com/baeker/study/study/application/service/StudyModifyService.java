@@ -2,7 +2,7 @@ package com.baeker.study.study.application.service;
 
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.global.exception.NotFoundException;
-import com.baeker.study.study.adapter.in.reqDto.StudyModifyResDto;
+import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
@@ -10,7 +10,6 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.reqDto.UpdateReqDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.in.resDto.UpdateResDto;
@@ -31,7 +30,7 @@ public class StudyModifyService implements StudyModifyUseCase {
     private final ApplicationEventPublisher publisher;
 
     @Override
-    public UpdateResDto info(Study study, Long memberId, StudyModifyResDto dto) {
+    public UpdateResDto info(Study study, Long memberId, StudyModifyReqDto dto) {
         if (study.getLeader() != memberId)
             throw new NoPermissionException("권한이 없습니다.");
 
@@ -49,7 +48,7 @@ public class StudyModifyService implements StudyModifyUseCase {
             throw new NoPermissionException("스터디 리더만 위임이 가능합니다.");
 
         if (isMember(study.getId(), memberId))
-            throw new NotFoundException("존재하지 않는 회원입니다.");
+            throw new NotFoundException("가입된 회원이 아닙니다.");
 
         Study modified = repository.save(
                 study.modifyLeader(memberId)
@@ -62,8 +61,8 @@ public class StudyModifyService implements StudyModifyUseCase {
 
         for (StudyResDto dto : dtos)
             if (dto.getId() == studyId)
-                return true;
-        return false;
+                return false;
+        return true;
     }
 
     @Override
