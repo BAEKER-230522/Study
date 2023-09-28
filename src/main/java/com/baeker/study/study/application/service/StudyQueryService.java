@@ -1,6 +1,5 @@
 package com.baeker.study.study.application.service;
 
-import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.exception.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.CandidateResDto;
