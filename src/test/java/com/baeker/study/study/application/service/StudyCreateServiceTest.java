@@ -8,7 +8,7 @@ import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPo
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import com.baeker.study.testUtil.CreateStudy;
-import com.baeker.study.testUtil.MemberClientMock;
+import com.baeker.study.testUtil.feign.MemberClientMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class StudyCreateServiceTest extends MemberClientMock {
 
     @BeforeEach
     void beforeEach() {
-        memberClientMocking();
+        memberClientConnectCheckMocking();
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.baeker.study.myStudy.application.service;
 
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.testUtil.MyStudyCreateMock;
+import com.baeker.study.testUtil.myStudy.MyStudyCreateMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

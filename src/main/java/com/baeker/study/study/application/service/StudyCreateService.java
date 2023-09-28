@@ -42,9 +42,7 @@ public class StudyCreateService implements StudyCreateUseCase {
     }
 
     private void permissionCheck(Long memberId) {
-        MemberResDto member = memberClient.findById(memberId).getData();
-
-        if (member.getBaekJoonName() == null)
+        if (!memberClient.isConnectBaekJoon(memberId))
             throw new NoPermissionException("백준 연동이 안된 user");
     }
 

@@ -4,7 +4,7 @@ import com.baeker.study.global.exception.InvalidDuplicateException;
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.global.exception.OverLimitedException;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.testUtil.MyStudyCreateMock;
+import com.baeker.study.testUtil.myStudy.MyStudyCreateMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

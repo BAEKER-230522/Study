@@ -2,38 +2,36 @@ package com.baeker.study.study.application.service;
 
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.global.exception.NotFoundException;
-import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.testUtil.StudyModifyRepositoryMock;
+import com.baeker.study.testUtil.study.StudyModifyRepositoryMock;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
 
 import static com.baeker.study.testUtil.CreateStudy.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
+@DisplayName("스터디 리더 위임")
 @ExtendWith(MockitoExtension.class)
 class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
 
     @InjectMocks
     private StudyModifyService studyModifyService;
-    @Mock
-    private StudyQueryUseCase studyQueryUseCase;
+
+    @BeforeEach
+    void beforeEach() {
+        studyRepoSaveMocking();
+        studyQueryByMemberIdMocking();
+    }
 
     @Test
-    @DisplayName("study 리더 위임")
+    @DisplayName("리더 위임 성공")
     void no1() {
-        mocking();
         Long memberId = 1L;
         Long newLeaderId = 2L;
         Study study = createStudy(memberId, 1L, "study1");
@@ -56,7 +54,6 @@ class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
     @Test
     @DisplayName("study 에 가입하지 않은 회원에게 리더를 위임하는 경우")
     void no3() {
-        mocking();
         Long memberId = 1L;
         Long newLeaderId = 3L;
         Study study = createStudy(memberId, 1L, "study1");
@@ -71,20 +68,5 @@ class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
         dto.setStudyId(study.getId());
         dto.setNewLeader(newLeaderId);
         return studyModifyService.leader(study, memberId, dto);
-    }
-
-    void mocking() {
-        ArrayList<StudyResDto> dtos = new ArrayList<>();
-        when(studyQueryUseCase.byMemberId(anyLong(), anyInt()))
-                .thenAnswer(invocation -> {
-                    Long newMemberId = (Long) invocation.getArgument(0);
-
-                    if (newMemberId == 3L) return dtos;
-
-                    StudyResDto dto = new StudyResDto();
-                    dto.setId(1L);
-                    dtos.add(dto);
-                    return dtos;
-                });
     }
 }

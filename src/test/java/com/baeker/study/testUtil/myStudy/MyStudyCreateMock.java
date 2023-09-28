@@ -1,9 +1,10 @@
-package com.baeker.study.testUtil;
+package com.baeker.study.testUtil.myStudy;
 
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.testUtil.feign.MemberClientMock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
