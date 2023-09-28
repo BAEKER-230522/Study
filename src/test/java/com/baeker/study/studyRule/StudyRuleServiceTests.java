@@ -16,10 +16,11 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,7 +43,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
 class StudyRuleServiceTests {
     @Autowired
     StudyRuleService studyRuleService;
@@ -50,15 +50,12 @@ class StudyRuleServiceTests {
     StudyService studyService;
     @Autowired
     MyStudyService myStudyService;
-    @MockBean
-    RuleClient ruleClient;
+
     @MockBean
     MemberClient memberClient;
 
     @BeforeEach
     void setFeign() {
-        when(ruleClient.getRule(any()))
-                .thenReturn(new RsData<>("S-1", "msg", null));
         when(memberClient.updateMyStudy(any()))
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(memberClient.deleteMyStudy(any()))
