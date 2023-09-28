@@ -25,7 +25,7 @@ class StudyModifyService_InfoTest extends StudyModifyRepositoryMock {
     @DisplayName("스터디 정보 수정")
     void no1() {
         long memberId = 1L;
-        Study study = CreateStudy("study", memberId);
+        Study study = CreateStudy(memberId, 1L, "study");
 
         UpdateResDto dto = modifyInfo(study, memberId);
     }
@@ -34,7 +34,7 @@ class StudyModifyService_InfoTest extends StudyModifyRepositoryMock {
     @DisplayName("수정 권한 없음")
     void no2() {
         long memberId = 1L;
-        Study study = CreateStudy("study", memberId);
+        Study study = CreateStudy(memberId, 1L, "study");
 
         assertThatThrownBy(() -> studyModifyService.info(study, 2L, null))
                 .isInstanceOf(NoPermissionException.class)

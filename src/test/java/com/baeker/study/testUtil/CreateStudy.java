@@ -4,7 +4,7 @@ import com.baeker.study.study.domain.entity.Study;
 
 public class CreateStudy {
 
-    public static Study CreateStudy(String name, Long memberId) {
-        return Study.createStudy(1L,name, "about", 10, memberId);
+    public static Study CreateStudy(Long memberId, Long studyId, String name) {
+        return Study.createStudy(studyId, name, "about", 10, memberId);
     }
 }

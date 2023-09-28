@@ -56,7 +56,7 @@ class StudyCreateServiceTest extends MemberClientMock {
 
     private Study createStudy(Long memberId, String name) {
         when(repository.save(any()))
-                .thenReturn(CreateStudy(name, memberId));
+                .thenReturn(CreateStudy(memberId, 1L, name));
 
         when(myStudyCreateUseCase.myStudy(eq(memberId), any()))
                 .thenReturn(1L);
@@ -68,7 +68,7 @@ class StudyCreateServiceTest extends MemberClientMock {
 
         when(repository.findById(eq(resDto.getStudyId())))
                 .thenReturn(Optional.ofNullable(
-                        CreateStudy(name, memberId)
+                        CreateStudy(memberId, 1L, name)
                 ));
 
         return repository.findById(resDto.getStudyId()).get();

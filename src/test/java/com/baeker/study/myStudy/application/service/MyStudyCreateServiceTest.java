@@ -33,7 +33,7 @@ class MyStudyCreateServiceTest extends MemberClientMock {
     @DisplayName("my study 생성")
     void no1() {
         Long memberId = 1L;
-        Study study = CreateStudy("study", memberId);
+        Study study = CreateStudy(memberId, 1L, "study");
 
         MyStudy myStudy = createMyStudy(memberId, study);
 

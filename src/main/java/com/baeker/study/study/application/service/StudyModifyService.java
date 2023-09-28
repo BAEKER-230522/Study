@@ -47,11 +47,11 @@ public class StudyModifyService implements StudyModifyUseCase {
         if (study.getLeader() != memberId)
             throw new NoPermissionException("스터디 리더만 위임이 가능합니다.");
 
-        if (isMember(study.getId(), memberId))
+        if (isMember(study.getId(), dto.getNewLeader()))
             throw new NotFoundException("가입된 회원이 아닙니다.");
 
         Study modified = repository.save(
-                study.modifyLeader(memberId)
+                study.modifyLeader(dto.getNewLeader())
         );
         return new StudyResDto(modified);
     }
