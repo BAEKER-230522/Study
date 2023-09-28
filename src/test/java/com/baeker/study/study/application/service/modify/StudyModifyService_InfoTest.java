@@ -21,11 +21,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class StudyModifyService_InfoTest extends StudyModifyMock {
 
     @InjectMocks
-    private StudyModifyService studyModifyService;
+    private StudyModifyService modifyService;
 
     @BeforeEach
     void beforeEach() {
-        studyRepoSaveMocking();
+        repoSaveMocking();
     }
 
     @Test
@@ -43,13 +43,13 @@ class StudyModifyService_InfoTest extends StudyModifyMock {
         long memberId = 1L;
         Study study = createStudy(memberId, 1L, "study");
 
-        assertThatThrownBy(() -> studyModifyService.info(study, 2L, null))
+        assertThatThrownBy(() -> modifyService.info(study, 2L, null))
                 .isInstanceOf(NoPermissionException.class)
                 .hasMessageContaining("권한이 없습니다.");
     }
 
     private UpdateResDto modifyInfo(Study study, Long memberId) {
         StudyModifyReqDto dto = new StudyModifyReqDto(1L, "update", "about", 5);
-        return studyModifyService.info(study, memberId, dto);
+        return modifyService.info(study, memberId, dto);
     }
 }

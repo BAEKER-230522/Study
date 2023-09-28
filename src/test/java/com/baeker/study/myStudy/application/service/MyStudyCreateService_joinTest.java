@@ -20,13 +20,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MyStudyCreateService_joinTest extends MyStudyCreateMock {
 
     @InjectMocks
-    private MyStudyCreateService myStudyCreateService;
+    private MyStudyCreateService createService;
 
     @BeforeEach
     void beforeEach() {
         baekjoonConnectCheckMocking();
         updateMyStudyMocking();
-        studyQueryUesCaseMocking();
+        getByMemberListMocking();
         repoSaveMocking();
     }
 
@@ -35,9 +35,10 @@ class MyStudyCreateService_joinTest extends MyStudyCreateMock {
     void no1() {
         Long studyLeaderId = 1L;
         Study study = createStudy(studyLeaderId, 1L, "study", 10);
+
         Long memberId = 3L;
 
-        Long myStudyId = myStudyCreateService.join(memberId, study, "msg");
+        Long myStudyId = createService.join(memberId, study, "msg");
     }
 
     @Test
@@ -45,9 +46,10 @@ class MyStudyCreateService_joinTest extends MyStudyCreateMock {
     void no2() {
         Long studyLeaderId = 1L;
         Study study = createStudy(studyLeaderId, 1L, "study", 10);
+
         Long memberId = 2L;
 
-        assertThatThrownBy(() -> myStudyCreateService.join(memberId, study, "msg"))
+        assertThatThrownBy(() -> createService.join(memberId, study, "msg"))
                 .isInstanceOf(NoPermissionException.class)
                 .hasMessageContaining("백준 연동이 안된 회원입니다.");
     }
@@ -57,9 +59,10 @@ class MyStudyCreateService_joinTest extends MyStudyCreateMock {
     void no3() {
         Long studyLeaderId = 1L;
         Study study = createStudy(studyLeaderId, 1L, "study", 10);
-        Long memberId = 1L;
 
-        assertThatThrownBy(() -> myStudyCreateService.join(memberId, study, "msg"))
+        Long memberId = studyLeaderId;
+
+        assertThatThrownBy(() -> createService.join(memberId, study, "msg"))
                 .isInstanceOf(InvalidDuplicateException.class)
                 .hasMessageContaining("이미 가입 또는 가입 대기 중입니다.");
     }
@@ -69,9 +72,10 @@ class MyStudyCreateService_joinTest extends MyStudyCreateMock {
     void no4() {
         Long studyLeaderId = 1L;
         Study study = createStudy(studyLeaderId, 1L, "study", 5);
+
         Long memberId = 3L;
 
-        assertThatThrownBy(() -> myStudyCreateService.join(memberId, study, "msg"))
+        assertThatThrownBy(() -> createService.join(memberId, study, "msg"))
                 .isInstanceOf(OverLimitedException.class)
                 .hasMessageContaining("최대 인원에 도달한 스터디입니다.");
     }

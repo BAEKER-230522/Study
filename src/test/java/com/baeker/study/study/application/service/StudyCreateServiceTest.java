@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class StudyCreateServiceTest extends StudyCreateMock {
 
     @InjectMocks
-    private StudyCreateService studyCreateService;
+    private StudyCreateService createService;
 
     @BeforeEach
     void beforeEach() {
@@ -38,7 +38,7 @@ class StudyCreateServiceTest extends StudyCreateMock {
 
     private CreateResDto createStudy(Long memberId, String name) {
         StudyCreateReqDto reqDto = new StudyCreateReqDto(name, "about", 10);
-        return studyCreateService.study(memberId, reqDto);
+        return createService.study(memberId, reqDto);
     }
 
     @Test
@@ -47,7 +47,7 @@ class StudyCreateServiceTest extends StudyCreateMock {
         Long memberId = 2L;
 
         assertThatThrownBy(() ->
-                studyCreateService.study(memberId, null))
+                createService.study(memberId, null))
                 .isInstanceOf(NoPermissionException.class)
                 .hasMessageContaining("백준 연동이 안된 user");
     }

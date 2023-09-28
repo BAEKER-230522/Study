@@ -16,7 +16,7 @@ import static com.baeker.study.testUtil.CreateStudy.createStudy;
 class MyStudyCreateService_createTest extends MyStudyCreateMock {
 
     @InjectMocks
-    private MyStudyCreateService myStudyCreateService;
+    private MyStudyCreateService createService;
 
     @BeforeEach
     void beforeEach() {
@@ -30,6 +30,6 @@ class MyStudyCreateService_createTest extends MyStudyCreateMock {
         Long memberId = 1L;
         Study study = createStudy(memberId, 1L, "study");
 
-        Long myStudyId = myStudyCreateService.myStudy(memberId, study);
+        Long myStudyId = createService.myStudy(memberId, study);
     }
 }

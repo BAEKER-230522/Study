@@ -21,12 +21,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class StudyModifyService_leaderTest extends StudyModifyMock {
 
     @InjectMocks
-    private StudyModifyService studyModifyService;
+    private StudyModifyService modifyService;
 
     @BeforeEach
     void beforeEach() {
-        studyRepoSaveMocking();
-        studyQueryByMemberIdMocking();
+        repoSaveMocking();
+        getByMemberIdMocking();
     }
 
     @Test
@@ -67,6 +67,6 @@ class StudyModifyService_leaderTest extends StudyModifyMock {
         UpdateLeaderReqDto dto = new UpdateLeaderReqDto();
         dto.setStudyId(study.getId());
         dto.setNewLeader(newLeaderId);
-        return studyModifyService.leader(study, memberId, dto);
+        return modifyService.leader(study, memberId, dto);
     }
 }

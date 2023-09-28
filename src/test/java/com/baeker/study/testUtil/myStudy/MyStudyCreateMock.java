@@ -20,7 +20,7 @@ public class MyStudyCreateMock extends MemberClientMock {
             Mockito.mock(StudyQueryUseCase.class);
 
 
-    public void studyQueryUesCaseMocking() {
+    public void getByMemberListMocking() {
         ArrayList<MemberResDto> dtos = new ArrayList<>();
         for (int i = 0; i < 5; i++)
             dtos.add(new MemberResDto());

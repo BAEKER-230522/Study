@@ -20,7 +20,7 @@ public class StudyModifyMock extends MemberClientMock {
     private StudyQueryUseCase studyQueryUseCase =
             Mockito.mock(StudyQueryUseCase.class);
 
-    public void studyRepoSaveMocking() {
+    public void repoSaveMocking() {
         when(repository.save(any())).thenAnswer(invocation -> {
             Study study = (Study) invocation.getArgument(0);
 
@@ -28,7 +28,7 @@ public class StudyModifyMock extends MemberClientMock {
         });
     }
 
-    public void studyQueryByMemberIdMocking() {
+    public void getByMemberIdMocking() {
         ArrayList<StudyResDto> dtos = new ArrayList<>();
         when(studyQueryUseCase.byMemberId(anyLong(), anyInt()))
                 .thenAnswer(invocation -> {
