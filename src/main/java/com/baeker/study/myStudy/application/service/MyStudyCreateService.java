@@ -51,7 +51,7 @@ public class MyStudyCreateService implements MyStudyCreateUseCase {
 
     @Override
     public Long invite(Long memberId, Study study, InviteReqDto dto) {
-        baekJoonConnectCheck(memberId);
+        baekJoonConnectCheck(dto.getInvitee());
         permissionCheck(study.getLeader(), memberId);
         duplicateCheck(study, dto.getInvitee());
         capacityCheck(study);
