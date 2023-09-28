@@ -16,15 +16,12 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemSe
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.global.feign.MemberClient;
-import com.baeker.study.global.feign.RuleClient;
-import com.baeker.study.global.feign.dto.RuleDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +45,6 @@ public class StudyRuleService {
 
 
     private final MemberClient memberClient;
-    private final RuleClient ruleClient;
 
     private final ProblemService problemService;
 
@@ -251,9 +247,7 @@ public class StudyRuleService {
         modify(studyRule, request);
     }
 
-    /**
-     * @param studyRuleId = studyRuleId
-     */
+
 //    public void updateStudySolved(Long studyRuleId) throws NotFoundException {
 //        StudyRule studyRule = getStudyRule(studyRuleId);
 //        Study study = studyRule.getStudy();
@@ -300,17 +294,7 @@ public class StudyRuleService {
 //        }
 //    }
 
-    /**
-     * Rule 받아오기
-     *
-     * @param id
-     * @return
-     * @throws ParseException
-     */
-    public RuleDto getRule(Long id) {
-        RsData<RuleDto> rule = ruleClient.getRule(id);
-        return rule.getData();
-    }
+
 
     public List<StudyRule> getStudyRuleActiveFromStudy(Long studyId) {
         return studyRuleRepository.findStudyRuleActiveFromStudy(studyId)

@@ -10,7 +10,6 @@ import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.global.feign.MemberClient;
-import com.baeker.study.global.feign.RuleClient;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
