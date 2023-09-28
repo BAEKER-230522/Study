@@ -6,6 +6,12 @@ custom:
   feign:
     member: http://localhost:8081/api/member
 
+  mapping:
+    study:
+      web: /web/study
+    my-study:
+      web: /web/my-study
+
 #  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
 
 server:
