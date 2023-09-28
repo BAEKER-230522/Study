@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("${custom.mapping.my-study.web}")
 @RequiredArgsConstructor
-public class MyStudyCreateService {
+public class MyStudyCreateController {
 
     private final MyStudyCreateUseCase myStudyCreateUseCase;
     private final StudyQueryUseCase studyQueryUseCase;
