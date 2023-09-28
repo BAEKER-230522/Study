@@ -26,7 +26,7 @@ public class CreateDomain {
 
         switch (status) {
             case PENDING -> myStudy = MyStudy.joinStudy(memberId, study, msg);
-            case INVITING -> myStudy = MyStudy.inviteStudy(10L, study, msg);
+            case INVITING -> myStudy = MyStudy.inviteStudy(memberId, study, msg);
             default -> myStudy = MyStudy.createNewStudy(memberId, study);
         }
 

@@ -19,8 +19,8 @@ public class MyStudyModifyService implements MyStudyModifyUseCase {
 
         switch (status) {
             case MEMBER -> duplicateCheck();
-            case PENDING -> joinPermissionCheck(myStudy, memberId);
-            default -> invitePermissionCheck(myStudy, memberId);
+            case PENDING -> isMember(myStudy, memberId);
+            default -> isLeader(myStudy, memberId);
         }
 
         myStudy.modifyMsg(msg);
@@ -32,7 +32,8 @@ public class MyStudyModifyService implements MyStudyModifyUseCase {
 
         switch (status) {
             case MEMBER -> duplicateCheck();
-            default -> invitePermissionCheck(myStudy, memberId);
+            case PENDING -> isLeader(myStudy, memberId);
+            default -> isMember(myStudy, memberId);
         }
 
         myStudy.accept();
@@ -42,12 +43,12 @@ public class MyStudyModifyService implements MyStudyModifyUseCase {
         throw new IllegalStateException("이미 승인된 스터디 맴버입니다.");
     }
 
-    private void joinPermissionCheck(MyStudy myStudy, Long memberId) {
+    private void isMember(MyStudy myStudy, Long memberId) {
         Long joinMemberId = myStudy.getMember();
         permissionCheck(memberId, joinMemberId);
     }
 
-    private void invitePermissionCheck(MyStudy myStudy, Long memberId) {
+    private void isLeader(MyStudy myStudy, Long memberId) {
         Long leader = myStudy.getStudy().getLeader();
         permissionCheck(memberId, leader);
     }
