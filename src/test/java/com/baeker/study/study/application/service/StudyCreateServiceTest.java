@@ -7,19 +7,18 @@ import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.CreateResDto;
+import com.baeker.study.testUtil.CreateStudy;
 import com.baeker.study.testUtil.MemberClientMock;
-import jakarta.ws.rs.BadRequestException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.baeker.study.testUtil.CreateStudy.CreateStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -37,6 +36,11 @@ class StudyCreateServiceTest extends MemberClientMock {
     private MyStudyCreateUseCase myStudyCreateUseCase;
     @Mock
     private SnapshotUseCase snapshotUseCase;
+
+    @BeforeEach
+    void beforeEach() {
+        memberClientMocking();
+    }
 
     @Test
     @DisplayName("study 생성")
@@ -56,7 +60,7 @@ class StudyCreateServiceTest extends MemberClientMock {
 
     private Study createStudy(Long memberId, String name) {
         when(repository.save(any()))
-                .thenReturn(CreateStudy(memberId, 1L, name));
+                .thenReturn(CreateStudy.createStudy(memberId, 1L, name));
 
         when(myStudyCreateUseCase.myStudy(eq(memberId), any()))
                 .thenReturn(1L);
@@ -68,7 +72,7 @@ class StudyCreateServiceTest extends MemberClientMock {
 
         when(repository.findById(eq(resDto.getStudyId())))
                 .thenReturn(Optional.ofNullable(
-                        CreateStudy(memberId, 1L, name)
+                        CreateStudy.createStudy(memberId, 1L, name)
                 ));
 
         return repository.findById(resDto.getStudyId()).get();

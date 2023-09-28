@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.baeker.study.testUtil.CreateStudy.CreateStudy;
+import static com.baeker.study.testUtil.CreateStudy.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +25,7 @@ class StudyModifyService_InfoTest extends StudyModifyRepositoryMock {
     @DisplayName("스터디 정보 수정")
     void no1() {
         long memberId = 1L;
-        Study study = CreateStudy(memberId, 1L, "study");
+        Study study = createStudy(memberId, 1L, "study");
 
         UpdateResDto dto = modifyInfo(study, memberId);
     }
@@ -34,7 +34,7 @@ class StudyModifyService_InfoTest extends StudyModifyRepositoryMock {
     @DisplayName("수정 권한 없음")
     void no2() {
         long memberId = 1L;
-        Study study = CreateStudy(memberId, 1L, "study");
+        Study study = createStudy(memberId, 1L, "study");
 
         assertThatThrownBy(() -> studyModifyService.info(study, 2L, null))
                 .isInstanceOf(NoPermissionException.class)

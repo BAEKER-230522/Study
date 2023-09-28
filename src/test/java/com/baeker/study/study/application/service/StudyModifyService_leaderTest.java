@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
-import static com.baeker.study.testUtil.CreateStudy.CreateStudy;
+import static com.baeker.study.testUtil.CreateStudy.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -36,7 +36,7 @@ class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
         mocking();
         Long memberId = 1L;
         Long newLeaderId = 2L;
-        Study study = CreateStudy(memberId, 1L, "study1");
+        Study study = createStudy(memberId, 1L, "study1");
 
         StudyResDto dto = modifyLeader(study, memberId, newLeaderId);
     }
@@ -46,7 +46,7 @@ class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
     void no2() {
         Long memberId = 1L;
         Long newLeaderId = 2L;
-        Study study = CreateStudy(memberId, 1L, "study1");
+        Study study = createStudy(memberId, 1L, "study1");
 
         assertThatThrownBy(() -> modifyLeader(study, newLeaderId, newLeaderId))
                 .isInstanceOf(NoPermissionException.class)
@@ -59,7 +59,7 @@ class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
         mocking();
         Long memberId = 1L;
         Long newLeaderId = 3L;
-        Study study = CreateStudy(memberId, 1L, "study1");
+        Study study = createStudy(memberId, 1L, "study1");
 
         assertThatThrownBy(() -> modifyLeader(study, memberId, newLeaderId))
                 .isInstanceOf(NotFoundException.class)

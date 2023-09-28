@@ -8,18 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.longThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class MemberClientMock {
     private MemberClient memberClient =
             Mockito.mock(MemberClient.class);
 
-    @BeforeEach
-    void beforeEach() {
-        when(memberClient.updateMyStudy(any())).thenReturn(
-                new RsData<>("S-1", "성공", null)
-        );
+    public void memberClientMocking() {
 
         MemberResDto dto = new MemberResDto("test123");
 
@@ -34,6 +30,22 @@ public class MemberClientMock {
 
                     dto.setBaekJoonName("test123");
                     return new RsData<>("S-1", "성공", dto);
+                });
+    }
+
+    public void memberClientUpdateMyStudyMocking() {
+        when(memberClient.updateMyStudy(any())).thenReturn(
+                new RsData<>("S-1", "성공", null)
+        );
+    }
+
+    public void memberClientConnectCheckMocking() {
+        when(memberClient.isConnectBaekJoon(anyLong()))
+                .thenAnswer(invocation -> {
+                    Long memberId = (Long) invocation.getArgument(0);
+
+                    if (memberId == 2L) return false;
+                    else return true;
                 });
     }
 }
