@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-public class StudyModifyRepositoryMock extends MemberClientMock {
+public class StudyModifyMock extends MemberClientMock {
 
     private StudyRepositoryPort repository =
             Mockito.mock(StudyRepositoryPort.class);

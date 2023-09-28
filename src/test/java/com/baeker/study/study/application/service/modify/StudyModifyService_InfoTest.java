@@ -5,7 +5,7 @@ import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.service.StudyModifyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.UpdateResDto;
-import com.baeker.study.testUtil.study.StudyModifyRepositoryMock;
+import com.baeker.study.testUtil.study.StudyModifyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("스터디 정보 수정")
 @ExtendWith(MockitoExtension.class)
-class StudyModifyService_InfoTest extends StudyModifyRepositoryMock {
+class StudyModifyService_InfoTest extends StudyModifyMock {
 
     @InjectMocks
     private StudyModifyService studyModifyService;

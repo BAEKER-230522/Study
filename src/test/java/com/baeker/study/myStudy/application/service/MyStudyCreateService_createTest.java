@@ -20,7 +20,7 @@ class MyStudyCreateService_createTest extends MyStudyCreateMock {
 
     @BeforeEach
     void beforeEach() {
-        memberClientUpdateMyStudyMocking();
+        updateMyStudyMocking();
         repoSaveMocking();
     }
 

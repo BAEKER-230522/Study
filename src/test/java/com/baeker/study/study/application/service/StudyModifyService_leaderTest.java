@@ -5,7 +5,7 @@ import com.baeker.study.global.exception.NotFoundException;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.testUtil.study.StudyModifyRepositoryMock;
+import com.baeker.study.testUtil.study.StudyModifyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("스터디 리더 위임")
 @ExtendWith(MockitoExtension.class)
-class StudyModifyService_leaderTest extends StudyModifyRepositoryMock {
+class StudyModifyService_leaderTest extends StudyModifyMock {
 
     @InjectMocks
     private StudyModifyService studyModifyService;
