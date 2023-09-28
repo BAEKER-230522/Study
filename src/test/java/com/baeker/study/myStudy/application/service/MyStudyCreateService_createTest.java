@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.baeker.study.testUtil.CreateStudy.createStudy;
+import static com.baeker.study.testUtil.CreateDomain.createStudy;
 
 @DisplayName("My Study 생성")
 @ExtendWith(MockitoExtension.class)

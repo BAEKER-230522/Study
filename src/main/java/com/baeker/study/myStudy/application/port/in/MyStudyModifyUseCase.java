@@ -4,7 +4,7 @@ import com.baeker.study.myStudy.domain.entity.MyStudy;
 
 public interface MyStudyModifyUseCase {
 
-    void msg(MyStudy myStudy, String msg);
+    void msg(Long memberId, MyStudy myStudy, String msg);
 
-    void accept(MyStudy myStudy);
+    void accept(Long memberId, MyStudy myStudy);
 }

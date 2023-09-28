@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.baeker.study.testUtil.CreateStudy.createStudy;
+import static com.baeker.study.testUtil.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("스터디 가입 신청")
