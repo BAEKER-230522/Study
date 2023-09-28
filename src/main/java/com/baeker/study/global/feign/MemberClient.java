@@ -34,6 +34,10 @@ public interface MemberClient {
     @GetMapping("/get/v1/id")
     RsData<MemberResDto> findById(@RequestParam(value = "id") Long id);
 
+    //-- baekjoon 연동 확인 --//
+    @GetMapping
+    boolean isConnectBaekJoon(@RequestParam(value = "memberId") Long memberId);
+
     @GetMapping("/get/v1/{memberId}")
     RsData<MemberDto> getMember(@PathVariable("memberId") Long memberId);
 }
