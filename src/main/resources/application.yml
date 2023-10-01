@@ -1,7 +1,6 @@
 custom:
   server: localhost
 
-
   feign:
     member: http://localhost:8081/api/member
 
