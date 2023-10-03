@@ -27,4 +27,11 @@ public class MemberClientMock {
                     else return true;
                 });
     }
+
+    public void deleteMemberMocking() {
+        when(memberClient.deleteMyStudy(any()))
+                .thenReturn(
+                        new RsData("S-1", "성공", null)
+                );
+    }
 }
