@@ -42,8 +42,6 @@ class MyStudyCreateService_inviteTest extends MyStudyCreateMock {
         Long myStudyId = inviteMember(studyLeaderId, invitee, study);
     }
 
-
-
     @Test
     @DisplayName("초대 대상이 백준 연동을 하지 않은 경우")
     void no2() {
