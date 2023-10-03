@@ -36,4 +36,16 @@ public class MyStudyResDto {
         this.memberRanking = member.getRanking();
         this.studyRanking = study.getRanking();
     }
+
+    public MyStudyResDto(MyStudy myStudy, Integer memberRanking, Integer studyRanking) {
+        this.id = myStudy.getId();
+        this.createDate = myStudy.getCreateDate();
+        this.modifyDate = myStudy.getModifyDate();
+        this.msg = myStudy.getMsg();
+        this.status = myStudy.getStatus();
+        this.member = myStudy.getMember();
+        this.study = myStudy.getStudy().getId();
+        this.memberRanking = memberRanking;
+        this.studyRanking = studyRanking;
+    }
 }

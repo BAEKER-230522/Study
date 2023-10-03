@@ -40,4 +40,8 @@ public interface MemberClient {
 
     @GetMapping("/get/v1/{memberId}")
     RsData<MemberDto> getMember(@PathVariable("memberId") Long memberId);
+
+    //-- v2 ranking 조회 --//
+    @GetMapping("/v2/rnaking/{memberId}")
+    Integer findRanking(@PathVariable(value = "memberId") Long memberId);
 }

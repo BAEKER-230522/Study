@@ -1,10 +1,12 @@
 package com.baeker.study.myStudy.application.service;
 
 import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyQueryRepositoryPort;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.in.resDto.MyStudyResDto;
 import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class MyStudyQueryService implements MyStudyQueryUseCase {
 
     private final MyStudyRepositoryPort repository;
     private final MyStudyQueryRepositoryPort queryRepository;
+    private final MemberClient memberClient;
 
     @Override
     public MyStudy byId(Long myStudyId) {
@@ -38,5 +41,12 @@ public class MyStudyQueryService implements MyStudyQueryUseCase {
             throw new NotFoundException("가입하지 않은 study");
 
         return myStudy;
+    }
+
+    @Override
+    public MyStudyResDto toDtoByStudyIdAndMemberId(Long memberId, Study study) {
+        Integer memberRanking = memberClient.findRanking(memberId);
+        MyStudy myStudy = byStudyIdAndMemberId(memberId, study);
+        return new MyStudyResDto(myStudy, memberRanking, study.getRanking());
     }
 }
