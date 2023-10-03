@@ -8,6 +8,7 @@ custom:
   mapping:
     study:
       web: /web/study
+      api: /api/study
     my-study:
       web: /web/my-study
 

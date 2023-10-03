@@ -110,9 +110,4 @@ public class StudyQueryService implements StudyQueryUseCase {
     public List<StudyResDto> byInput(String input, int page, int content) {
         return queryRepository.byInput(input, page, content);
     }
-
-    @Override
-    public List<StudySnapshot> snapshotByStudy(Study study) {
-        return null;
-    }
 }

@@ -25,6 +25,4 @@ public interface StudyQueryUseCase {
     List<StudyResDto> allOrderByRanking(int page, int content);
 
     List<StudyResDto> byInput(String input, int page, int content);
-
-    List<StudySnapshot> snapshotByStudy(Study study);
 }

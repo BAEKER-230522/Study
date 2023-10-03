@@ -48,7 +48,12 @@ public class StudyQueryController {
         return ResponseEntity.ok(resDtos);
     }
 
-    @Operation(summary = "member id 로 study 목록 조회")
+    @Operation(summary = "member id 로 study 목록 조회",
+            description =
+                    "status = 1 : 정회원 \n" +
+                    " 2 : 가입신청 목록 \n" +
+                    " 3 : 초디받은 목록"
+    )
     @GetMapping("/v2/{memberId}")
     public ResponseEntity<List<StudyResDto>> findByMemberId(
             @PathVariable @Valid Long memberId,
