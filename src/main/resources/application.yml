@@ -67,11 +67,6 @@ spring:
 #    solved-member: "solved-member"
 #    name: "study"
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${custom.eureka.server}/eureka/
-
 logging.level:
   org.hibernate:
     SQL: debug

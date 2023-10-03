@@ -1,10 +1,6 @@
 custom:
   server: study
 
-  eureka:
-    server: bk-e.1ll.ca
-    client: bk-s.1ll.ca
-
   feign:
     member: http://member:8081/api/member
 
