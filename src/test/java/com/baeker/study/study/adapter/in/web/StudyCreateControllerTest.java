@@ -10,11 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static com.baeker.study.testUtil.global.JsonMapper.toJson;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static com.baeker.study.testUtil.global.MockMvcRequest.postReq;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("스터디 생성 api 테스트")
 @SpringJUnitConfig
@@ -36,17 +37,16 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
     @Test
     @DisplayName("스터디 생성 api")
     void no1() throws Exception {
-        String name = "study";
-        String about = "hi";
-        Integer capacity = 10;
-        String reqDto = createReqDto(name, about, capacity);
+        String memberId = "1";
+        String reqDto = createReqDto();
 
-        mvc.perform(post(mapping + "/v2/study")
-                .contentType(APPLICATION_JSON)
-                .header("Authorization", "1")
-                .content(reqDto)
+        ResultActions result = postReq(mvc,
+                mapping + "/v2/study",
+                memberId,
+                reqDto
+        );
 
-        ).andExpect(
+        result.andExpect(
                 status().is2xxSuccessful()
         ).andExpect(
                 jsonPath("studyId").value(1L)
@@ -58,22 +58,22 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
     @Test
     @DisplayName("jwt 복호화 실패")
     void no2() throws Exception {
-        String name = "study";
-        String about = "hi";
-        Integer capacity = 10;
-        String reqDto = createReqDto(name, about, capacity);
+        String memberId = "0";
+        String reqDto = createReqDto();
 
-        mvc.perform(post(mapping + "/v2/study")
-                .contentType(APPLICATION_JSON)
-                .header("Authorization", "0")
-                .content(reqDto)
-        ).andExpect(
+        ResultActions result = postReq(mvc,
+                mapping + "/v2/study",
+                memberId,
+                reqDto
+        );
+
+        result.andExpect(
                 status().is4xxClientError()
         );
     }
 
-    private String createReqDto(String name, String about, Integer capacity) {
-        StudyCreateReqDto reqDto = new StudyCreateReqDto(name, about, capacity);
+    private String createReqDto() {
+        StudyCreateReqDto reqDto = new StudyCreateReqDto();
         return toJson(reqDto);
     }
 }

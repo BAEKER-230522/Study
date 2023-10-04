@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyModifyReqDto {
 
-    private Long id;
+    private Long studyId;
     private String name;
     private String about;
     private Integer capacity;

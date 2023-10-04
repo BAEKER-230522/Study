@@ -9,6 +9,7 @@ import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.in.resDto.UpdateResDto;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +25,21 @@ public class StudyModifyController {
 
     @Operation(summary = "스터디명, 소개, 최대 인원 수정")
     @PatchMapping("/v2/info")
-    public ResponseEntity update(
+    public ResponseEntity<UpdateResDto> update(
             @RequestHeader("Authorization") String token,
-            @RequestBody StudyModifyReqDto dto
+            @RequestBody @Valid StudyModifyReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
-        Study study = studyQueryUseCase.byId(dto.getId());
+        Study study = studyQueryUseCase.byId(dto.getStudyId());
         UpdateResDto resDto = studyModifyUseCase.info(study, memberId, dto);
         return ResponseEntity.ok(resDto);
     }
 
     @Operation(summary = "스터디장 변경")
     @PatchMapping("/v2/leader")
-    public ResponseEntity updateLeader(
+    public ResponseEntity<StudyResDto> updateLeader(
             @RequestHeader("Authorization") String token,
-            @RequestBody UpdateLeaderReqDto dto
+            @RequestBody @Valid UpdateLeaderReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(dto.getStudyId());

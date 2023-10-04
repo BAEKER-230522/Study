@@ -20,7 +20,7 @@ public class StudyCreateController {
 
     @Operation(summary = "스터디 생성")
     @PostMapping("/v2/study")
-    public ResponseEntity create(
+    public ResponseEntity<CreateResDto> create(
             @RequestHeader("Authorization") String token,
             @RequestBody @Valid StudyCreateReqDto dto
     ) {
