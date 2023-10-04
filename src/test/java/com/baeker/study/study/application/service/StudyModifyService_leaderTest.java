@@ -48,7 +48,7 @@ class StudyModifyService_leaderTest extends StudyModifyMock {
 
         assertThatThrownBy(() -> modifyLeader(study, newLeaderId, newLeaderId))
                 .isInstanceOf(NoPermissionException.class)
-                .hasMessageContaining("스터디 리더만 위임이 가능합니다.");
+                .hasMessageContaining("권한이 없습니다.");
     }
 
     @Test

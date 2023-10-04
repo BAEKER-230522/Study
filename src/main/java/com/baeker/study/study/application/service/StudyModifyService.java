@@ -31,24 +31,19 @@ public class StudyModifyService implements StudyModifyUseCase {
 
     @Override
     public UpdateResDto info(Study study, Long memberId, StudyModifyReqDto dto) {
-        if (study.getLeader() != memberId)
-            throw new NoPermissionException("권한이 없습니다.");
+        isLeader(study, memberId);
 
         Study modified = study.modifyStudy(
                 dto.getName(), dto.getAbout(), dto.getCapacity()
         );
-
         repository.save(modified);
         return new UpdateResDto(modified.getId());
     }
 
     @Override
     public StudyResDto leader(Study study, Long memberId, UpdateLeaderReqDto dto) {
-        if (study.getLeader() != memberId)
-            throw new NoPermissionException("스터디 리더만 위임이 가능합니다.");
-
-        if (isMember(study.getId(), dto.getNewLeader()))
-            throw new NotFoundException("가입된 회원이 아닙니다.");
+        isLeader(study, memberId);
+        isMember(study.getId(), dto.getNewLeader());
 
         Study modified = repository.save(
                 study.modifyLeader(dto.getNewLeader())
@@ -56,13 +51,18 @@ public class StudyModifyService implements StudyModifyUseCase {
         return new StudyResDto(modified);
     }
 
-    private boolean isMember(Long studyId, Long memberId) {
+    private static void isLeader(Study study, Long memberId) {
+        if (study.getLeader() != memberId)
+            throw new NoPermissionException("권한이 없습니다.");
+    }
+
+    private void isMember(Long studyId, Long memberId) {
         List<StudyResDto> dtos = queryUseCase.byMemberId(memberId, 1);
 
         for (StudyResDto dto : dtos)
-            if (dto.getId() == studyId)
-                return false;
-        return true;
+            if (dto.getId() == studyId) return;
+
+        throw new NotFoundException("가입된 회원이 아닙니다.");
     }
 
     @Override
