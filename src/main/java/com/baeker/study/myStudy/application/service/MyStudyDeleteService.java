@@ -7,9 +7,12 @@ import com.baeker.study.myStudy.application.port.in.MyStudyDeleteUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
+import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
 
@@ -34,7 +37,7 @@ public class MyStudyDeleteService implements MyStudyDeleteUseCase {
     private void pendingPermissionCheck(Long memberId, MyStudy myStudy) {
         if (
                 memberId == myStudy.getMember() ||
-                memberId == myStudy.getStudy().getLeader()
+                        memberId == myStudy.getStudy().getLeader()
         )
             return;
 
@@ -47,6 +50,14 @@ public class MyStudyDeleteService implements MyStudyDeleteUseCase {
 
         if (memberId != myStudy.getMember())
             throw new NoPermissionException("권한이 없습니다.");
+    }
+
+    @Override
+    public void study(Study study) {
+        List<MyStudy> myStudies = study.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            deleteMember(myStudy);
     }
 
     @Override

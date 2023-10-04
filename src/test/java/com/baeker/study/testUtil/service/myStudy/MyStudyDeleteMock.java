@@ -1,7 +1,7 @@
-package com.baeker.study.testUtil.myStudy;
+package com.baeker.study.testUtil.service.myStudy;
 
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
-import com.baeker.study.testUtil.feign.MemberClientMock;
+import com.baeker.study.testUtil.global.MemberClientMock;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;

@@ -1,4 +1,4 @@
-package com.baeker.study.testUtil.feign;
+package com.baeker.study.testUtil.global;
 
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;

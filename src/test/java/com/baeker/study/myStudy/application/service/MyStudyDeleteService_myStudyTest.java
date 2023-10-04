@@ -2,7 +2,7 @@ package com.baeker.study.myStudy.application.service;
 
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.testUtil.myStudy.MyStudyDeleteMock;
+import com.baeker.study.testUtil.service.myStudy.MyStudyDeleteMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.*;
-import static com.baeker.study.testUtil.CreateDomain.createMyStudy;
+import static com.baeker.study.testUtil.global.CreateDomain.createMyStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("스터디 가입 거절과 탈퇴")

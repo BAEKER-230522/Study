@@ -5,7 +5,7 @@ import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.global.exception.OverLimitedException;
 import com.baeker.study.myStudy.adapter.in.reqDto.InviteReqDto;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.testUtil.myStudy.MyStudyCreateMock;
+import com.baeker.study.testUtil.service.myStudy.MyStudyCreateMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.baeker.study.testUtil.CreateDomain.createStudy;
+import static com.baeker.study.testUtil.global.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("스터디 초대")

@@ -13,4 +13,6 @@ public interface SnapshotUseCase {
     void createSnapshot(Study study, BaekjoonDto dto, int addDate);
 
     List<SnapshotResDto> getSnapshotOfWeek(Study study);
+
+    void deleteStudy(Study study);
 }

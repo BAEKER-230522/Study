@@ -1,4 +1,4 @@
-package com.baeker.study.testUtil;
+package com.baeker.study.testUtil.global;
 
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;

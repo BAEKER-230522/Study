@@ -11,6 +11,11 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Slf4j
 public class ExceptionController {
 
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<ErrorMsg> invalidJwtExceptionHandler(InvalidJwtException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.badRequest().body(new ErrorMsg(e.getMessage()));
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorMsg> notFoundExceptionHandler(NotFoundException e) {

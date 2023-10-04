@@ -1,10 +1,10 @@
-package com.baeker.study.testUtil.study;
+package com.baeker.study.testUtil.service.study;
 
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.testUtil.feign.MemberClientMock;
+import com.baeker.study.testUtil.global.MemberClientMock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;

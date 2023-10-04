@@ -1,7 +1,7 @@
 package com.baeker.study.myStudy.application.service;
 
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.testUtil.myStudy.MyStudyCreateMock;
+import com.baeker.study.testUtil.service.myStudy.MyStudyCreateMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.baeker.study.testUtil.CreateDomain.createStudy;
+import static com.baeker.study.testUtil.global.CreateDomain.createStudy;
 
 @DisplayName("My Study 생성")
 @ExtendWith(MockitoExtension.class)

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity @Getter
@@ -31,15 +32,15 @@ public class Study extends ScoreBase {
     private Integer ranking;
 
     @Builder.Default
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = ALL)
     private List<MyStudy> myStudies = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "study", cascade = ALL)
     private List<StudyRule> studyRules = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = ALL)
     private List<StudySnapshot> snapshots = new ArrayList<>();
 
 

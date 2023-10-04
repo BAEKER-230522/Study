@@ -3,7 +3,7 @@ package com.baeker.study.study.application.service;
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.in.resDto.CreateResDto;
-import com.baeker.study.testUtil.study.StudyCreateMock;
+import com.baeker.study.testUtil.service.study.StudyCreateMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

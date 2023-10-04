@@ -27,8 +27,6 @@ public class StudyDeleteController {
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(studyId);
-
-        // 작업중
         studyDeleteUseCase.study(study, memberId);
         return ResponseEntity.noContent().build();
     }

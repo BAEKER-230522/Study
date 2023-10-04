@@ -5,6 +5,7 @@ import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyCreateUseCase;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class StudyCreateController {
     @PostMapping("/v2/study")
     public ResponseEntity create(
             @RequestHeader("Authorization") String token,
-            @RequestBody StudyCreateReqDto dto
+            @RequestBody @Valid StudyCreateReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         CreateResDto resDto = studyCreateUseCase.study(memberId, dto);

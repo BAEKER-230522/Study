@@ -69,4 +69,12 @@ public class SnapshotService implements SnapshotUseCase {
                 .map(s -> new SnapshotResDto(s))
                 .toList();
     }
+
+    @Override
+    public void deleteStudy(Study study) {
+        List<StudySnapshot> snapshots = study.getSnapshots();
+
+        for (StudySnapshot snapshot : snapshots)
+            repository.delete(snapshot);
+    }
 }
