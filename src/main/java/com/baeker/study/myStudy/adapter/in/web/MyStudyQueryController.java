@@ -5,7 +5,7 @@ import com.baeker.study.myStudy.in.resDto.MyStudyResDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +24,8 @@ public class MyStudyQueryController {
     @Operation(summary = "my study 조회")
     @GetMapping("/v2/{memberId}/{studyId}")
     public ResponseEntity<MyStudyResDto> find(
-            @PathVariable @Valid Long memberId,
-            @PathVariable @Valid Long studyId
+            @PathVariable Long memberId,
+            @PathVariable Long studyId
     ) {
         Study study = studyQueryUseCase.byId(studyId);
         MyStudyResDto resDto = myStudyQueryUseCase.toDtoByStudyIdAndMemberId(memberId, study);

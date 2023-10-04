@@ -6,7 +6,7 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class StudyQueryController {
     @Operation(summary = "study id 로 study 조회")
     @GetMapping("/v2/{studyId}")
     public ResponseEntity<StudyResDto> findById(
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Study study = studyQueryUseCase.byId(studyId);
         StudyResDto dto = new StudyResDto(study);
@@ -34,7 +34,7 @@ public class StudyQueryController {
     @Operation(summary = "study 이름으로 study 조회")
     @GetMapping("/v2/{name}")
     public ResponseEntity<StudyResDto> findByName(
-            @PathVariable @Valid String name
+            @PathVariable String name
     ) {
         Study study = studyQueryUseCase.byName(name);
         StudyResDto dto = new StudyResDto(study);
@@ -56,8 +56,8 @@ public class StudyQueryController {
     )
     @GetMapping("/v2/{memberId}")
     public ResponseEntity<List<StudyResDto>> findByMemberId(
-            @PathVariable @Valid Long memberId,
-            @RequestParam @Valid int status
+            @PathVariable Long memberId,
+            @RequestParam int status
     ) {
         List<StudyResDto> dtoList = studyQueryUseCase.byMemberId(memberId, status);
         return ResponseEntity.ok(dtoList);
@@ -66,7 +66,7 @@ public class StudyQueryController {
     @Operation(summary = "study 정회원 목록 조회")
     @GetMapping("/v2/member-list/{studyId}")
     public ResponseEntity<List<MemberResDto>> findMembers(
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Study study = studyQueryUseCase.byId(studyId);
         List<MemberResDto> dtoList = studyQueryUseCase.byMemberList(study);
@@ -76,7 +76,7 @@ public class StudyQueryController {
     @Operation(summary = "study 가입 대기 회원 목록 조회")
     @GetMapping("/v2/candidate-list/{studyId}")
     public ResponseEntity<CandidateResDto> findCandidates(
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Study study = studyQueryUseCase.byId(studyId);
         CandidateResDto resDto = studyQueryUseCase.byCandidateList(study);
@@ -86,8 +86,8 @@ public class StudyQueryController {
     @Operation(summary = "랭킹 순으로 study 목록 조회")
     @GetMapping("/v2/ranking")
     public ResponseEntity<List<StudyResDto>> orderByRanking(
-            @RequestParam(defaultValue = "0") @Valid int page,
-            @RequestParam(defaultValue = "10") @Valid int content
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int content
     ) {
         List<StudyResDto> dtoList = studyQueryUseCase.allOrderByRanking(page, content);
         return ResponseEntity.ok(dtoList);
@@ -96,9 +96,9 @@ public class StudyQueryController {
     @Operation(summary = "검색어로 study 목록 조회")
     @GetMapping("v1/{input}")
     public ResponseEntity<List<StudyResDto>> findByInput(
-            @PathVariable @Valid String input,
-            @RequestParam(defaultValue = "0") @Valid int page,
-            @RequestParam(defaultValue = "10") @Valid int content
+            @PathVariable String input,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int content
     ) {
         List<StudyResDto> dtoList = studyQueryUseCase.byInput(input, page, content);
         return ResponseEntity.ok(dtoList);

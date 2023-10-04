@@ -34,23 +34,25 @@ public class SnapshotService implements SnapshotUseCase {
     }
 
     private boolean isNew(String today, List<StudySnapshot> snapshots) {
-        return snapshots.get(0).getDayOfWeek().equals(today);
+        if (snapshots.size() == 0)
+            return true;
+        else
+            return !snapshots.get(0).getDayOfWeek().equals(today);
     }
 
     @Override
     public void createSnapshot(Study study, BaekjoonDto dto, int addDate) {
         String today = LocalDate.now().plusDays(addDate).getDayOfWeek().toString();
 
-        repository.save(
-                StudySnapshot.create(study, dto, today)
-        );
+        StudySnapshot snapshot = StudySnapshot.create(study, dto, today);
+        repository.save(snapshot);
 
         List<StudySnapshot> snapshots = study.getSnapshots();
 
         if (snapshots.size() >= 8) {
-            StudySnapshot snapshot = snapshots.get(7);
-            snapshots.remove(snapshot);
-            repository.delete(snapshot);
+            StudySnapshot overSnapshot = snapshots.get(7);
+            snapshots.remove(overSnapshot);
+            repository.delete(overSnapshot);
         }
     }
 

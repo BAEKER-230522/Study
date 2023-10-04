@@ -5,7 +5,7 @@ import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.SnapshotResDto;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ public class StudySnapshotController {
     @Operation(summary = "한주간 Study Snapshot 목록 조회")
     @GetMapping("/v2/snapshots/{studyId}")
     public ResponseEntity<List<SnapshotResDto>> findSnapshotOfWeek(
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Study study = studyQueryUseCase.byId(studyId);
         List<SnapshotResDto> resDtos = snapshotUseCase.getSnapshotOfWeek(study);

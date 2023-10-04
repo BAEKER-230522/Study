@@ -3,6 +3,10 @@ package com.baeker.study.testUtil.global;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.domain.entity.StudySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateDomain {
 
@@ -10,6 +14,8 @@ public class CreateDomain {
         Study study = Study.createStudy(studyId, name, "about", 10, memberId);
         MyStudy myStudy = MyStudy.createNewStudy(memberId, study);
         study.getMyStudies().add(myStudy);
+        List<StudySnapshot> snapshots = study.getSnapshots();
+        snapshots = new ArrayList<>();
         return study;
     }
 

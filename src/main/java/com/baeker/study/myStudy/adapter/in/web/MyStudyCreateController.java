@@ -8,7 +8,7 @@ import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class MyStudyCreateController {
     @PostMapping("/v2/join")
     public ResponseEntity<CreateResDto> join(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid JoinReqDto dto
+            @RequestBody JoinReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(dto.getStudyId());
@@ -38,7 +38,7 @@ public class MyStudyCreateController {
     @PostMapping("/v2/invite")
     public ResponseEntity<CreateResDto> invite(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid InviteReqDto dto
+            @RequestBody InviteReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(dto.getStudyId());

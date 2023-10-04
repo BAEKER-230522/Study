@@ -8,7 +8,7 @@ import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class MyStudyDeleteController {
     @DeleteMapping("/v2/{studyId}")
     public ResponseEntity delete(
             @RequestHeader("Authorization") String token,
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Long memberId = decrypt.getMemberId(token);
         MyStudy myStudy = getMyStudy(memberId, studyId);
@@ -39,7 +39,7 @@ public class MyStudyDeleteController {
     @DeleteMapping("/v2/drop")
     public ResponseEntity drop(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid DropReqDto dto
+            @RequestBody DropReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         MyStudy myStudy = getMyStudy(dto.getDropMemberId(), dto.getStudyId());

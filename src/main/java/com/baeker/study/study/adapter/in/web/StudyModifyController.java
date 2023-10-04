@@ -9,7 +9,7 @@ import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.study.in.resDto.UpdateResDto;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class StudyModifyController {
     @PatchMapping("/v2/info")
     public ResponseEntity<UpdateResDto> update(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid StudyModifyReqDto dto
+            @RequestBody StudyModifyReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(dto.getStudyId());
@@ -39,7 +39,7 @@ public class StudyModifyController {
     @PatchMapping("/v2/leader")
     public ResponseEntity<StudyResDto> updateLeader(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid UpdateLeaderReqDto dto
+            @RequestBody UpdateLeaderReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(dto.getStudyId());

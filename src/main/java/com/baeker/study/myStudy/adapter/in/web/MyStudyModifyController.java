@@ -8,7 +8,7 @@ import com.baeker.study.study.adapter.in.reqDto.ModifyMsgReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class MyStudyModifyController {
     @PatchMapping("/v2/accept/{studyId}")
     public ResponseEntity accept(
             @RequestHeader("Authorization") String token,
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Long memberId = decrypt.getMemberId(token);
         MyStudy myStudy = getMyStudy(studyId, memberId);
@@ -39,7 +39,7 @@ public class MyStudyModifyController {
     @PatchMapping("/v2/msg")
     public ResponseEntity modifyMsg(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid ModifyMsgReqDto dto
+            @RequestBody ModifyMsgReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         MyStudy myStudy = getMyStudy(dto.getStudyId(), memberId);

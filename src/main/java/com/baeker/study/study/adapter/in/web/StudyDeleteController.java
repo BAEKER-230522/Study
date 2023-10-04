@@ -5,7 +5,7 @@ import com.baeker.study.study.application.port.in.StudyDeleteUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class StudyDeleteController {
     @DeleteMapping("/v2/{studyId}")
     public ResponseEntity deleteStudy(
             @RequestHeader("Authorization") String token,
-            @PathVariable @Valid Long studyId
+            @PathVariable Long studyId
     ) {
         Long memberId = decrypt.getMemberId(token);
         Study study = studyQueryUseCase.byId(studyId);
