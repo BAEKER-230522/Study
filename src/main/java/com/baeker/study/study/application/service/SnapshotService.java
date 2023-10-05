@@ -37,7 +37,7 @@ public class SnapshotService implements SnapshotUseCase {
         if (snapshots.size() == 0)
             return true;
         else
-            return !snapshots.get(0).getDayOfWeek().equals(today);
+            return !snapshots.get(snapshots.size() - 1).getDayOfWeek().equals(today);
     }
 
     @Override

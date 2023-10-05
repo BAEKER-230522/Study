@@ -25,8 +25,11 @@ public class CreateStudyRuleRequest {
     private Long studyId;
 
 
-//    @Schema(description = "studyRule 멤버, 문제별 상태")
+    //    @Schema(description = "studyRule 멤버, 문제별 상태")
 //    private List<StudyRuleStatus> statuses;
     @Schema(description = "미션에서 풀 문제")
     private List<CreateProblem> createProblemList;
+
+    @Schema(description = "미션 성공시 오르는 경험치", example = "1.1")
+    private Double xp;
 }

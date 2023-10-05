@@ -64,6 +64,8 @@ public class StudyRule {
     @Builder.Default
     private List<PersonalStudyRule> personalStudyRules = new ArrayList<>();
 
+    private Double xp;
+
     public void setStatus(boolean status) {
         if (status) {
             this.status = Status.COMPLETE;
@@ -90,6 +92,7 @@ public class StudyRule {
                 .startDate(request.getStartDate())
                 .deadline(request.getDeadline())
                 .about(request.getAbout())
+                .xp(request.getXp())
                 .status(FAIL)
                 .build();
     }
@@ -106,5 +109,9 @@ public class StudyRule {
 
     public void setSendMail() {
         this.sendMail = true;
+    }
+
+    public void addXp() {
+        this.study.xpUp(this.xp.intValue());
     }
 }

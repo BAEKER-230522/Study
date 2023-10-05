@@ -3,7 +3,7 @@ package com.baeker.study.study.domain.entity;
 import com.baeker.study.base.entity.ScoreBase;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.study.in.event.AddSolvedCountEvent;
+import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -28,7 +28,7 @@ public class Study extends ScoreBase {
     private String about;
     private Long leader;
     private Integer capacity;
-    private Integer xp;
+    private double xp;
     private Integer ranking;
 
     @Builder.Default
@@ -45,24 +45,25 @@ public class Study extends ScoreBase {
 
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, Long id) {
+    public static Study createStudy(String name, String about, Integer capacity, Long memberId) {
         return builder()
                 .createDate(LocalDateTime.now())
                 .name(name)
                 .about(about)
-                .leader(id)
+                .leader(memberId)
                 .capacity(capacity)
                 .xp(0)
                 .build();
     }
 
-    public static Study createStudy(Long studyId, String name, String about, Integer capacity, Long id) {
+    // test 용 //
+    public static Study createStudy(Long studyId, String name, String about, Integer capacity, Long memberId) {
         return builder()
                 .id(studyId)
                 .createDate(LocalDateTime.now())
                 .name(name)
                 .about(about)
-                .leader(id)
+                .leader(memberId)
                 .capacity(capacity)
                 .xp(0)
                 .build();
@@ -90,7 +91,7 @@ public class Study extends ScoreBase {
     }
 
     // 경험치 상승 //
-    public void xpUp(Integer addXp) {
+    public void xpUp(double addXp) {
         this.xp += addXp;
     }
 
@@ -100,14 +101,14 @@ public class Study extends ScoreBase {
     }
 
     // 백준 점수 최신화 //
-    public Study updateSolvedCount(AddSolvedCountEvent event) {
+    public Study updateSolvedCount(SolvedCountReqDto dto) {
         return this.toBuilder()
-                .bronze(this.getBronze() + event.getBronze())
-                .silver(this.getSilver() + event.getSilver())
-                .gold(this.getGold() + event.getGold())
-                .diamond(this.getDiamond() + event.getDiamond())
-                .ruby(this.getRuby() + event.getRuby())
-                .platinum(this.getPlatinum() + event.getPlatinum())
+                .bronze(this.getBronze() + dto.getBronze())
+                .silver(this.getSilver() + dto.getSilver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
                 .build();
     }
 }

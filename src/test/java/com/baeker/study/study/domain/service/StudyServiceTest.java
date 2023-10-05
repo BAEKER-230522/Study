@@ -2,6 +2,7 @@ package com.baeker.study.study.domain.service;
 
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.exception.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
@@ -9,13 +10,13 @@ import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
-import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
+import com.baeker.study.study.in.reqDto.DeleteStudyReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.study.out.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,11 +42,14 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 class StudyServiceTest {
 
-    @Autowired private StudyService studyService;
-    @Autowired private ApplicationEventPublisher publisher;
-    @Autowired private SnapshotRepository snapshotRepository;
-    @Autowired private MyStudyService myStudyService;
-    @MockBean private MemberClient memberClient;
+    @Autowired
+    private StudyService studyService;
+    @Autowired
+    private ApplicationEventPublisher publisher;
+    @Autowired
+    private MyStudyService myStudyService;
+    @MockBean
+    private MemberClient memberClient;
 
     @BeforeEach
     public void beforeEach() {
@@ -53,10 +57,13 @@ class StudyServiceTest {
                 .thenReturn(new RsData<>("S-1", "성공", null));
 
         when(memberClient.findById(any()))
-                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader", "bk1234")));
+                .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto(1L, "leader", "bk1234")));
 
         when(memberClient.findById(6L))
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto("leader")));
+
+        when((memberClient.deleteMyStudy(any())))
+                .thenReturn(new RsData<>("S-1", "성공", null));
     }
 
     @Test
@@ -71,18 +78,18 @@ class StudyServiceTest {
     @Test
     @DisplayName("이벤트로 해결한 문제 업데이트")
     void no1() {
-        Study study1 = study(1L, "study1", "about", "member1");
-        Study study2 = study(1L, "study2", "about", "member1");
-        Study study3 = study(1L, "study3", "about", "member1");
-        Study study4 = study(2L, "study4", "about", "member2");
-        Study study5 = study(2L, "study5", "about", "member2");
-        Study study6 = study(2L, "study6", "about", "member2");
+        Study study1 = createStudy(1L, "study1", "about", "member1");
+        Study study2 = createStudy(1L, "study2", "about", "member1");
+        Study study3 = createStudy(1L, "study3", "about", "member1");
+        Study study4 = createStudy(2L, "study4", "about", "member2");
+        Study study5 = createStudy(2L, "study5", "about", "member2");
+        Study study6 = createStudy(2L, "study6", "about", "member2");
 
         List<Study> all = studyService.findAll();
         assertThat(all.size()).isEqualTo(6);
         assertThat(study1.solvedCount()).isEqualTo(0);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 1L, 1, 1, 1, 1, 1, 1));
+        studyService.addSolveCount(new SolvedCountReqDto(1L, 1, 1, 1, 1, 1, 1));
 
         assertThat(study1.solvedCount()).isEqualTo(6);
         assertThat(study2.solvedCount()).isEqualTo(6);
@@ -94,14 +101,14 @@ class StudyServiceTest {
         List<StudySnapshot> snapshots4 = study4.getSnapshots();
         assertThat(snapshots4.size()).isEqualTo(0);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 2L, 3, 3, 3, 3, 3, 3));
+        studyService.addSolveCount(new SolvedCountReqDto(2L, 3, 3, 3, 3, 3, 3));
 
         assertThat(study1.solvedCount()).isEqualTo(6);
         assertThat(study4.solvedCount()).isEqualTo(18);
         assertThat(study5.solvedCount()).isEqualTo(18);
         assertThat(study6.solvedCount()).isEqualTo(18);
 
-        publisher.publishEvent(new AddSolvedCountEvent(this, 1L, 1, 1, 1, 1, 1, 1));
+        studyService.addSolveCount(new SolvedCountReqDto(1L, 1, 1, 1, 1, 1, 1));
 
         assertThat(study1.solvedCount()).isEqualTo(12);
         assertThat(study2.solvedCount()).isEqualTo(12);
@@ -119,7 +126,7 @@ class StudyServiceTest {
     @Test
     @DisplayName("Snapshot 테스트")
     void no3() {
-        Study study = study(1L, "study", "about", "member");
+        Study study = createStudy(1L, "study", "about", "member");
 
         for (int i = 0; i < 7; i++)
             updateSnapshot(study, i);
@@ -128,30 +135,30 @@ class StudyServiceTest {
         assertThat(list1.size()).isEqualTo(7);
 
         String day = dayCalculator(0);
-        assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
+        assertThat(list1.get(0).getDayOfWeek()).isEqualTo(day);
 
         day = dayCalculator(-1);
-        assertThat(list1.get(0).getDayOfWeek()).isEqualTo(day);
+        assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
 
         updateSnapshot(study, 0);
         List<StudySnapshot> list2 = study.getSnapshots();
         assertThat(list2.size()).isEqualTo(7);
 
         day = dayCalculator(1);
-        assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
+        assertThat(list1.get(0).getDayOfWeek()).isEqualTo(day);
 
         day = dayCalculator(0);
-        assertThat(list1.get(0).getDayOfWeek()).isEqualTo(day);
+        assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
     }
 
     @Test
     @DisplayName("member 의 study 조회")
     public void no4() {
-        Study study1 = study(1L, "my study1", "", "1");
-        Study study2 = study(2L, "my study2", "", "2");
-        Study study3 = study(3L, "pending study", "", "3");
-        Study study4 = study(4L, "invite study", "", "4");
-        Study study5 = study(5L, "study", "", "5");
+        Study study1 = createStudy(1L, "my study1", "", "1");
+        Study study2 = createStudy(2L, "my study2", "", "2");
+        Study study3 = createStudy(3L, "pending study", "", "3");
+        Study study4 = createStudy(4L, "invite study", "", "4");
+        Study study5 = createStudy(5L, "study", "", "5");
 
         MyStudy join = myStudyService.join(new JoinMyStudyReqDto(study2.getId(), 1L, "가입신청"), study2);
         myStudyService.accept(join);
@@ -171,10 +178,10 @@ class StudyServiceTest {
     @Test
     @DisplayName("백준 연동 안할경우 가입 금지")
     public void no5() {
-        assertThatThrownBy(() -> study(6L, "my study1", "", "1"))
+        assertThatThrownBy(() -> createStudy(6L, "my study1", "", "1"))
                 .isInstanceOf(NoPermissionException.class);
 
-        Study study = study(1L, "my study1", "", "1");
+        Study study = createStudy(1L, "my study1", "", "1");
 
         Study findStudy = studyService.findById(study.getId());
 
@@ -184,12 +191,12 @@ class StudyServiceTest {
     @Test
     @DisplayName("검색어로 study 찾기")
     public void no7() {
-        Study study1 = study(1L, "abc", "about", "member1");
-        Study study2 = study(1L, "bcd", "about", "member1");
-        Study study3 = study(1L, "cde", "about", "member1");
-        Study study4 = study(1L, "def", "about", "member1");
-        Study study5 = study(1L, "efg", "about", "member1");
-        Study study6 = study(1L, "fgh", "about", "member1");
+        Study study1 = createStudy(1L, "abc", "about", "member1");
+        Study study2 = createStudy(1L, "bcd", "about", "member1");
+        Study study3 = createStudy(1L, "cde", "about", "member1");
+        Study study4 = createStudy(1L, "def", "about", "member1");
+        Study study5 = createStudy(1L, "efg", "about", "member1");
+        Study study6 = createStudy(1L, "fgh", "about", "member1");
 
         List<StudyResDto> findByC = studyService.findByInput("c", 0, 10);
         assertThat(findByC.size()).isEqualTo(3);
@@ -206,7 +213,7 @@ class StudyServiceTest {
     @DisplayName("ranking 확인")
     void no8() {
         for (int i = 0; i < 5; i++) {
-            Study study = study(1L, "study" + i, "about", "member1");
+            Study study = createStudy(1L, "study" + i, "about", "member1");
             AddXpReqDto dto = new AddXpReqDto();
             dto.setId(study.getId());
             dto.setXp(i * 10);
@@ -227,8 +234,40 @@ class StudyServiceTest {
         assertThat(studies.get(4).getRanking()).isEqualTo(5);
     }
 
+    @Test
+    @DisplayName("Study 삭제")
+    public void no9() {
+        Study study = createStudy(1L, "Study", "", null);
+        Long studyId = study.getId();
 
-    private Study study(Long member, String name, String about, String leader) {
+        for (Long i = 2L; i < 6; i++)
+            joinStudy(study, i);
+
+        int size = study.getMyStudies().size();
+        assertThat(size).isEqualTo(5);
+
+        deleteStudy(studyId, 1L);
+
+        assertThatThrownBy(() -> studyService.findById(studyId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("존재하지 않는 id 입니다.");
+
+    }
+
+    private void deleteStudy(Long studyId, Long memberId) {
+        DeleteStudyReqDto dto = new DeleteStudyReqDto();
+        dto.setStudyId(studyId);
+        dto.setMemberId(memberId);
+        studyService.delete(dto);
+    }
+
+    private void joinStudy(Study study, Long memberId) {
+        JoinMyStudyReqDto dto = new JoinMyStudyReqDto(study.getId(), memberId, "");
+        MyStudy myStudy = myStudyService.join(dto, study);
+        myStudyService.accept(myStudy);
+    }
+
+    private Study createStudy(Long member, String name, String about, String leader) {
         MyStudy myStudy = studyService.create(CreateReqDto.createStudy(member, name, about, 10));
         Study study = myStudy.getStudy();
         return study;

@@ -7,7 +7,6 @@ import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.event.AddSolvedCountEvent;
 import com.baeker.study.study.in.reqDto.AddXpReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
@@ -73,7 +72,7 @@ public class StudyModifyService implements StudyModifyUseCase {
 
     @Override
     public void solvedCount(SolvedCountReqDto dto) {
-        publisher.publishEvent(new AddSolvedCountEvent(this, dto));
+
     }
 
     @Override

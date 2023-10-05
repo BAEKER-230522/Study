@@ -8,10 +8,7 @@ import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
-import com.baeker.study.study.in.reqDto.AddXpReqDto;
-import com.baeker.study.study.in.reqDto.CreateReqDto;
-import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.reqDto.UpdateReqDto;
+import com.baeker.study.study.in.reqDto.*;
 import com.baeker.study.study.in.resDto.*;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -88,10 +85,10 @@ public class StudyController {
     public RsData updateSolved(
             @RequestBody @Valid SolvedCountReqDto dto
     ) {
-        log.info("solved count 최신화 요청 확인 member id = {}", dto.getMemberId());
+        log.info("solved count 최신화 요청 확인 member id = {}", dto.getId());
         studyService.addSolveCount(dto);
 
-        log.info("solved count 최신화 완료 member id = {}", dto.getMemberId());
+        log.info("solved count 최신화 완료 member id = {}", dto.getId());
         return RsData.of("S-1", "성공");
     }
 
@@ -239,16 +236,17 @@ public class StudyController {
         List<Study> byMember = studyService.findByMember(memberId, 1);
         for (Study study : byMember) {
             log.info(study.getName() + "스터디 진행");
-            studyRuleService.updateProblemStatus(study.getId(), memberId,problemDtos);
+            studyRuleService.updateProblemStatus(study.getId(), memberId, problemDtos);
         }
     }
+
     //-- study list order by xp --//
     @GetMapping("/v1/ranking")
     @Operation(summary = "스터디 랭킹으로 목록 조회 / page = 페이지, content = page 당 data 숫자")
     public RsData<List<StudyResDto>> ranking(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int content
-    ){
+    ) {
         log.info("스터디 랭킹으로 목록 조회 요청 확인 page = {}, content = {}", page, content);
 
         List<StudyResDto> dtoList = studyService.findAllOrderByRanking(page, content);
@@ -273,6 +271,17 @@ public class StudyController {
         return RsData.successOf(dtoList);
     }
 
-    //-- update solved count --//
+    //-- delete study --//
+    @DeleteMapping("/v1")
+    @Operation(summary = "스터디 삭제 (리더만 가능)")
+    public RsData delete(
+            @RequestBody DeleteStudyReqDto dto
+    ) {
+        log.info("스터디 삭제 요청 확인 member id = {}, study id = {}", dto.getMemberId(), dto.getStudyId());
 
+        studyService.delete(dto);
+
+        log.info("스터디 삭제 완료");
+        return RsData.of("S-1", "성공");
+    }
 }

@@ -69,12 +69,13 @@ class SnapshotService_updateTest extends SnapshotServiceMock {
         for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
             updateSnapshot(study, dayOfWeek);
 
-        String dayOfWeek1 = snapshots.get(0).getDayOfWeek();
+        String dayOfWeek1 = snapshots.get(6).getDayOfWeek();
         String yesterday = createDay(-1);
         assertThat(dayOfWeek1).isEqualTo(yesterday);
 
         updateSnapshot(study, 0);
-        String dayOfWeek2 = snapshots.get(0).getDayOfWeek();
+
+        String dayOfWeek2 = snapshots.get(6).getDayOfWeek();
         String today = createDay(0);
         assertThat(dayOfWeek2).isEqualTo(today);
         assertThat(snapshots.size()).isEqualTo(7);

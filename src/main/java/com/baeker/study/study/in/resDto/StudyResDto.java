@@ -29,7 +29,7 @@ public class StudyResDto {
     @Schema(example = "5")
     private Integer studyMember;
     @Schema(example = "10")
-    private Integer xp;
+    private double xp;
     @Schema(example = "1")
     int bronze;
     @Schema(example = "1")
@@ -68,7 +68,7 @@ public class StudyResDto {
     }
 
     @QueryProjection
-    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Long studyMember, Integer ranking) {
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, double xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Long studyMember, Integer ranking) {
         this.id = id;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -89,7 +89,7 @@ public class StudyResDto {
     }
 
     @QueryProjection
-    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, Integer xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Integer ranking) {
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, double xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Integer ranking) {
         this.id = id;
         this.createDate = createDate;
         this.modifyDate = modifyDate;

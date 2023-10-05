@@ -36,7 +36,7 @@ public class StudySnapshot extends ScoreBase {
                 .platinum(dto.getPlatinum())
                 .build();
 
-        study.getSnapshots().add(0, snapshot);
+        study.getSnapshots().add(snapshot);
         return snapshot;
     }
 

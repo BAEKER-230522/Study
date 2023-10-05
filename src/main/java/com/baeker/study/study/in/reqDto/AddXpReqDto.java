@@ -9,5 +9,5 @@ public class AddXpReqDto {
     @Schema(example = "1")
     private Long id;
     @Schema(example = "10")
-    private Integer xp;
+    private double xp;
 }
