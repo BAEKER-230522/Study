@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.PENDING;
-import static com.baeker.study.testUtil.global.CreateDomain.createMyStudy;
+import static com.baeker.study.testUtil.global.unit.CreateDomain.createMyStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("스터디원 강퇴")

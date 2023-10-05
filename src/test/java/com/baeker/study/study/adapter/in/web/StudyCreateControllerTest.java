@@ -2,6 +2,8 @@ package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.testUtil.adapter.web.StudyCreateControllerMock;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,8 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.baeker.study.testUtil.global.JsonMapper.toJson;
-import static com.baeker.study.testUtil.global.MockMvcRequest.postReq;
+import static com.baeker.study.testUtil.global.integration.MockMvcRequest.postReq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(StudyCreateController.class)
 class StudyCreateControllerTest extends StudyCreateControllerMock {
 
-    @Autowired
-    MockMvc mvc;
+    @Autowired MockMvc mvc;
+    @Autowired ObjectMapper mapper;
 
     @Value("${custom.mapping.study.web}")
     String mapping;
@@ -46,13 +47,10 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
                 reqDto
         );
 
-        result.andExpect(
-                status().is2xxSuccessful()
-        ).andExpect(
-                jsonPath("studyId").value(1L)
-        ).andExpect(
-                jsonPath("myStudyId").value(1L)
-        );
+        result
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("studyId").value(1L))
+                .andExpect(jsonPath("myStudyId").value(1L));
     }
 
     @Test
@@ -72,8 +70,8 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
         );
     }
 
-    private String createReqDto() {
+    private String createReqDto() throws JsonProcessingException {
         StudyCreateReqDto reqDto = new StudyCreateReqDto();
-        return toJson(reqDto);
+        return mapper.writeValueAsString(reqDto);
     }
 }

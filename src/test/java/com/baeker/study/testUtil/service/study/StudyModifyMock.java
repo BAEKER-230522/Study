@@ -4,7 +4,7 @@ import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.testUtil.global.MemberClientMock;
+import com.baeker.study.testUtil.global.unit.MemberClientUnitMock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-public class StudyModifyMock extends MemberClientMock {
+public class StudyModifyMock extends MemberClientUnitMock {
 
     private StudyRepositoryPort repository =
             Mockito.mock(StudyRepositoryPort.class);

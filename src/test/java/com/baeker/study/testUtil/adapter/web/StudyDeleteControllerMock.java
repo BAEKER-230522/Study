@@ -1,7 +1,7 @@
 package com.baeker.study.testUtil.adapter.web;
 
 import com.baeker.study.study.application.port.in.StudyDeleteUseCase;
-import com.baeker.study.testUtil.global.StudyQueryUseCaseMock;
+import com.baeker.study.testUtil.global.unit.StudyQueryUseCaseMock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.ArgumentMatchers.any;

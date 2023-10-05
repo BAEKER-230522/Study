@@ -2,7 +2,7 @@ package com.baeker.study.myStudy.application.service;
 
 import com.baeker.study.global.exception.NoPermissionException;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.testUtil.global.CreateDomain;
+import com.baeker.study.testUtil.global.unit.CreateDomain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.baeker.study.testUtil.global.CreateDomain.createStudy;
+import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("snapshot 최신화 단위 테스트")

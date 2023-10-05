@@ -1,9 +1,9 @@
-package com.baeker.study.testUtil.global;
+package com.baeker.study.testUtil.global.unit;
 
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static com.baeker.study.testUtil.global.CreateDomain.createStudy;
+import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

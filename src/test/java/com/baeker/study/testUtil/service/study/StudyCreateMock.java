@@ -4,14 +4,14 @@ import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
 import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.testUtil.global.MemberClientMock;
+import com.baeker.study.testUtil.global.unit.MemberClientUnitMock;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-public class StudyCreateMock extends MemberClientMock {
+public class StudyCreateMock extends MemberClientUnitMock {
 
     private StudyRepositoryPort repository =
             Mockito.mock(StudyRepositoryPort.class);

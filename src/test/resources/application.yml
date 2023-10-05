@@ -14,6 +14,7 @@ custom:
 
   jwt:
     secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
+    test: ENC(w/b3otCw2/s8reSGGuEynBQgtFBS/DpTWysLkC7rRJZPUBqczCNCCO/zWNzAIbObr9PMBzLITMeIeNJYdUGJKUcDB3t1gYpu3WY6e2soyCKxeO6VttVdKeJTDbfwQPO8Vjz6NA2GK4u0M5Ifx5+f4U3L2wxoHoYX8+GlGd8NoGSKin9nK7RVSDQofT2PpOi8SGx8wc3xIg987JxJYgLLEMiOrqeC3OLcp6iXRwCeWakk4rN7t+TN4Po+8xx+mdiu1ReJTn8yEVNjFTNWJd+l/DwFANauebWpOmvta1e0GXJ2uFQPv2IYwg==)
 
 
 spring:

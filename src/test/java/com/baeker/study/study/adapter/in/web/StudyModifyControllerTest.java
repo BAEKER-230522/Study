@@ -3,6 +3,8 @@ package com.baeker.study.study.adapter.in.web;
 import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.testUtil.adapter.web.StudyModifyControllerMock;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.baeker.study.testUtil.global.JsonMapper.toJson;
-import static com.baeker.study.testUtil.global.MockMvcRequest.patchReq;
+import static com.baeker.study.testUtil.global.integration.MockMvcRequest.patchReq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(StudyModifyController.class)
 class StudyModifyControllerTest extends StudyModifyControllerMock {
 
-    @Autowired
-    MockMvc mvc;
+    @Autowired MockMvc mvc;
+    @Autowired ObjectMapper mapper;
 
     @Value("${custom.mapping.study.web}")
     String mapping;
@@ -57,10 +58,10 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         );
     }
 
-    private String infoReqDto(Long studyId) {
+    private String infoReqDto(Long studyId) throws JsonProcessingException {
         StudyModifyReqDto dto = new StudyModifyReqDto();
         dto.setStudyId(studyId);
-        return toJson(dto);
+        return mapper.writeValueAsString(dto);
     }
 
     @Test
@@ -84,10 +85,10 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         );
     }
 
-    private String leaderReqDto(Long studyId, String newLeaderId) {
+    private String leaderReqDto(Long studyId, String newLeaderId) throws JsonProcessingException {
         UpdateLeaderReqDto dto = new UpdateLeaderReqDto();
         dto.setStudyId(studyId);
         dto.setNewLeader(Long.valueOf(newLeaderId));
-        return toJson(dto);
+        return mapper.writeValueAsString(dto);
     }
 }

@@ -1,4 +1,4 @@
-package com.baeker.study.testUtil.global;
+package com.baeker.study.testUtil.global.integration;
 
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;

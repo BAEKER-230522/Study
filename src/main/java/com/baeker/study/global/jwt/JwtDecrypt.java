@@ -54,6 +54,7 @@ public class JwtDecrypt {
 
     public Long getMemberId(String token) {
         Map<String, Object> claims = getClaims(token);
-        return (long) claims.get("id");
+        Integer memberId = (Integer) claims.get("id");
+        return memberId.longValue();
     }
 }

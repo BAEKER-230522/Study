@@ -1,16 +1,17 @@
-package com.baeker.study.testUtil.global;
+package com.baeker.study.testUtil.global.integration;
 
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
-import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class MemberClientMock {
-    private MemberClient memberClient =
-            Mockito.mock(MemberClient.class);
+public class MemberClientIntegrationMock {
+
+    @MockBean
+    private MemberClient memberClient;
 
     public void updateMyStudyMocking() {
         when(memberClient.updateMyStudy(any())).thenReturn(
