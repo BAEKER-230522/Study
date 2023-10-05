@@ -43,7 +43,7 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
     void no1() throws Exception {
         String memberId = "1";
         Long studyId = 1L;
-        String reqDto = infoReqDto(studyId);
+        StudyModifyReqDto reqDto = infoReqDto(studyId);
 
         ResultActions result = patchReq(mvc,
                 mapping + "/v2/info",
@@ -58,10 +58,10 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         );
     }
 
-    private String infoReqDto(Long studyId) throws JsonProcessingException {
+    private StudyModifyReqDto infoReqDto(Long studyId) throws JsonProcessingException {
         StudyModifyReqDto dto = new StudyModifyReqDto();
         dto.setStudyId(studyId);
-        return mapper.writeValueAsString(dto);
+        return dto;
     }
 
     @Test
@@ -70,7 +70,7 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         String memberId = "1";
         String newLeaderId = "2";
         Long studyId = 1L;
-        String reqDto = leaderReqDto(studyId, newLeaderId);
+        UpdateLeaderReqDto reqDto = leaderReqDto(studyId, newLeaderId);
 
         ResultActions result = patchReq(mvc,
                 mapping + "/v2/leader",
@@ -85,10 +85,10 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         );
     }
 
-    private String leaderReqDto(Long studyId, String newLeaderId) throws JsonProcessingException {
+    private UpdateLeaderReqDto leaderReqDto(Long studyId, String newLeaderId) throws JsonProcessingException {
         UpdateLeaderReqDto dto = new UpdateLeaderReqDto();
         dto.setStudyId(studyId);
         dto.setNewLeader(Long.valueOf(newLeaderId));
-        return mapper.writeValueAsString(dto);
+        return dto;
     }
 }

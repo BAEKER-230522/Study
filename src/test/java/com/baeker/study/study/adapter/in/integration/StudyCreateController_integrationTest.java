@@ -4,9 +4,6 @@ import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,12 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class StudyCreateController_integrationTest extends MemberClientIntegrationMock {
 
-    @Autowired
-    MockMvc mvc;
-    @Autowired
-    ObjectMapper mapper;
-    @Autowired
-    StudyQueryUseCase studyQueryUseCase;
+    @Autowired MockMvc mvc;
+    @Autowired StudyQueryUseCase studyQueryUseCase;
 
     @Value("${custom.mapping.study.web}")
     String mapping;
@@ -51,7 +44,7 @@ class StudyCreateController_integrationTest extends MemberClientIntegrationMock 
     @Test
     @DisplayName("스터디 생성 api")
     void no1() throws Exception {
-        String reqDto = createReqDto("스터디", "하이", 10);
+        StudyCreateReqDto reqDto = createReqDto("스터디", "하이", 10);
 
         ResultActions result = postReq(mvc,
                 mapping + "/v2/study", jwt, reqDto
@@ -70,11 +63,7 @@ class StudyCreateController_integrationTest extends MemberClientIntegrationMock 
         assertThat(study.getSnapshots().size()).isEqualTo(7);
     }
 
-    private String createReqDto(String name, String about, Integer capacity) throws JsonProcessingException {
-        StudyCreateReqDto reqDto = new StudyCreateReqDto();
-        reqDto.setName(name);
-        reqDto.setAbout(about);
-        reqDto.setCapacity(capacity);
-        return mapper.writeValueAsString(reqDto);
+    private StudyCreateReqDto createReqDto(String name, String about, Integer capacity) {
+       return new StudyCreateReqDto(name, about, capacity);
     }
 }
