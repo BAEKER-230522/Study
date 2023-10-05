@@ -50,7 +50,7 @@ public class SnapshotService implements SnapshotUseCase {
         List<StudySnapshot> snapshots = study.getSnapshots();
 
         if (snapshots.size() >= 8) {
-            StudySnapshot overSnapshot = snapshots.get(7);
+            StudySnapshot overSnapshot = snapshots.get(0);
             snapshots.remove(overSnapshot);
             repository.delete(overSnapshot);
         }

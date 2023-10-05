@@ -55,30 +55,33 @@ class SnapshotService_updateTest extends SnapshotServiceMock {
         assertThat(snapshotSize).isEqualTo(7);
     }
 
-    private void updateSnapshot(Study study, int addDate) {
-        BaekjoonDto dto = new BaekjoonDto(study);
-        snapshotService.updateSnapshot(study, dto, addDate);
-    }
-
     @Test
     @DisplayName("8번째 스냅샷이 추가될 경우")
     void no3() {
         Study study = createStudy(1L, 1L, "스터디");
         List<StudySnapshot> snapshots = study.getSnapshots();
+        String yesterday = createDay(-1);
+        String today = createDay(0);
+        String tomorrow = createDay(1);
 
         for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
             updateSnapshot(study, dayOfWeek);
 
-        String dayOfWeek1 = snapshots.get(6).getDayOfWeek();
-        String yesterday = createDay(-1);
-        assertThat(dayOfWeek1).isEqualTo(yesterday);
+        String findYesterday = snapshots.get(6).getDayOfWeek();
+        assertThat(findYesterday).isEqualTo(yesterday);
 
         updateSnapshot(study, 0);
 
-        String dayOfWeek2 = snapshots.get(6).getDayOfWeek();
-        String today = createDay(0);
-        assertThat(dayOfWeek2).isEqualTo(today);
+        String findToday = snapshots.get(6).getDayOfWeek();
+        String findTomorrow = snapshots.get(0).getDayOfWeek();
+        assertThat(findToday).isEqualTo(today);
+        assertThat(findTomorrow).isEqualTo(tomorrow);
         assertThat(snapshots.size()).isEqualTo(7);
+    }
+
+    private void updateSnapshot(Study study, int addDate) {
+        BaekjoonDto dto = new BaekjoonDto(study);
+        snapshotService.updateSnapshot(study, dto, addDate);
     }
 
     private String createDay(int addDate) {
