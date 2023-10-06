@@ -1,6 +1,6 @@
 package com.baeker.study.study.application.service;
 
-import com.baeker.study.global.exception.NoPermissionException;
+import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
 import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
@@ -10,7 +10,6 @@ import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPo
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.resDto.CreateResDto;
-import com.baeker.study.study.in.resDto.MemberResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

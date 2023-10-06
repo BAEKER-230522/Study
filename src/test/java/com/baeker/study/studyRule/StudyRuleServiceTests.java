@@ -1,6 +1,6 @@
 package com.baeker.study.studyRule;
 
-import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;

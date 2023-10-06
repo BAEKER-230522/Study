@@ -1,6 +1,6 @@
 package com.baeker.study.myStudy.application.service;
 
-import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyQueryRepositoryPort;

@@ -1,6 +1,6 @@
 package com.baeker.study.testUtil.global.unit;
 
-import com.baeker.study.global.exception.InvalidJwtException;
+import com.baeker.study.global.exception.jwt.InvalidJwtException;
 import com.baeker.study.global.jwt.JwtDecrypt;
 import org.springframework.boot.test.mock.mockito.MockBean;
 

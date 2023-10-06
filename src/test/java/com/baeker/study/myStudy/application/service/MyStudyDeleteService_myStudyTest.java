@@ -1,6 +1,6 @@
 package com.baeker.study.myStudy.application.service;
 
-import com.baeker.study.global.exception.NoPermissionException;
+import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.testUtil.service.myStudy.MyStudyDeleteMock;
 import org.junit.jupiter.api.BeforeEach;

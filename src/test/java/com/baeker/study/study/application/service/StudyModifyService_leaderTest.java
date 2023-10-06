@@ -1,7 +1,7 @@
 package com.baeker.study.study.application.service;
 
-import com.baeker.study.global.exception.NoPermissionException;
-import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.service.NoPermissionException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;

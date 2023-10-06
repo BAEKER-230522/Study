@@ -1,6 +1,6 @@
 package com.baeker.study.study.application.service;
 
-import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
@@ -9,7 +9,6 @@ import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyQueryRepositoryPort;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.domain.entity.StudySnapshot;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import lombok.RequiredArgsConstructor;
@@ -53,12 +52,12 @@ public class StudyQueryService implements StudyQueryUseCase {
 
     @Override
     public List<StudyResDto> all() {
-        List<Study> all = repository.findAll();
+        List<Study> studies = repository.findAll();
 
-        if (all().size() == 0)
+        if (studies.size() == 0)
             throw new NotFoundException("Study가 존재하지 않습니다.");
 
-        return toStudyDtoList(all);
+        return toStudyDtoList(studies);
     }
 
     private List<StudyResDto> toStudyDtoList(List<Study> all) {

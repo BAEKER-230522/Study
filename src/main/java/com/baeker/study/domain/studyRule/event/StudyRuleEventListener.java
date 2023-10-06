@@ -1,6 +1,6 @@
 package com.baeker.study.domain.studyRule.event;
 
-import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

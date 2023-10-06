@@ -10,6 +10,8 @@ custom:
   jpa:
     ddl-auto: update
 
+
+
 spring:
   config:
     activate:

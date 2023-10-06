@@ -1,6 +1,6 @@
 package com.baeker.study.study.application.service;
 
-import com.baeker.study.global.exception.NoPermissionException;
+import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.myStudy.application.port.in.MyStudyDeleteUseCase;
 import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.in.StudyDeleteUseCase;

@@ -27,7 +27,8 @@ public class MyStudyModifyController {
     @PatchMapping("/v2/accept/{studyId}")
     public ResponseEntity accept(
             @RequestHeader("Authorization") String token,
-            @PathVariable Long studyId
+            @PathVariable Long studyId,
+            @PathVariable AcceptReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
         MyStudy myStudy = getMyStudy(studyId, memberId);

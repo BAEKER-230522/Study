@@ -1,6 +1,6 @@
 package com.baeker.study.global.jwt;
 
-import com.baeker.study.global.exception.InvalidJwtException;
+import com.baeker.study.global.exception.jwt.InvalidJwtException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.security.Keys;

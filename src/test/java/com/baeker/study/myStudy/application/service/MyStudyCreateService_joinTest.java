@@ -1,8 +1,8 @@
 package com.baeker.study.myStudy.application.service;
 
-import com.baeker.study.global.exception.InvalidDuplicateException;
-import com.baeker.study.global.exception.NoPermissionException;
-import com.baeker.study.global.exception.OverLimitedException;
+import com.baeker.study.global.exception.service.InvalidDuplicateException;
+import com.baeker.study.global.exception.service.NoPermissionException;
+import com.baeker.study.global.exception.service.OverLimitedException;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.testUtil.service.myStudy.MyStudyCreateMock;
 import org.junit.jupiter.api.BeforeEach;

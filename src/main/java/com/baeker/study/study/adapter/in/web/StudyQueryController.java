@@ -22,7 +22,7 @@ public class StudyQueryController {
     private final StudyQueryUseCase studyQueryUseCase;
 
     @Operation(summary = "study id 로 study 조회")
-    @GetMapping("/v2/{studyId}")
+    @GetMapping("/v2/id/{studyId}")
     public ResponseEntity<StudyResDto> findById(
             @PathVariable Long studyId
     ) {
@@ -32,7 +32,7 @@ public class StudyQueryController {
     }
 
     @Operation(summary = "study 이름으로 study 조회")
-    @GetMapping("/v2/{name}")
+    @GetMapping("/v2/name/{name}")
     public ResponseEntity<StudyResDto> findByName(
             @PathVariable String name
     ) {
@@ -54,7 +54,7 @@ public class StudyQueryController {
                     " 2 : 가입신청 목록 \n" +
                     " 3 : 초디받은 목록"
     )
-    @GetMapping("/v2/{memberId}")
+    @GetMapping("/v2/study-list/{memberId}")
     public ResponseEntity<List<StudyResDto>> findByMemberId(
             @PathVariable Long memberId,
             @RequestParam int status
@@ -94,7 +94,7 @@ public class StudyQueryController {
     }
 
     @Operation(summary = "검색어로 study 목록 조회")
-    @GetMapping("v1/{input}")
+    @GetMapping("v2/input/{input}")
     public ResponseEntity<List<StudyResDto>> findByInput(
             @PathVariable String input,
             @RequestParam(defaultValue = "0") int page,

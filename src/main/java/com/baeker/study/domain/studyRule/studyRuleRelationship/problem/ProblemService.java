@@ -1,6 +1,6 @@
 package com.baeker.study.domain.studyRule.studyRuleRelationship.problem;
 
-import com.baeker.study.global.exception.NotFoundException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
