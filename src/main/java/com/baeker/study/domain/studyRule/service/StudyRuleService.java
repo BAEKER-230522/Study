@@ -294,6 +294,9 @@ public class StudyRuleService {
 //        }
 //    }
 
+    public List<StudyRule> getStudyRuleFromStudy(Long studyId) {
+        return studyRuleRepository.findStudyRuleFromStudy(studyId);
+    }
 
 
     public List<StudyRule> getStudyRuleActiveFromStudy(Long studyId) {
