@@ -1,11 +1,4 @@
 custom:
-  server: localhost
-  eureka:
-    server: ${custom.server}:8761
-
-  feign:
-    member: http://localhost:8081/api/member
-
   mapping:
     study:
       web: /web/study
@@ -16,7 +9,21 @@ custom:
   jwt:
     secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
 
-#  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
+  feign:
+    member: http://localhost:8081/api/member
+
+  db:
+    url: jdbc:mysql://127.0.0.1:3306/bk__study?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    usr: ENC(MrlF9UZUaHufCgWLRE3ipQ==)
+    pw: ENC(dhw6nRBS+50xHhqPVFnZdw==)
+
+  jpa:
+    ddl-auto: create
+
+  kafka:
+    server: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
+
+
 
 server:
   port: 8082
@@ -48,20 +55,20 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/bk__study?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: ENC(MrlF9UZUaHufCgWLRE3ipQ==)
-    password: ENC(dhw6nRBS+50xHhqPVFnZdw==)
+    url: ${custom.db.url}
+    username: ${custom.db.usr}
+    password: ${custom.db.pw}
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: ${custom.jpa.ddl-auto}
     properties:
       hibernate:
         format_sql: true
         show_sql: true
 
 #  kafka:
-#    bootstrap-servers: ${custom.kafka}:9092
+#    bootstrap-servers: ${custom.kafka.server}:9092
 #    consumer:
 #      group-id: study
 #      auto-offset-reset: earliest
@@ -93,17 +100,10 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     password:
+
 ---
 
 spring:
   config:
     activate:
       on-profile: dev
-
-eureka:
-  instance:
-    instance-id: ${custom.server}:${server.port}
-    preferIpAddress: true
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
