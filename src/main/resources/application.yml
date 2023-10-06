@@ -1,15 +1,11 @@
 custom:
   server: localhost
-<<<<<<< HEAD
   eureka:
     server: ${custom.server}:8761
-=======
->>>>>>> develop
 
   feign:
     member: http://localhost:8081/api/member
 
-<<<<<<< HEAD
   mapping:
     study:
       web: /web/study
@@ -20,8 +16,6 @@ custom:
   jwt:
     secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
 
-=======
->>>>>>> develop
 #  kafka: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
 
 server:
@@ -84,14 +78,11 @@ spring:
 #    studyRule: "studyRule"
 #    solved-member: "solved-member"
 #    name: "study"
-<<<<<<< HEAD
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://${custom.eureka.server}/eureka/
-=======
->>>>>>> develop
 
 logging.level:
   org.hibernate:
@@ -103,7 +94,6 @@ jasypt:
     bean: jasyptStringEncryptor
     password:
 ---
-<<<<<<< HEAD
 
 spring:
   config:
@@ -117,11 +107,3 @@ eureka:
   client:
     registerWithEureka: true
     fetchRegistry: true
-=======
-
-spring:
-  config:
-    activate:
-      on-profile: dev
-
->>>>>>> develop

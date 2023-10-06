@@ -32,7 +32,7 @@ class StudyCreateController_integrationTest extends MemberClientIntegrationMock 
     @Value("${custom.mapping.study.web}")
     String mapping;
 
-    @Value("${custom.jwt.test}")
+    @Value("${custom.jwt.test1}")
     String jwt;
 
     @BeforeEach
