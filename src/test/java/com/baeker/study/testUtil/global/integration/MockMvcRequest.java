@@ -67,8 +67,7 @@ public class MockMvcRequest {
         MvcResult mvcResult = result.andReturn();
 
         return mapper.readValue(
-                mvcResult.getResponse().getContentAsString(),
-                new TypeReference<Object>() {}
+                mvcResult.getResponse().getContentAsString(), new TypeReference<Object>() {}
         );
     }
 

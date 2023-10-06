@@ -4,6 +4,7 @@ import com.baeker.study.global.jwt.JwtDecrypt;
 import com.baeker.study.myStudy.application.port.in.MyStudyModifyUseCase;
 import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.study.adapter.in.reqDto.AcceptReqDto;
 import com.baeker.study.study.adapter.in.reqDto.ModifyMsgReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
@@ -24,14 +25,13 @@ public class MyStudyModifyController {
     private final JwtDecrypt decrypt;
 
     @Operation(summary = "가입 요청, 초대 승인")
-    @PatchMapping("/v2/accept/{studyId}")
+    @PatchMapping("/v2/accept")
     public ResponseEntity accept(
             @RequestHeader("Authorization") String token,
-            @PathVariable Long studyId,
-            @PathVariable AcceptReqDto dto
+            @RequestBody AcceptReqDto dto
     ) {
         Long memberId = decrypt.getMemberId(token);
-        MyStudy myStudy = getMyStudy(studyId, memberId);
+        MyStudy myStudy = getMyStudy(dto.getStudyId(), dto.getTargetMemberId());
         myStudyModifyUseCase.accept(memberId, myStudy);
         return ResponseEntity.noContent().build();
     }

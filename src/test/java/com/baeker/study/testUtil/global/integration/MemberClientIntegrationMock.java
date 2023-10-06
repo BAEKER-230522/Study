@@ -32,12 +32,12 @@ public class MemberClientIntegrationMock {
     }
 
     public void getMemberListMocking() {
-        List<MemberResDto> dtos = new ArrayList<>();
-
         when(memberClient.findMemberList(any()))
                 .thenAnswer(invocation -> {
                     MembersReqDto dto = (MembersReqDto) invocation.getArgument(0);
                     List<Long> members = dto.getMembers();
+
+                    List<MemberResDto> dtos = new ArrayList<>();
 
                     for (Long memberId : members) {
                         MemberResDto resDto = new MemberResDto();

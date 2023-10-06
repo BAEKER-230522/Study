@@ -4,7 +4,10 @@ import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
+import com.baeker.study.study.in.resDto.CreateResDto;
+import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.baeker.study.testUtil.global.integration.CreateRow.addMemberToStudy;
-import static com.baeker.study.testUtil.global.integration.CreateRow.createStudy;
+import static com.baeker.study.testUtil.global.integration.CreateRow.*;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.patchReq;
+import static com.baeker.study.testUtil.global.integration.MockMvcRequest.toResDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,20 +42,21 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
     @Value("${custom.jwt.test1}")
     String jwt1;
 
-    @Value("${custom.jwt.test3}")
-    String jwt3;
+    @Value("${custom.jwt.test2}")
+    String jwt2;
 
     @BeforeEach
     void setup() throws Exception {
         baekjoonConnectCheckMocking();
-        createStudy(mvc, 1, 10, jwt1);
-        addMemberToStudy(mvc, 1L, jwt3);
+        getMemberListMocking();
     }
 
     @Test
     @DisplayName("스터디 기본 정보 수정")
     void no1() throws Exception {
-        Study study = studyQueryUseCase.byId(1L);
+        Long studyId = createStudy(mvc, 1, 10, jwt1).getStudyId();
+        Study study = studyQueryUseCase.byId(studyId);
+
         StudyModifyReqDto reqDto = createModifyReqDto(study.getId(), "이름 수정", "소개 수정", 3);
 
         ResultActions result = patchReq(mvc,
@@ -70,14 +74,21 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
     @Test
     @DisplayName("스터디장 위임 api ")
     void no2() throws Exception {
-        Study study = studyQueryUseCase.byId(1L);
-        UpdateLeaderReqDto reqDto = createLeaderReqDto(study.getId(), 3L);
+        Long studyId = createStudy(mvc, 1, 10, jwt1).getStudyId();
+        joinStudy(mvc, studyId, jwt2);
+        accept(mvc, studyId, 2L, jwt1);
+
+        Study study = studyQueryUseCase.byId(studyId);
+        UpdateLeaderReqDto reqDto = createLeaderReqDto(study.getId(), 2L);
+
 
         ResultActions result = patchReq(mvc,
-                mapping + "/v2/leader", jwt1, reqDto
-        );
+                mapping + "/v2/leader", jwt1, reqDto);
+        StudyResDto resDto = (StudyResDto) toResDto(result);
+
 
         result.andExpect(status().is2xxSuccessful());
+        assertThat(resDto.getLeader()).isEqualTo(2L);
     }
 
     private StudyModifyReqDto createModifyReqDto(Long studyId, String name, String about, int capacity) {

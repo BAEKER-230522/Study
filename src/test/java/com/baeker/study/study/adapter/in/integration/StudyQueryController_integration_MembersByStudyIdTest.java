@@ -18,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.baeker.study.testUtil.global.integration.CreateRow.addMemberToStudy;
-import static com.baeker.study.testUtil.global.integration.CreateRow.createStudy;
+import static com.baeker.study.testUtil.global.integration.CreateRow.*;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.getReq;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.toResDto;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,13 +49,7 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
         baekjoonConnectCheckMocking();
         updateMyStudyMocking();
         getMemberListMocking();
-        createStudy(mvc, 1, 10, jwt1);
-        createStudy(mvc, 2, 10, jwt2);
-        createStudy(mvc, 3, 10, jwt3);
-
-        addMemberToStudy(mvc, 1L, jwt2);
-        addMemberToStudy(mvc, 1L, jwt3);
-        addMemberToStudy(mvc, 2L, jwt1);
+        dataSetup();
     }
 
     @Test
@@ -69,7 +62,22 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
         Assertions.assertThat(study1.size()).isEqualTo(3);
         Assertions.assertThat(study2.size()).isEqualTo(2);
         Assertions.assertThat(study3.size()).isEqualTo(1);
+    }
 
+
+    private void dataSetup() throws Exception {
+        createStudy(mvc, 1, 10, jwt1);
+        createStudy(mvc, 2, 10, jwt2);
+        createStudy(mvc, 3, 10, jwt3);
+
+        joinStudy(mvc, 1L, jwt2);
+        accept(mvc, 1L, 2L, jwt1);
+
+        joinStudy(mvc, 1L, jwt3);
+        accept(mvc, 1L, 3L, jwt1);
+
+        joinStudy(mvc, 2L, jwt1);
+        accept(mvc, 2L, 1L, jwt2);
     }
 
     private List<MemberResDto> requestApi(Long studyId) throws Exception {
