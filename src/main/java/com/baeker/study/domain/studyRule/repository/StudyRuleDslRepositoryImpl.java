@@ -76,6 +76,17 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
                 .where(notYetSendMail())
                 .fetch();
     }
+
+    @Override
+    public List<StudyRule> findStudyRuleFromStudy(Long studyId) {
+        // studyId -> StudyRule 조회
+        return jpaQueryFactory.selectFrom(studyRule)
+                .leftJoin(studyRule.study, study)
+                .fetchJoin()
+                .where(study.id.eq(studyId))
+                .fetch();
+    }
+
     private BooleanExpression notYetSendMail() {
         return studyRule.mission.eq(Mission.DONE)
                 .and(studyRule.sendMail.eq(false))
