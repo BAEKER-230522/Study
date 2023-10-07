@@ -17,6 +17,7 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.Pro
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.resDto.MemberResDto;
@@ -351,6 +352,7 @@ public class StudyRuleService {
         List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
         String studyName = studyRule.getName();
         for (MyStudy myStudy : myStudies) {
+            if (!myStudy.getStatus().equals(StudyStatus.MEMBER)) continue;
             Long memberId = myStudy.getMember();
             RsData<MemberResDto> member = memberClient.findById(memberId);
             emailService.mailSend(new MailDto(member.getData().getEmail(),
