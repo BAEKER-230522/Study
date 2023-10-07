@@ -3,6 +3,7 @@ package com.baeker.study.study.in.resDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

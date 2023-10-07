@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.baeker.study.testUtil.global.integration.CreateRow.*;
-import static com.baeker.study.testUtil.global.integration.MockMvcRequest.getReq;
-import static com.baeker.study.testUtil.global.integration.MockMvcRequest.toResDto;
+import static com.baeker.study.testUtil.global.integration.MockMvcRequest.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("스터디에 가입한 회원 목록 조회 통합 테스트")
@@ -84,7 +83,7 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
         ResultActions result = getReq(mvc,
                 mapping + "/v2/member-list/{studyId}",
                 studyId);
-        List<MemberResDto> resDto = (List<MemberResDto>) toResDto(result);
+        List<MemberResDto> resDto =  toList(result, MemberResDto.class);
 
         result.andExpect(status().is2xxSuccessful());
         return resDto;

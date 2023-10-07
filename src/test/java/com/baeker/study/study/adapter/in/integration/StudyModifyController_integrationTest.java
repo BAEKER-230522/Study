@@ -4,10 +4,8 @@ import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.resDto.CreateResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +44,7 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
     String jwt2;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() {
         baekjoonConnectCheckMocking();
         getMemberListMocking();
     }
@@ -59,9 +57,11 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
 
         StudyModifyReqDto reqDto = createModifyReqDto(study.getId(), "이름 수정", "소개 수정", 3);
 
+
         ResultActions result = patchReq(mvc,
                 mapping + "/v2/info", jwt1, reqDto
         );
+
 
         result.andExpect(status().is2xxSuccessful());
 
@@ -84,7 +84,7 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
 
         ResultActions result = patchReq(mvc,
                 mapping + "/v2/leader", jwt1, reqDto);
-        StudyResDto resDto = (StudyResDto) toResDto(result);
+        StudyResDto resDto = toResDto(result, StudyResDto.class);
 
 
         result.andExpect(status().is2xxSuccessful());

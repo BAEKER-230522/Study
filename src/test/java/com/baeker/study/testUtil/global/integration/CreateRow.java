@@ -17,7 +17,7 @@ public class CreateRow {
         StudyCreateReqDto reqDto = new StudyCreateReqDto("study" + name, "", capacity);
         ResultActions result = postReq(mvc, "/web/study/v2/study", jwt, reqDto);
 
-        return (CreateResDto) toResDto(result);
+        return toResDto(result, CreateResDto.class);
     }
 
     public static void accept(MockMvc mvc, Long studyId, Long targetId, String jwt) throws Exception {

@@ -49,6 +49,7 @@ spring:
     username: sa
     password:
 
+
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor

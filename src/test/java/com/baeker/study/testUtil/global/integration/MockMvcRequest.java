@@ -3,17 +3,22 @@ package com.baeker.study.testUtil.global.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-public class MockMvcRequest {
+public class MockMvcRequest<T> {
+
+    private T data;
 
     public static ResultActions postReq(MockMvc mvc, String url, String jwt, Object reqDto) throws Exception {
         String dto = toJsonString(reqDto);
@@ -62,13 +67,22 @@ public class MockMvcRequest {
         ).andDo(print());
     }
 
-    public static Object toResDto(ResultActions result) throws UnsupportedEncodingException, JsonProcessingException {
+    public static <T> T toResDto(ResultActions result, Class<T> data) throws UnsupportedEncodingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         MvcResult mvcResult = result.andReturn();
 
-        return mapper.readValue(
-                mvcResult.getResponse().getContentAsString(), new TypeReference<Object>() {}
-        );
+        return mapper.registerModule(new JavaTimeModule()).readValue(
+                mvcResult.getResponse().getContentAsString(), data);
+    }
+
+    public static <T> List<T> toList(ResultActions result, Class<T> data) throws UnsupportedEncodingException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        MvcResult mvcResult = result.andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        CollectionType dataType = mapper.getTypeFactory().constructCollectionType(List.class, data);
+
+        return mapper.readValue(content, dataType);
     }
 
     private static String toJsonString(Object reqDto) throws JsonProcessingException {
