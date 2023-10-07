@@ -58,7 +58,7 @@ public class MyStudyCreateService implements MyStudyCreateUseCase {
 
         MyStudy myStudy = repository.save(
                 MyStudy.inviteStudy(
-                        memberId,
+                        dto.getInvitee(),
                         study,
                         dto.getMsg()
                 ));

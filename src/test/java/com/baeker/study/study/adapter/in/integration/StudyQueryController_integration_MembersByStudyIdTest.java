@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,18 +30,6 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
 
     @Autowired MockMvc mvc;
     @Autowired StudyQueryUseCase studyQueryUseCase;
-
-    @Value("${custom.mapping.study.web}")
-    String mapping;
-
-    @Value("${custom.jwt.test1}")
-    String jwt1;
-
-    @Value("${custom.jwt.test2}")
-    String jwt2;
-
-    @Value("${custom.jwt.test3}")
-    String jwt3;
 
     @BeforeEach
     void setup() {
@@ -105,7 +92,7 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
 
     private List<MemberResDto> requestMemberApi(Long studyId) throws Exception {
         ResultActions result = getReq(mvc,
-                mapping + "/v2/member-list/{studyId}",
+                STUDY_URL + "/v2/member-list/{studyId}",
                 studyId);
         List<MemberResDto> resDto =  toList(result, MemberResDto.class);
 
@@ -115,7 +102,7 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
 
     private CandidateResDto RequestCandidateApi(Long studyId) throws Exception{
         ResultActions result = getReq(mvc,
-                mapping + "/v2/candidate-list/{studyId}",
+                STUDY_URL + "/v2/candidate-list/{studyId}",
                 studyId);
         CandidateResDto resDto =  toResDto(result, CandidateResDto.class);
 

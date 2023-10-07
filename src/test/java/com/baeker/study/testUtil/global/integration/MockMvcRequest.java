@@ -66,6 +66,12 @@ public class MockMvcRequest<T> {
         ).andDo(print());
     }
 
+    public static ResultActions getReq(MockMvc mvc, String url, String pathVariable) throws Exception {
+        return mvc.perform(get(url, pathVariable)
+                .contentType(APPLICATION_JSON)
+        ).andDo(print());
+    }
+
     public static <T> T toResDto(ResultActions result, Class<T> data) throws UnsupportedEncodingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         MvcResult mvcResult = result.andReturn();
