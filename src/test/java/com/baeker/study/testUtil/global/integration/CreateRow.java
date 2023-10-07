@@ -1,5 +1,6 @@
 package com.baeker.study.testUtil.global.integration;
 
+import com.baeker.study.myStudy.adapter.in.reqDto.InviteReqDto;
 import com.baeker.study.myStudy.adapter.in.reqDto.JoinReqDto;
 import com.baeker.study.study.adapter.in.reqDto.AcceptReqDto;
 import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
@@ -30,5 +31,13 @@ public class CreateRow {
         dto.setStudyId(studyId);
         dto.setMsg("");
         postReq(mvc, "/web/my-study/v2/join", jwt, dto);
+    }
+
+    public static void inviteStudy(MockMvc mvc, Long studyId, Long invitee, String jwt) throws Exception {
+        InviteReqDto dto = new InviteReqDto();
+        dto.setStudyId(studyId);
+        dto.setInvitee(invitee);
+        dto.setMsg("");
+        postReq(mvc, "/web/my-study/v2/invite", jwt, dto);
     }
 }

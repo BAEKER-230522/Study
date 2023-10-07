@@ -28,5 +28,7 @@ public class CandidateResDto {
     public CandidateResDto(List<MemberResDto> pending, List<MemberResDto> inviting) {
         this.pending = pending;
         this.inviting = inviting;
+        this.pendingSize = pending.size();
+        this.inviteSize = inviting.size();
     }
 }

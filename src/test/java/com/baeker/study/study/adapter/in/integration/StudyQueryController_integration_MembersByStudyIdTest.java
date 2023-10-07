@@ -1,6 +1,7 @@
 package com.baeker.study.study.adapter.in.integration;
 
 
+import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
@@ -61,27 +62,62 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
         addMember(jwt1, study1Id, jwt3, 3L);
         addMember(jwt2, study2Id, jwt1, 1L);
 
-        List<MemberResDto> study1 = requestApi(study1Id);
-        List<MemberResDto> study2 = requestApi(study2Id);
-        List<MemberResDto> study3 = requestApi(study3Id);
+        List<MemberResDto> study1 = requestMemberApi(study1Id);
+        List<MemberResDto> study2 = requestMemberApi(study2Id);
+        List<MemberResDto> study3 = requestMemberApi(study3Id);
 
         Assertions.assertThat(study1.size()).isEqualTo(3);
         Assertions.assertThat(study2.size()).isEqualTo(2);
         Assertions.assertThat(study3.size()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("가입 대기회원 목록 조회 api")
+    void no2() throws Exception {
+        Long study1Id = createStudy(mvc, 1, 10, jwt1).getStudyId();
+        Long study2Id = createStudy(mvc, 2, 10, jwt2).getStudyId();
+        Long study3Id = createStudy(mvc, 3, 10, jwt3).getStudyId();
 
+
+        joinStudy(mvc, study1Id, jwt2);
+        inviteStudy(mvc, study1Id, 3L, jwt1);
+        inviteStudy(mvc, study2Id, 1L, jwt2);
+
+        CandidateResDto study1 =  RequestCandidateApi(study1Id);
+        CandidateResDto study2 =  RequestCandidateApi(study2Id);
+        CandidateResDto study3 =  RequestCandidateApi(study3Id);
+
+
+        Assertions.assertThat(study1.getPendingSize()).isEqualTo(1);
+        Assertions.assertThat(study1.getInviteSize()).isEqualTo(1);
+
+        Assertions.assertThat(study2.getPendingSize()).isEqualTo(0);
+        Assertions.assertThat(study2.getInviteSize()).isEqualTo(1);
+
+        Assertions.assertThat(study3.getPendingSize()).isEqualTo(0);
+        Assertions.assertThat(study3.getInviteSize()).isEqualTo(0);
+    }
 
     private void addMember(String leader, Long studyId, String target, Long targetId) throws Exception {
         joinStudy(mvc, studyId, target);
         accept(mvc, studyId, targetId, leader);
     }
 
-    private List<MemberResDto> requestApi(Long studyId) throws Exception {
+    private List<MemberResDto> requestMemberApi(Long studyId) throws Exception {
         ResultActions result = getReq(mvc,
                 mapping + "/v2/member-list/{studyId}",
                 studyId);
         List<MemberResDto> resDto =  toList(result, MemberResDto.class);
+
+        result.andExpect(status().is2xxSuccessful());
+        return resDto;
+    }
+
+    private CandidateResDto RequestCandidateApi(Long studyId) throws Exception{
+        ResultActions result = getReq(mvc,
+                mapping + "/v2/candidate-list/{studyId}",
+                studyId);
+        CandidateResDto resDto =  toResDto(result, CandidateResDto.class);
 
         result.andExpect(status().is2xxSuccessful());
         return resDto;
