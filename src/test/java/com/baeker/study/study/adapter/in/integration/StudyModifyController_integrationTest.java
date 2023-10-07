@@ -65,7 +65,7 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
 
         result.andExpect(status().is2xxSuccessful());
 
-        study = studyQueryUseCase.byId(1L);
+        study = studyQueryUseCase.byId(study.getId());
         assertThat(study.getName()).isEqualTo("이름 수정");
         assertThat(study.getAbout()).isEqualTo("소개 수정");
         assertThat(study.getCapacity()).isEqualTo(3);

@@ -1,7 +1,6 @@
 package com.baeker.study.testUtil.global.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -71,8 +70,9 @@ public class MockMvcRequest<T> {
         ObjectMapper mapper = new ObjectMapper();
         MvcResult mvcResult = result.andReturn();
 
-        return mapper.registerModule(new JavaTimeModule()).readValue(
-                mvcResult.getResponse().getContentAsString(), data);
+        return mapper
+                .registerModule(new JavaTimeModule())
+                .readValue(mvcResult.getResponse().getContentAsString(), data);
     }
 
     public static <T> List<T> toList(ResultActions result, Class<T> data) throws UnsupportedEncodingException, JsonProcessingException {
@@ -82,7 +82,9 @@ public class MockMvcRequest<T> {
         String content = mvcResult.getResponse().getContentAsString();
         CollectionType dataType = mapper.getTypeFactory().constructCollectionType(List.class, data);
 
-        return mapper.readValue(content, dataType);
+        return mapper
+                .registerModule(new JavaTimeModule())
+                .readValue(content, dataType);
     }
 
     private static String toJsonString(Object reqDto) throws JsonProcessingException {

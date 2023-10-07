@@ -44,19 +44,26 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
     String jwt3;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() {
         baekjoonConnectCheckMocking();
         updateMyStudyMocking();
         getMemberListMocking();
-        dataSetup();
     }
 
     @Test
     @DisplayName("정회원 목록 조회 api")
     void no1() throws Exception {
-        List<MemberResDto> study1 = requestApi(1L);
-        List<MemberResDto> study2 = requestApi(2L);
-        List<MemberResDto> study3 = requestApi(3L);
+        Long study1Id = createStudy(mvc, 1, 10, jwt1).getStudyId();
+        Long study2Id = createStudy(mvc, 2, 10, jwt2).getStudyId();
+        Long study3Id = createStudy(mvc, 3, 10, jwt3).getStudyId();
+
+        addMember(jwt1, study1Id, jwt2, 2L);
+        addMember(jwt1, study1Id, jwt3, 3L);
+        addMember(jwt2, study2Id, jwt1, 1L);
+
+        List<MemberResDto> study1 = requestApi(study1Id);
+        List<MemberResDto> study2 = requestApi(study2Id);
+        List<MemberResDto> study3 = requestApi(study3Id);
 
         Assertions.assertThat(study1.size()).isEqualTo(3);
         Assertions.assertThat(study2.size()).isEqualTo(2);
@@ -64,19 +71,10 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
     }
 
 
-    private void dataSetup() throws Exception {
-        createStudy(mvc, 1, 10, jwt1);
-        createStudy(mvc, 2, 10, jwt2);
-        createStudy(mvc, 3, 10, jwt3);
 
-        joinStudy(mvc, 1L, jwt2);
-        accept(mvc, 1L, 2L, jwt1);
-
-        joinStudy(mvc, 1L, jwt3);
-        accept(mvc, 1L, 3L, jwt1);
-
-        joinStudy(mvc, 2L, jwt1);
-        accept(mvc, 2L, 1L, jwt2);
+    private void addMember(String leader, Long studyId, String target, Long targetId) throws Exception {
+        joinStudy(mvc, studyId, target);
+        accept(mvc, studyId, targetId, leader);
     }
 
     private List<MemberResDto> requestApi(Long studyId) throws Exception {
