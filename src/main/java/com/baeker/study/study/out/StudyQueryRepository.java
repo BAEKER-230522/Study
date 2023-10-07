@@ -51,15 +51,6 @@ public class StudyQueryRepository {
 
     //-- find all order by ranking --//
     public List<StudyResDto> findAllOrderByRanking(int page, int content) {
-
-        Expression<Long> studyMembers = ExpressionUtils.as(
-                JPAExpressions
-                        .select(myStudy.count())
-                        .from(myStudy)
-                        .where(myStudy.study.eq(study).and(myStudy.status.eq(MEMBER))),
-                "studyMember"
-        );
-
         return query
                 .select(new QStudyResDto(
                         study.id,
@@ -76,7 +67,7 @@ public class StudyQueryRepository {
                         study.diamond,
                         study.ruby,
                         study.platinum,
-                        studyMembers,
+                        study.studyMember,
                         study.ranking
                 ))
                 .from(study)
@@ -92,14 +83,6 @@ public class StudyQueryRepository {
 
     //-- find by input --//
     public List<StudyResDto> findByInput(String input, int page, int content) {
-        Expression<Long> studyMembers = ExpressionUtils.as(
-                JPAExpressions
-                        .select(myStudy.count())
-                        .from(myStudy)
-                        .where(myStudy.study.eq(study).and(myStudy.status.eq(MEMBER))),
-                "studyMember"
-        );
-
         return query
                 .select(new QStudyResDto(
                         study.id,
@@ -116,7 +99,7 @@ public class StudyQueryRepository {
                         study.diamond,
                         study.ruby,
                         study.platinum,
-                        studyMembers,
+                        study.studyMember,
                         study.ranking
                 ))
                 .from(study)
