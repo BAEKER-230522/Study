@@ -64,12 +64,12 @@ public class StudyResDto {
         this.ruby = study.getRuby();
         this.platinum = study.getPlatinum();
         this.solvedCount = study.solvedCount();
-        this.studyMember = study.getMyStudies().size();
+        this.studyMember = study.getStudyMember();
         this.ranking = study.getRanking();
     }
 
     @QueryProjection
-    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, double xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Long studyMember, Integer ranking) {
+    public StudyResDto(Long id, LocalDateTime createDate, LocalDateTime modifyDate, String name, String about, Long leader, Integer capacity, double xp, int bronze, int silver, int gold, int diamond, int ruby, int platinum, Integer studyMember, Integer ranking) {
         this.id = id;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -77,7 +77,7 @@ public class StudyResDto {
         this.about = about;
         this.leader = leader;
         this.capacity = capacity;
-        this.studyMember = Math.toIntExact(studyMember);
+        this.studyMember = studyMember;
         this.xp = xp;
         this.bronze = bronze;
         this.silver = silver;

@@ -28,6 +28,7 @@ public class Study extends ScoreBase {
     private String about;
     private Long leader;
     private Integer capacity;
+    private Integer studyMember;
     private double xp;
     private Integer ranking;
 
@@ -65,6 +66,7 @@ public class Study extends ScoreBase {
                 .about(about)
                 .leader(memberId)
                 .capacity(capacity)
+                .studyMember(1)
                 .xp(0)
                 .build();
     }
@@ -110,5 +112,14 @@ public class Study extends ScoreBase {
                 .ruby(this.getRuby() + dto.getRuby())
                 .platinum(this.getPlatinum() + dto.getPlatinum())
                 .build();
+    }
+
+    // 스터디 정회원 추가 //
+    public void addStudyMember() {
+        this.studyMember++;
+    }
+
+    public void removeStudyMember() {
+        this.studyMember--;
     }
 }
