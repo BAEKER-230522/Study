@@ -3,12 +3,14 @@ package com.baeker.study.study.adapter.in.api;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "서버간 통신용 find study api.V2")
 @RestController
 @RequestMapping("${custom.mapping.study.api}")
 @RequiredArgsConstructor

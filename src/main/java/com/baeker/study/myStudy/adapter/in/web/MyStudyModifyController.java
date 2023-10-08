@@ -10,10 +10,12 @@ import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import io.swagger.v3.oas.annotations.Operation;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "modify my study api.V2", description = "나의 스터디 수정 관련 api")
 @RestController
 @RequestMapping("${custom.mapping.my-study.web}")
 @RequiredArgsConstructor

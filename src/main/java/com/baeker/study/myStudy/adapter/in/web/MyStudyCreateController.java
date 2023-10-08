@@ -9,10 +9,12 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "create my study api.V2", description = "나의 스터디 생성 관련 api")
 @RestController
 @RequestMapping("${custom.mapping.my-study.web}")
 @RequiredArgsConstructor

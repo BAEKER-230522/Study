@@ -6,10 +6,12 @@ import com.baeker.study.study.application.port.in.StudyCreateUseCase;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "create study api.V2", description = "스터디 생성 관련 api")
 @RestController
 @RequestMapping("${custom.mapping.study.web}")
 @RequiredArgsConstructor

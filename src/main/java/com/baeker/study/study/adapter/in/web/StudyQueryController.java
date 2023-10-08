@@ -9,13 +9,14 @@ import com.baeker.study.study.in.resDto.SnapshotResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Tag(name = "find study api.V2", description = "스터디 조회 관련 api")
 @RestController
 @RequestMapping("${custom.mapping.study.web}")
 @RequiredArgsConstructor
