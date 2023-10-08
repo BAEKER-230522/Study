@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "delete my study api.V2", description = "나의 스터디 삭제 관련 api")
+@Tag(name = "My Study - 삭제.V2", description = "나의 스터디 삭제 관련 api")
 @RestController
 @RequestMapping("${custom.mapping.my-study.web}")
 @RequiredArgsConstructor

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "서버간 통신용 find study api.V2")
+@Tag(name = "Study - 서버간 조회.V2")
 @RestController
 @RequestMapping("${custom.mapping.study.api}")
 @RequiredArgsConstructor

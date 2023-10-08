@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "서버간 통신용 modify study api.V2")
+@Tag(name = "Study - 서버간 수정.V2")
 @RestController
 @RequestMapping("${custom.mapping.study.api}")
 @RequiredArgsConstructor

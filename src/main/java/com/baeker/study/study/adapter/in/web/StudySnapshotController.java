@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "snapshot api.V2", description = "스터디 스냅샷 관련 api")
+@Tag(name = "Study - 스냅샷.V2")
 @RestController
 @RequestMapping("${custom.mapping.study.web}")
 @RequiredArgsConstructor

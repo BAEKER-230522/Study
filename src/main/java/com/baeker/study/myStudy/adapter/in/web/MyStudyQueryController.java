@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "find my study api.V2", description = "나의 스터디 조회 관련 api")
+@Tag(name = "My Study - 조회.V2", description = "나의 스터디 조회 관련 api")
 @RestController
 @RequestMapping("${custom.mapping.my-study.web}")
 @RequiredArgsConstructor
