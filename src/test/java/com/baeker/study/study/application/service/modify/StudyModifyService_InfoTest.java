@@ -24,7 +24,7 @@ class StudyModifyService_InfoTest extends StudyModifyMock {
     private StudyModifyService modifyService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         repoSaveMocking();
     }
 

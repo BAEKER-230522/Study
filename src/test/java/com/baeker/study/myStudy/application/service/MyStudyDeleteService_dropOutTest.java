@@ -24,7 +24,7 @@ class MyStudyDeleteService_dropOutTest extends MyStudyDeleteMock {
     private  MyStudyDeleteService deleteService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         deleteMemberMocking();
         deleteMyStudyMocking();
     }

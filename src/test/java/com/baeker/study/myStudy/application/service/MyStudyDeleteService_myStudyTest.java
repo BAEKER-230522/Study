@@ -22,7 +22,7 @@ class MyStudyDeleteService_myStudyTest extends MyStudyDeleteMock {
     private  MyStudyDeleteService deleteService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         deleteMemberMocking();
         deleteMyStudyMocking();
     }

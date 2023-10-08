@@ -19,7 +19,7 @@ class MyStudyCreateService_createTest extends MyStudyCreateMock {
     private MyStudyCreateService createService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         updateMyStudyMocking();
         repoSaveMocking();
     }

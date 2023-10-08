@@ -3,11 +3,12 @@ package com.baeker.study.study.application.service;
 import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
+import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.reqDto.AddXpReqDto;
+import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
@@ -26,6 +27,7 @@ public class StudyModifyService implements StudyModifyUseCase {
 
     private final StudyRepositoryPort repository;
     private final StudyQueryUseCase queryUseCase;
+    private final SnapshotUseCase snapshotUseCase;
     private final ApplicationEventPublisher publisher;
 
     @Override
@@ -65,19 +67,33 @@ public class StudyModifyService implements StudyModifyUseCase {
     }
 
     @Override
-    public UpdateResDto xp(Study study, AddXpReqDto dto) {
-        study.xpUp(dto.getXp());
+    public UpdateResDto xp(Study study, double addXp) {
+        study.xpUp(addXp);
         return new UpdateResDto(study.getId());
     }
 
     @Override
-    public void solvedCount(SolvedCountReqDto dto) {
-
+    public void solvedCount(List<StudyResDto> studyList, SolvedCountReqDto dto) {
+        if (studyList.size() == 0) return;
+        updateSolvedCount(studyList, dto);
     }
 
     @Override
     public void ranking(List<Study> studyList) {
         for (int i = 0; i < studyList.size(); i++)
             studyList.get(i).updateRanking(i + 1);
+    }
+
+
+    private void updateSolvedCount(List<StudyResDto> studyList, SolvedCountReqDto dto) {
+        for (StudyResDto studyDto : studyList) {
+            Study study = queryUseCase.byId(studyDto.getId());
+            Study saveStudy = repository.save(
+                    study.updateSolvedCount(dto)
+            );
+
+            BaekjoonDto reqDto = new BaekjoonDto(dto);
+            snapshotUseCase.updateSnapshot(saveStudy, reqDto, 0);
+        }
     }
 }

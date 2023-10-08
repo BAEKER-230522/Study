@@ -5,19 +5,16 @@ import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.application.port.out.persistence.StudyQueryRepositoryPort;
 import com.baeker.study.study.domain.entity.QStudy;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.study.in.resDto.QStudyResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.querydsl.core.types.*;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
 
 @Repository
 public class StudyQueryRepositoryAdapter implements StudyQueryRepositoryPort {
@@ -94,19 +91,8 @@ public class StudyQueryRepositoryAdapter implements StudyQueryRepositoryPort {
                 study.diamond,
                 study.ruby,
                 study.platinum,
-                studyMemberCounter(),
+                study.studyMember,
                 study.ranking
-        );
-    }
-
-    private Expression<Long> studyMemberCounter() {
-        return ExpressionUtils.as(
-                JPAExpressions
-                        .select(myStudy.count())
-                        .from(myStudy)
-                        .where(myStudy.study.eq(study)
-                                .and(myStudy.status.eq(MEMBER)))
-                , "studyMember"
         );
     }
 }

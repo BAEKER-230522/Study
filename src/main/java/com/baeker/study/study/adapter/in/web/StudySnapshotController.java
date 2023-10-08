@@ -23,7 +23,7 @@ public class StudySnapshotController {
     private final SnapshotUseCase snapshotUseCase;
     private final StudyQueryUseCase studyQueryUseCase;
 
-    @Operation(summary = "한주간 Study Snapshot 목록 조회")
+    @Operation(summary = "7일간 Study 스냅샷 조회")
     @GetMapping("/v2/snapshots/{studyId}")
     public ResponseEntity<List<SnapshotResDto>> findSnapshotOfWeek(
             @PathVariable Long studyId

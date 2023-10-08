@@ -151,29 +151,6 @@ class StudyServiceTest {
         assertThat(list1.get(6).getDayOfWeek()).isEqualTo(day);
     }
 
-    @Test
-    @DisplayName("member 의 study 조회")
-    public void no4() {
-        Study study1 = createStudy(1L, "my study1", "", "1");
-        Study study2 = createStudy(2L, "my study2", "", "2");
-        Study study3 = createStudy(3L, "pending study", "", "3");
-        Study study4 = createStudy(4L, "invite study", "", "4");
-        Study study5 = createStudy(5L, "study", "", "5");
-
-        MyStudy join = myStudyService.join(new JoinMyStudyReqDto(study2.getId(), 1L, "가입신청"), study2);
-        myStudyService.accept(join);
-
-        myStudyService.join(new JoinMyStudyReqDto(study3.getId(), 1L, "가입신청"), study3);
-        myStudyService.invite(new InviteMyStudyReqDto(study4.getId(), 4L, 1L, "초대"), study4);
-
-        List<Study> studyList = studyService.findByMember(1L, 1);
-        List<Study> pendingList = studyService.findByMember(1L, 2);
-        List<Study> inviteList = studyService.findByMember(1L, 3);
-
-        assertThat(pendingList.size()).isEqualTo(1);
-        assertThat(inviteList.size()).isEqualTo(1);
-        assertThat(studyList.size()).isEqualTo(2);
-    }
 
     @Test
     @DisplayName("백준 연동 안할경우 가입 금지")
@@ -232,26 +209,6 @@ class StudyServiceTest {
         assertThat(studies.get(2).getRanking()).isEqualTo(3);
         assertThat(studies.get(3).getRanking()).isEqualTo(4);
         assertThat(studies.get(4).getRanking()).isEqualTo(5);
-    }
-
-    @Test
-    @DisplayName("Study 삭제")
-    public void no9() {
-        Study study = createStudy(1L, "Study", "", null);
-        Long studyId = study.getId();
-
-        for (Long i = 2L; i < 6; i++)
-            joinStudy(study, i);
-
-        int size = study.getMyStudies().size();
-        assertThat(size).isEqualTo(5);
-
-        deleteStudy(studyId, 1L);
-
-        assertThatThrownBy(() -> studyService.findById(studyId))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("존재하지 않는 id 입니다.");
-
     }
 
     private void deleteStudy(Long studyId, Long memberId) {

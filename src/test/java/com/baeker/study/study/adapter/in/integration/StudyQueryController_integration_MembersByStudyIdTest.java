@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class StudyQueryController_integration_MembersByStudyIdTest extends MemberClientIntegrationMock {
 
     @Autowired MockMvc mvc;
-    @Autowired StudyQueryUseCase studyQueryUseCase;
 
     @BeforeEach
     void setup() {

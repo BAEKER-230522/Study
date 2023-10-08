@@ -1,9 +1,11 @@
 package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.global.feign.dto.CandidateResDto;
+import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.in.resDto.SnapshotResDto;
 import com.baeker.study.study.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class StudyQueryController {
 
     private final StudyQueryUseCase studyQueryUseCase;
+
 
     @Operation(summary = "study id 로 study 조회")
     @GetMapping("/v2/id/{studyId}")
@@ -51,8 +54,8 @@ public class StudyQueryController {
     @Operation(summary = "member id 로 study 목록 조회",
             description =
                     "status = 1 : 정회원 \n" +
-                    " 2 : 가입신청 목록 \n" +
-                    " 3 : 초디받은 목록"
+                            " 2 : 가입신청 목록 \n" +
+                            " 3 : 초디받은 목록"
     )
     @GetMapping("/v2/study-list/{memberId}")
     public ResponseEntity<List<StudyResDto>> findByMemberId(
@@ -90,17 +93,6 @@ public class StudyQueryController {
             @RequestParam(defaultValue = "10") int content
     ) {
         List<StudyResDto> dtoList = studyQueryUseCase.allOrderByRanking(page, content);
-        return ResponseEntity.ok(dtoList);
-    }
-
-    @Operation(summary = "검색어로 study 목록 조회")
-    @GetMapping("v2/input/{input}")
-    public ResponseEntity<List<StudyResDto>> findByInput(
-            @PathVariable String input,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int content
-    ) {
-        List<StudyResDto> dtoList = studyQueryUseCase.byInput(input, page, content);
         return ResponseEntity.ok(dtoList);
     }
 }

@@ -24,7 +24,7 @@ class StudyModifyService_leaderTest extends StudyModifyMock {
     private StudyModifyService modifyService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         repoSaveMocking();
         getByMemberIdMocking();
     }

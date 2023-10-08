@@ -24,7 +24,7 @@ class MyStudyCreateService_inviteTest extends MyStudyCreateMock {
     private MyStudyCreateService createService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         baekjoonConnectCheckMocking();
         updateMyStudyMocking();
         getByMemberListMocking();

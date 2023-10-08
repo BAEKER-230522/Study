@@ -21,7 +21,7 @@ class StudyCreateServiceTest extends StudyCreateMock {
     private StudyCreateService createService;
 
     @BeforeEach
-    void beforeEach() {
+    void setup() {
         baekjoonConnectCheckMocking();
         repoSaveMocking();
         createMyStudyMocking();

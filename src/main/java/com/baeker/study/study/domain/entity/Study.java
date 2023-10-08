@@ -53,6 +53,7 @@ public class Study extends ScoreBase {
                 .about(about)
                 .leader(memberId)
                 .capacity(capacity)
+                .studyMember(1)
                 .xp(0)
                 .build();
     }

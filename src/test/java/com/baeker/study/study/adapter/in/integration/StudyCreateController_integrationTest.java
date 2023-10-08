@@ -3,6 +3,7 @@ package com.baeker.study.study.adapter.in.integration;
 import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
+import com.baeker.study.study.in.resDto.CreateResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.postReq;
+import static com.baeker.study.testUtil.global.integration.MockMvcRequest.toResDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,16 +48,13 @@ class StudyCreateController_integrationTest extends MemberClientIntegrationMock 
     void no1() throws Exception {
         StudyCreateReqDto reqDto = createReqDto("스터디", "하이", 10);
 
-        ResultActions result = postReq(mvc,
-                mapping + "/v2/study", jwt, reqDto
-        );
+        ResultActions result = postReq(mvc, mapping + "/v2/study", jwt, reqDto);
+        CreateResDto resDto = toResDto(result, CreateResDto.class);
 
-        result
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("studyId").value(1L))
-                .andExpect(jsonPath("myStudyId").value(1L));
 
-        Study study = studyQueryUseCase.byId(1L);
+        result.andExpect(status().is2xxSuccessful());
+
+        Study study = studyQueryUseCase.byId(resDto.getStudyId());
         assertThat(study.getName()).isEqualTo("스터디");
         assertThat(study.getAbout()).isEqualTo("하이");
         assertThat(study.getCapacity()).isEqualTo(10);

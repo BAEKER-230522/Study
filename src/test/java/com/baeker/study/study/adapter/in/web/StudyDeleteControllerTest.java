@@ -1,5 +1,6 @@
 package com.baeker.study.study.adapter.in.web;
 
+import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.testUtil.adapter.web.StudyDeleteControllerMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(StudyDeleteController.class)
 class StudyDeleteControllerTest extends StudyDeleteControllerMock {
 
-    @Autowired
-    MockMvc mvc;
+    @Autowired MockMvc mvc;
+    @Autowired StudyQueryUseCase studyQueryUseCase;
 
     @Value("${custom.mapping.study.web}")
     String mapping;

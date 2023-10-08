@@ -16,9 +16,9 @@ public interface StudyModifyUseCase {
 
     StudyResDto leader(Study study, Long memberId, UpdateLeaderReqDto dto);
 
-    UpdateResDto xp(Study study, AddXpReqDto dto);
+    UpdateResDto xp(Study study, double addXp);
 
-    void solvedCount(SolvedCountReqDto dto);
+    void solvedCount(List<StudyResDto> studyList, SolvedCountReqDto dto);
 
     void ranking(List<Study> studyList);
 }
