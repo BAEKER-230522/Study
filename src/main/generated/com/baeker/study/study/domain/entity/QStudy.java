@@ -63,6 +63,8 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final ListPath<StudySnapshot, QStudySnapshot> snapshots = this.<StudySnapshot, QStudySnapshot>createList("snapshots", StudySnapshot.class, QStudySnapshot.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> studyMember = createNumber("studyMember", Integer.class);
+
     public final ListPath<com.baeker.study.domain.studyRule.entity.StudyRule, com.baeker.study.domain.studyRule.entity.QStudyRule> studyRules = this.<com.baeker.study.domain.studyRule.entity.StudyRule, com.baeker.study.domain.studyRule.entity.QStudyRule>createList("studyRules", com.baeker.study.domain.studyRule.entity.StudyRule.class, com.baeker.study.domain.studyRule.entity.QStudyRule.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> xp = createNumber("xp", Double.class);

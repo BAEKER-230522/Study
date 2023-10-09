@@ -214,6 +214,9 @@ public class MyStudyService {
     //-- delete my study --//
     @Transactional
     public void delete(MyStudy myStudy) {
+        Study study = myStudy.getStudy();
+        study.removeStudyMember();
+
         myStudyRepository.delete(myStudy);
         deleteMember(myStudy);
     }
@@ -239,6 +242,7 @@ public class MyStudyService {
         if (!memberDto.getNickname().equals(study.getLeader()))
             throw new NoPermissionException(dto.getLeaderId() + "는 leader 가 아닙니다.");
 
+        study.removeStudyMember();
         myStudyRepository.delete(myStudy);
         memberClient.deleteMyStudy(new DeleteMyStudyReqDto(myStudy.getMember(), myStudy.getId()));
     }

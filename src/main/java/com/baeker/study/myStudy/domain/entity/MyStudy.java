@@ -79,5 +79,6 @@ public class MyStudy extends BaseEntity {
     public void accept() {
         this.status = MEMBER;
         this.msg = null;
+        this.study.addStudyMember();
     }
 }
