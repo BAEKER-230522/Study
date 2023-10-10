@@ -1,4 +1,4 @@
-package com.baeker.study.base.exception;
+package com.baeker.study.base.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
