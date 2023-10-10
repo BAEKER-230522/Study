@@ -7,6 +7,7 @@ import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
+import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.global.feign.MemberClient;
@@ -16,11 +17,11 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -53,6 +54,8 @@ class StudyRuleServiceTests {
 
     @MockBean
     MemberClient memberClient;
+    @Mock
+    StudyRuleRepository studyRuleRepository;
 
     @BeforeEach
     void setFeign() {
@@ -202,9 +205,9 @@ class StudyRuleServiceTests {
         studyRule.getPersonalStudyRules().forEach(
                 (personal) -> {
                     if (personal.getMemberId().equals(1L)) {
-                        Assertions.assertEquals(Status.COMPLETE, personal.getStatus());
+                        assertEquals(Status.COMPLETE, personal.getStatus());
                     } else {
-                        Assertions.assertEquals(Status.FAIL, personal.getStatus());
+                        assertEquals(Status.FAIL, personal.getStatus());
                     }
                 }
         );
@@ -223,7 +226,7 @@ class StudyRuleServiceTests {
         studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
         studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
         Study study = studyRule.getStudy();
-        Assertions.assertEquals(10, study.getXp());
+        assertEquals(10, study.getXp());
     }
 
     @Test
