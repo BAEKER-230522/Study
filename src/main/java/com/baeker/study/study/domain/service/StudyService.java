@@ -1,8 +1,8 @@
 package com.baeker.study.study.domain.service;
 
-import com.baeker.study.base.exception.InvalidDuplicateException;
-import com.baeker.study.base.exception.NoPermissionException;
-import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.base.error.exception.InvalidDuplicateException;
+import com.baeker.study.base.error.exception.NoPermissionException;
+import com.baeker.study.base.error.exception.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;

@@ -1,5 +1,10 @@
-package com.baeker.study.base.exception;
+package com.baeker.study.base.error.controller;
 
+import com.baeker.study.base.error.*;
+import com.baeker.study.base.error.exception.InvalidDuplicateException;
+import com.baeker.study.base.error.exception.NoPermissionException;
+import com.baeker.study.base.error.exception.NotFoundException;
+import com.baeker.study.base.error.exception.NumberInputException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
