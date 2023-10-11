@@ -1,4 +1,4 @@
-package com.baeker.study.base.exception;
+package com.baeker.study.base.error.exception;
 
 public class NotFoundException extends RuntimeException {
 

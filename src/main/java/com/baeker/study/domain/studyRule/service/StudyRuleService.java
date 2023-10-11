@@ -1,13 +1,15 @@
 package com.baeker.study.domain.studyRule.service;
 
-import com.baeker.study.base.exception.NotFoundException;
+import com.baeker.study.base.error.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.base.util.JwtUtil;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
 import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
+import com.baeker.study.domain.studyRule.dto.response.StudyRuleDetailResponse;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
@@ -15,8 +17,12 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
+import com.baeker.study.base.util.RedisUt;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.resDto.MemberResDto;
@@ -47,7 +53,8 @@ public class StudyRuleService {
     private final MemberClient memberClient;
 
     private final ProblemService problemService;
-
+    private final RedisUt redisUt;
+    private final JwtUtil jwtUtil;
 
     /**
      * 생성
@@ -143,8 +150,22 @@ public class StudyRuleService {
                 .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));
     }
 
-    public StudyRuleQueryDto getStudyRuleQueryDto(StudyRule studyRule) {
+    public StudyRuleDetailResponse getStudyRuleDetailResponse(StudyRule studyRule) {
+        StudyRuleQueryDto studyRuleQueryDto = getStudyRuleQueryDto(studyRule);
+        List<PersonalStudyRuleResponse> list = new ArrayList<>();
+        for (PersonalStudyRuleDto personalStudyRuleDto : studyRuleQueryDto.getPersonalStudyRuleDtos()) {
+            list.add(toPersonalStudyRuleResponse(personalStudyRuleDto));
+        }
+        return new StudyRuleDetailResponse(studyRuleQueryDto, list);
+    }
+    private StudyRuleQueryDto getStudyRuleQueryDto(StudyRule studyRule) {
         return studyRuleRepository.findStudyRuleDetail(studyRule);
+    }
+
+    private PersonalStudyRuleResponse toPersonalStudyRuleResponse(PersonalStudyRuleDto ruleDto) {
+        String token = redisUt.getValue(ruleDto.memberId().toString());
+        String nickName = jwtUtil.getClaimValue(token, "nickName");
+        return new PersonalStudyRuleResponse(nickName, ruleDto);
     }
 
 
@@ -351,6 +372,7 @@ public class StudyRuleService {
         List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
         String studyName = studyRule.getName();
         for (MyStudy myStudy : myStudies) {
+            if (!myStudy.getStatus().equals(StudyStatus.MEMBER)) continue;
             Long memberId = myStudy.getMember();
             RsData<MemberResDto> member = memberClient.findById(memberId);
             emailService.mailSend(new MailDto(member.getData().getEmail(),
