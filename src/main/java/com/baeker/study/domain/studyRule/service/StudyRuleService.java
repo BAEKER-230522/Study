@@ -164,7 +164,6 @@ public class StudyRuleService {
 
     private PersonalStudyRuleResponse toPersonalStudyRuleResponse(PersonalStudyRuleDto ruleDto) {
         String token = redisUt.getValue(ruleDto.memberId().toString());
-        log.info("token = {}", token);
         String nickName = jwtUtil.getClaimValue(token, "nickName");
         return new PersonalStudyRuleResponse(nickName, ruleDto);
     }
