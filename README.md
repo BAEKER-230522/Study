@@ -16,8 +16,21 @@
 <br>
 
 ## ERD
+### Study
+- STUDY : 스터디 정보를 관리
+- MY_STUDY : 스터디에 가입한 회원 정보를 관리
+  - Enum 객체인 STUDY_STATUS 를 사용한 상태 관리
+- STUDY_SMAPSHOT : 스터디에서 해결한 7일간의 미션 내역 관리
+  - BASE_ENTITY 를 사용한 STUDY 와 중복 필드 제거
 
-<br>
+### Mission
+- PROBLEM : 백준 문제 관리
+- PROBLEM_STATUS : 스터디 미션 관리
+- PERSONAL_STUDY_RULE : 스터디원의 미션 해결 현황
+
+<img width="964" alt="스크린샷 2023-10-13 오후 2 00 34" src="https://github.com/BAEKER-230522/Community/assets/115536240/24ce2328-d795-4cf3-8991-dd6e1b573404">
+
+<br><br>
 
 ## 핵심 요구사항
 ## 1. Study
