@@ -53,5 +53,5 @@ custom:
   server: localhost
 
   feign:
+    community: http://community:8086/pub/comm/api
     member: http://${custom.server}:8081/api/member
-    rule: http://rule:8083/api/rule

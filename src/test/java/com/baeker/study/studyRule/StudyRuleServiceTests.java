@@ -7,9 +7,9 @@ import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
-import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
+import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,8 +53,9 @@ class StudyRuleServiceTests {
 
     @MockBean
     MemberClient memberClient;
-    @Mock
-    StudyRuleRepository studyRuleRepository;
+    @MockBean
+    CommunityClient communityClient;
+
 
     @BeforeEach
     void setFeign() {
@@ -65,6 +65,8 @@ class StudyRuleServiceTests {
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(memberClient.findById(any()))
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto(1L, "leader", "bk1234")));
+        when(communityClient.createPost(any()))
+                .thenReturn("1");
     }
 
 
