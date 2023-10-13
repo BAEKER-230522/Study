@@ -15,12 +15,15 @@ import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.base.util.RedisUt;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
+import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
+import com.baeker.study.global.feign.dto.PostRequest;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.Study;
@@ -51,6 +54,7 @@ public class StudyRuleService {
 
 
     private final MemberClient memberClient;
+    private final CommunityClient communityClient;
 
     private final ProblemService problemService;
     private final RedisUt redisUt;
@@ -75,14 +79,31 @@ public class StudyRuleService {
         List<PersonalStudyRule> personalStudyRule = createPersonalStudyRule(study.getMyStudies(), studyRule);
         // ProblemStatus 생성
         List<ProblemStatus> problemStatus = createProblemStatus(personalStudyRule, problemIds);
-        /**
-         * 관계 맵핑
-         * problem 엔 status 넣기
-         * personalStudyRule problemStatus 넣기
-         */
 
         studyRuleRepository.save(studyRule);
+
+
+        PostRequest postRequest = new PostRequest(studyRule.getId(), memberList(studyRule), titleList(request));
+        communityClient.createPost(postRequest);
         return studyRule.getId();
+    }
+
+    private List<String> titleList(CreateStudyRuleRequest request) {
+        List<String> titles = new ArrayList<>();
+        for (CreateProblem createProblemRequest : request.getCreateProblemList()) {
+            titles.add(createProblemRequest.problemName());
+        }
+        return titles;
+
+    }
+
+    private List<Long> memberList(StudyRule studyRule) {
+        List<Long> members = new ArrayList<>();
+        List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+        for (MyStudy myStudy : myStudies) {
+            members.add(myStudy.getMember());
+        }
+        return members;
     }
 
     @Transactional
