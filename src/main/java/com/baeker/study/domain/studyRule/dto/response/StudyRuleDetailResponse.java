@@ -26,6 +26,9 @@ public class StudyRuleDetailResponse {
     @Schema(description = "StudyRule 과 양방향 맵핑 되어있는 Study 의 정보")
     private StudyResDto study;
 
+    @Schema(description = "미션 성공시 얻는 경험치")
+    private Double xp;
+
     @Schema(description = "미션 성공실패 여부")
     private Status status;
 
@@ -45,6 +48,7 @@ public class StudyRuleDetailResponse {
         this.studyRuleName = studyRuleQueryDto.getName();
         this.about = studyRuleQueryDto.getAbout();
         this.study = studyRuleQueryDto.getStudy();
+        this.xp = studyRuleQueryDto.getXp();
         this.mission = studyRuleQueryDto.getMission();
         this.status = studyRuleQueryDto.getStatus();
         this.startDate = studyRuleQueryDto.getStartDate();

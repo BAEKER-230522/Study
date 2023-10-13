@@ -1,5 +1,6 @@
 custom:
   feign:
+    community: http://community:8086/pub/comm/api
     member: http://member:8081/api/member
   redis:
     host: bk-redis.1ll.ca
