@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -283,5 +284,13 @@ public class StudyController {
 
         log.info("스터디 삭제 완료");
         return RsData.of("S-1", "성공");
+    }
+
+    //-- ranking update --//
+    @PatchMapping("/v1/ranking")
+    @Operation(summary = "서버간 통신: 스터디 랭킹 업데이트")
+    public ResponseEntity updateRanking() {
+        studyService.updateRanking();
+        return ResponseEntity.noContent().build();
     }
 }
