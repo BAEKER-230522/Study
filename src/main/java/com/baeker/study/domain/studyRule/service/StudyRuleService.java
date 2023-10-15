@@ -3,6 +3,7 @@ package com.baeker.study.domain.studyRule.service;
 import com.baeker.study.base.error.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.base.util.JwtUtil;
+import com.baeker.study.base.util.RedisUt;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
 import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
@@ -18,14 +19,13 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemSe
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
-import com.baeker.study.base.util.RedisUt;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
 import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.PostRequest;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.domain.entity.StudyStatus;
+import com.baeker.study.myStudy.out.MyStudyQueryRepository;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.resDto.MemberResDto;
@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -51,7 +53,7 @@ public class StudyRuleService {
     private final StudyService studyService;
 
     private final EmailService emailService;
-
+    private final MyStudyQueryRepository myStudyQueryRepository;
 
     private final MemberClient memberClient;
     private final CommunityClient communityClient;
@@ -98,12 +100,14 @@ public class StudyRuleService {
     }
 
     private List<Long> memberList(StudyRule studyRule) {
-        List<Long> members = new ArrayList<>();
-        List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
-        for (MyStudy myStudy : myStudies) {
-            members.add(myStudy.getMember());
-        }
-        return members;
+//        List<Long> members = new ArrayList<>();
+//        List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
+//        for (MyStudy myStudy : myStudies) {
+//            members.add(myStudy.getMember());
+//        }
+//        return members;
+        Study study = studyRule.getStudy();
+        return myStudyQueryRepository.findMemberList(study, MEMBER);
     }
 
     @Transactional
@@ -393,7 +397,7 @@ public class StudyRuleService {
         List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
         String studyName = studyRule.getName();
         for (MyStudy myStudy : myStudies) {
-            if (!myStudy.getStatus().equals(StudyStatus.MEMBER)) continue;
+            if (!myStudy.getStatus().equals(MEMBER)) continue;
             Long memberId = myStudy.getMember();
             RsData<MemberResDto> member = memberClient.findById(memberId);
             emailService.mailSend(new MailDto(member.getData().getEmail(),
