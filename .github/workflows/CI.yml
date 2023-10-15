@@ -1,13 +1,25 @@
 name: ciTests
 
+#on:
+#  pull_request:
+#    branches:
+#      - main
+#
+#  push:
+#    branches:
 on:
   pull_request:
     branches:
       - main
-
+      - develop
+      - dk
+      - park
   push:
-    branches:
-
+    branches-ignore:
+      - develop
+      - main
+      - dk
+      - park
 
 
 
