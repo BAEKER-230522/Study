@@ -7,6 +7,7 @@ on:
       - develop
       - dk
       - park
+
   push:
     branches-ignore:
       - develop
