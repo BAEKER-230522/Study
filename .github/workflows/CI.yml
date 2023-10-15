@@ -1,12 +1,5 @@
 name: ciTests
 
-#on:
-#  pull_request:
-#    branches:
-#      - main
-#
-#  push:
-#    branches:
 on:
   pull_request:
     branches:
