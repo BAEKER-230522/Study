@@ -9,7 +9,6 @@ on:
     branches:
       - dk
       - park
-    branches-ignore:
       - develop
       - main
 
