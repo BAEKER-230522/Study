@@ -4,10 +4,15 @@ on:
   pull_request:
     branches:
       - main
+      - develop
+      - dk
+      - park
   push:
-    branches:
-
-
+    branches-ignore:
+      - develop
+      - main
+      - dk
+      - park
 
 
 jobs:
