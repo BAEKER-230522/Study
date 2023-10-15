@@ -5,14 +5,13 @@ on:
     branches:
       - main
       - develop
+  push:
+    branches:
       - dk
       - park
-  push:
     branches-ignore:
       - develop
       - main
-      - dk
-      - park
 
 
 
