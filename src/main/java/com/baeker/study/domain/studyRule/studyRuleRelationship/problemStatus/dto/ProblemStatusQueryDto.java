@@ -3,6 +3,7 @@ package com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.dt
 import com.baeker.study.domain.studyRule.entity.Status;
 
 public record ProblemStatusQueryDto(
+        Long problemStatusId,
         Long memberId,
         Integer problemNumber,
         String problemName,
