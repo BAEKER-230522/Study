@@ -99,7 +99,9 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
                         (problemStatus)
                 .from(problemStatus)
                 .join(problem)
+                    .on(problemStatus.problem.id.eq(problem.id))
                 .join(personalStudyRule)
+                    .on(personalStudyRule.id.eq(problemStatus.personalStudyRule.id))
                 .fetchJoin()
                 .where(problemStatus.id.in(problemStatusIds))
                 .fetch();
