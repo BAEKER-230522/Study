@@ -18,7 +18,9 @@ import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatusRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
 import com.baeker.study.global.feign.CommunityClient;
@@ -61,6 +63,9 @@ public class StudyRuleService {
     private final ProblemService problemService;
     private final RedisUt redisUt;
     private final JwtUtil jwtUtil;
+    private final ProblemStatusRepository problemStatusRepository;
+    private final PersonalStudyRuleRepository personalStudyRuleRepository;
+
 
     /**
      * 생성
@@ -75,17 +80,18 @@ public class StudyRuleService {
         studyRule.setMission(now);
         studyRule.setStudy(studyRule, study);
 
+        List<Long> memberIds = memberList(studyRule);
         // Problem 생성
         List<Long> problemIds = problemService.createProblem(request.getCreateProblemList());
         //PersonalStudyRule 생성
-        List<PersonalStudyRule> personalStudyRule = createPersonalStudyRule(study.getMyStudies(), studyRule);
+        List<PersonalStudyRule> personalStudyRule = createPersonalStudyRule(memberIds, studyRule);
         // ProblemStatus 생성
         List<ProblemStatus> problemStatus = createProblemStatus(personalStudyRule, problemIds);
 
         studyRuleRepository.save(studyRule);
 
 
-        PostRequest postRequest = new PostRequest(studyRule.getId(), memberList(studyRule), titleList(request));
+        PostRequest postRequest = new PostRequest(studyRule.getId(), memberIds, titleList(request));
         communityClient.createPost(postRequest);
         return studyRule.getId();
     }
@@ -111,13 +117,13 @@ public class StudyRuleService {
     }
 
     @Transactional
-    public List<PersonalStudyRule> createPersonalStudyRule(List<MyStudy> myStudies, StudyRule studyRule) {
+    public List<PersonalStudyRule> createPersonalStudyRule(List<Long> memberIds, StudyRule studyRule) {
         List<PersonalStudyRule> personalStudyRules = new ArrayList<>();
-        for (MyStudy myStudy : myStudies) {
-            PersonalStudyRule personalStudyRule = PersonalStudyRule.create(myStudy.getMember(), studyRule);
+        for (Long memberId : memberIds) {
+            PersonalStudyRule personalStudyRule = PersonalStudyRule.create(memberId, studyRule);
             personalStudyRules.add(personalStudyRule);
             personalStudyRule.addStudyRule(personalStudyRule);
-//            personalStudyRuleRepository.save(personalStudyRule);
+            personalStudyRuleRepository.save(personalStudyRule);
         }
         return personalStudyRules;
     }
@@ -136,7 +142,7 @@ public class StudyRuleService {
                 problemStatuses.add(problemStatus);
                 problemStatus.addProblem();
                 problemStatus.addPersonalStudyRule();
-//                problemStatusRepository.save(problemStatus);
+                problemStatusRepository.save(problemStatus);
             }
         }
         return problemStatuses;
@@ -369,7 +375,7 @@ public class StudyRuleService {
                 }
             }
             setStatus(studyRule.getId());
-            if (studyRule.getStatus().equals(Status.COMPLETE)) {
+            if (studyRule.getStatus().equals(Status.COMPLETE) && !studyRule.isAddXp()) {
                 addStudyXp(studyRule);
             }
         }

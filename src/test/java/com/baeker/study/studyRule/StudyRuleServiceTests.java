@@ -224,10 +224,13 @@ class StudyRuleServiceTests {
         Long studyId = studyRule.getStudy().getId();
         List<ProblemNumberDto> problemNumberDtos = new ArrayList<>();
         problemNumberDtos.add(new ProblemNumberDto("1000", "10", "1000"));
-
-        studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
-        studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
         Study study = studyRule.getStudy();
+        System.out.println(study.getXp());
+        System.out.println(studyRule.getXp());
+        studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
+        System.out.println(study.getXp());
+        studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
+
         assertEquals(10, study.getXp());
     }
 
