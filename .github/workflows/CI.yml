@@ -12,7 +12,6 @@ on:
       - develop
       - main
       - dk
-      - park
 
 
 jobs:
