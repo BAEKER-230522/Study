@@ -107,6 +107,7 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
                 .fetch();
         return problemStatuses.stream()
                         .map(p -> new ProblemStatusQueryDto(
+                                p.getId(),
                                 p.getPersonalStudyRule().getMemberId(),
                                 p.getProblem().getProblemNumber(),
                                 p.getProblem().getProblemName(),
