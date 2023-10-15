@@ -24,6 +24,8 @@ public class QStudyRule extends EntityPathBase<StudyRule> {
 
     public final StringPath about = createString("about");
 
+    public final BooleanPath addXp = createBoolean("addXp");
+
     public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);
 
     public final DatePath<java.time.LocalDate> deadline = createDate("deadline", java.time.LocalDate.class);

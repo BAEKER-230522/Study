@@ -3,15 +3,10 @@ name: ciTests
 on:
   pull_request:
     branches:
-      - develop
-      - dk
-      - park
-  push:
-    branches-ignore:
-      - develop
       - main
-      - dk
-      - park
+  push:
+    branches:
+
 
 
 
