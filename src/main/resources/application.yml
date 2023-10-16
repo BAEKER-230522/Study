@@ -57,9 +57,7 @@ spring:
     url: ${custom.db.url}
     username: ${custom.db.usr}
     password: ${custom.db.pw}
-    hikari:
-      maximum-pool-size: 101
-      minimum-idle: 10
+
 
   jpa:
     hibernate:
