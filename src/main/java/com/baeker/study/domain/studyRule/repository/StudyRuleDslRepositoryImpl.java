@@ -116,6 +116,5 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
                                 p.getMemory()))
                 .toList();
     }
-
 }
 
