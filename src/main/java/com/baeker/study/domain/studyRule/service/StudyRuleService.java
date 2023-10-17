@@ -418,11 +418,14 @@ public class StudyRuleService {
     }
 
     @Scheduled(cron = "0 0 18 * * *")
+    @Transactional
     public void missionDoneStudyRuleSendMail() {
         try {
             List<StudyRule> studyRules = getNotYetSendMail();
             for (StudyRule studyRule : studyRules) {
-                sendMail(studyRule);
+                if (!studyRule.isSendMail()) {
+                    sendMail(studyRule);
+                }
             }
         } catch (NotFoundException ignored) {}
     }
