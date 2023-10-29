@@ -1,5 +1,6 @@
 package com.baeker.study.domain.studyRule.service;
 
+import com.baeker.study.base.error.exception.JwtException;
 import com.baeker.study.base.error.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.base.util.JwtUtil;
@@ -173,8 +174,14 @@ public class StudyRuleService {
     }
 
     private PersonalStudyRuleResponse toPersonalStudyRuleResponse(PersonalStudyRuleDto ruleDto) {
-        String token = redisUt.getValue(ruleDto.memberId().toString());
-        String nickName = jwtUtil.getClaimValue(token, "nickName");
+        Long memberId = ruleDto.memberId();
+        String token = redisUt.getValue(memberId.toString());
+        String nickName = null;
+        try {
+            nickName = jwtUtil.getClaimValue(token, "nickName");
+        } catch (JwtException e) {
+            nickName = memberClient.getMember(memberId).getData().id().toString();
+        }
         return new PersonalStudyRuleResponse(nickName, ruleDto);
     }
 
