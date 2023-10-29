@@ -17,6 +17,7 @@ spring:
   config:
     activate:
       on-profile: prod
+<<<<<<< Updated upstream
 
 #  kafka:
 #    bootstrap-servers: kafka.kafka.svc.cluster.local:19092
@@ -31,3 +32,37 @@ spring:
 #      linger:
 #        ms: 10
 
+=======
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ENC(plDde76MscNwKMt9v4A6Rw==)
+    password: ENC(OH+qshDPtFh1h1gDdWExzz/t0BlOzVbo)
+    url: ENC(cQUB47WfdehGJ/B1hlQxP4bpmUxFRNyGu/4MY91aS3P8AegR0zD/QPfbAOd2A5rkoG8+aIxRxkEjlzFlDmvt8EWhGC5uujEJ5+gFp6VL86BGNPkJICyY2gip6e3mk/9LoqdlLagZVrINiMAT3V32C2x67EKL8rZkch8Jc+uzhmU7Cv0vjdthuNPlASmTOFSB)
+  kafka:
+    bootstrap-servers: ${custom.kafka}:9092
+    consumer:
+      group-id: study
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      linger:
+        ms: 10
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://10.22.131.215:8761/eureka/
+>>>>>>> Stashed changes
