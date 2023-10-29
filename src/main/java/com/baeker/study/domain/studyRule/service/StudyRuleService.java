@@ -1,5 +1,6 @@
 package com.baeker.study.domain.studyRule.service;
 
+import com.baeker.study.base.error.exception.JwtException;
 import com.baeker.study.base.error.exception.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
 import com.baeker.study.base.util.JwtUtil;
@@ -16,16 +17,13 @@ import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatusRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
-import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
-import com.baeker.study.global.feign.dto.PostRequest;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.out.MyStudyQueryRepository;
 import com.baeker.study.study.domain.entity.Study;
@@ -58,7 +56,6 @@ public class StudyRuleService {
     private final MyStudyQueryRepository myStudyQueryRepository;
 
     private final MemberClient memberClient;
-    private final CommunityClient communityClient;
 
     private final ProblemService problemService;
     private final RedisUt redisUt;
@@ -91,27 +88,10 @@ public class StudyRuleService {
         studyRuleRepository.save(studyRule);
 
 
-        PostRequest postRequest = new PostRequest(studyRule.getId(), memberIds, titleList(request));
-        communityClient.createPost(postRequest);
         return studyRule.getId();
     }
 
-    private List<String> titleList(CreateStudyRuleRequest request) {
-        List<String> titles = new ArrayList<>();
-        for (CreateProblem createProblemRequest : request.getCreateProblemList()) {
-            titles.add(createProblemRequest.problemName());
-        }
-        return titles;
-
-    }
-
     private List<Long> memberList(StudyRule studyRule) {
-//        List<Long> members = new ArrayList<>();
-//        List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
-//        for (MyStudy myStudy : myStudies) {
-//            members.add(myStudy.getMember());
-//        }
-//        return members;
         Study study = studyRule.getStudy();
         return myStudyQueryRepository.findMemberList(study, MEMBER);
     }
@@ -194,8 +174,14 @@ public class StudyRuleService {
     }
 
     private PersonalStudyRuleResponse toPersonalStudyRuleResponse(PersonalStudyRuleDto ruleDto) {
-        String token = redisUt.getValue(ruleDto.memberId().toString());
-        String nickName = jwtUtil.getClaimValue(token, "nickName");
+        Long memberId = ruleDto.memberId();
+        String token = redisUt.getValue(memberId.toString());
+        String nickName = null;
+        try {
+            nickName = jwtUtil.getClaimValue(token, "nickName");
+        } catch (JwtException e) {
+            nickName = memberClient.getMember(memberId).getData().id().toString();
+        }
         return new PersonalStudyRuleResponse(nickName, ruleDto);
     }
 
@@ -223,21 +209,6 @@ public class StudyRuleService {
 //        return RsData.of("F-1" , "리더가 아닙니다.");
 //    }
 
-    /**
-     * xp 반환
-     * param studyRuleId
-     */
-//    public Integer getXp(Long id) {
-//        StudyRule studyRule = getStudyRule(id);
-//        Long ruleId = studyRule.getRuleId();
-//        RuleDto rule = getRule(ruleId);
-//        return rule.getXp();
-//    }
-
-
-//    public Integer getXp(StudyRule studyRule) {
-//        return getXp(studyRule.getId());
-//    }
 
     /**
      * study 에있는 멤버들 status 확인하여
@@ -429,5 +400,6 @@ public class StudyRuleService {
             }
         } catch (NotFoundException ignored) {}
     }
+
 }
 
