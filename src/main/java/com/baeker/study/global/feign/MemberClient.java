@@ -34,6 +34,4 @@ public interface MemberClient {
     @GetMapping("/get/v1/id")
     RsData<MemberResDto> findById(@RequestParam(value = "id") Long id);
 
-    @GetMapping("/get/v1/{memberId}")
-    RsData<MemberDto> getMember(@PathVariable("memberId") Long memberId);
 }
