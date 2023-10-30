@@ -1,8 +1,8 @@
 package com.baeker.study.study.in.controller;
 
-import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
-import com.baeker.study.domain.studyRule.service.StudyRuleService;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.studyRule.dto.ProblemNumberDto;
+import com.baeker.study.studyRule.service.StudyRuleService;
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;

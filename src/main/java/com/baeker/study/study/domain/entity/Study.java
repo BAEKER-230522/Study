@@ -1,10 +1,9 @@
 package com.baeker.study.study.domain.entity;
 
-import com.baeker.study.base.entity.ScoreBase;
-import com.baeker.study.domain.studyRule.entity.StudyRule;
+import com.baeker.study.global.entity.ScoreBase;
+import com.baeker.study.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;

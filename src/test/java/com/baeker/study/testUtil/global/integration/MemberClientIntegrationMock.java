@@ -1,6 +1,6 @@
 package com.baeker.study.testUtil.global.integration;
 
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;

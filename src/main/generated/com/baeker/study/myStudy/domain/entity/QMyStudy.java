@@ -22,7 +22,7 @@ public class QMyStudy extends EntityPathBase<MyStudy> {
 
     public static final QMyStudy myStudy = new QMyStudy("myStudy");
 
-    public final com.baeker.study.base.entity.QBaseEntity _super = new com.baeker.study.base.entity.QBaseEntity(this);
+    public final com.baeker.study.global.entity.QBaseEntity _super = new com.baeker.study.global.entity.QBaseEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;

@@ -1,6 +1,6 @@
 package com.baeker.study.myStudy.domain.service;
 
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.exception.service.InvalidDuplicateException;
 import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.exception.service.NotFoundException;
