@@ -34,7 +34,11 @@ server:
 spring:
   profiles:
     default: dev
-
+  data:
+    redis:
+      port: 6379
+      host: ${custom.redis.host}
+      password: ${custom.redis.pw}
   application:
     name: study
 
