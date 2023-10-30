@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Study - 조회.V2")
+@Tag(name = "STUDY")
 @RestController
-@RequestMapping("${custom.mapping.study.web}")
+@RequestMapping("${custom.mapping.study.web_pub}")
 @RequiredArgsConstructor
 public class StudyQueryController {
 

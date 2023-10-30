@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Study - 생성.V2")
+@Tag(name = "STUDY")
 @RestController
-@RequestMapping("${custom.mapping.study.web}")
+@RequestMapping("${custom.mapping.study.web_usr}")
 @RequiredArgsConstructor
 public class StudyCreateController {
 
