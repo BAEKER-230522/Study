@@ -183,6 +183,7 @@ public class StudyRuleService {
             nickName = memberClient.findById(memberId).getData().getId().toString();
         }
         return new PersonalStudyRuleResponse(nickName, memberId.toString(), ruleDto);
+
     }
 
 
