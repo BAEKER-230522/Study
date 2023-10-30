@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.*;
 
-public class CreateRow {
+public class TestApiUtil {
 
     public static CreateResDto createStudy(MockMvc mvc, String url, int name, String jwt) throws Exception {
         StudyCreateReqDto reqDto = new StudyCreateReqDto("study" + name, "", 10);

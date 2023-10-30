@@ -1,4 +1,4 @@
-package com.baeker.study.study.adapter.in.integration;
+package com.baeker.study.study.adapter.in.integration.web;
 
 
 import com.baeker.study.global.feign.dto.CandidateResDto;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.baeker.study.testUtil.global.integration.CreateRow.*;
+import static com.baeker.study.testUtil.global.integration.TestApiUtil.*;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

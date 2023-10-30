@@ -1,4 +1,4 @@
-package com.baeker.study.study.adapter.in.integration;
+package com.baeker.study.study.adapter.in.integration.web;
 
 import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;

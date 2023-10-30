@@ -10,6 +10,9 @@ public class TestData {
     @Value("${custom.mapping.study.web_pub}")
     public String STUDY_PUB_URL;
 
+    @Value("${custom.mapping.study.api}")
+    public String STUDY_API_URL;
+
     @Value("${custom.mapping.my-study.web_usr}")
     public String MY_STUDY_USR_URL;
 

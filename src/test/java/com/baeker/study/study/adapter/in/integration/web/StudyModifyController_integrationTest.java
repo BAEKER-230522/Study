@@ -1,4 +1,4 @@
-package com.baeker.study.study.adapter.in.integration;
+package com.baeker.study.study.adapter.in.integration.web;
 
 import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
@@ -10,14 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.baeker.study.testUtil.global.integration.CreateRow.*;
+import static com.baeker.study.testUtil.global.integration.TestApiUtil.*;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.patchReq;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.toResDto;
 import static org.assertj.core.api.Assertions.assertThat;

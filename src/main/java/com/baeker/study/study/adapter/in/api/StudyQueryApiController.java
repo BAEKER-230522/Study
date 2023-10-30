@@ -39,6 +39,6 @@ public class StudyQueryApiController {
             @PathVariable Long studyId
     ) {
         myStudyQueryUseCase.isMember(studyId, memberId);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }

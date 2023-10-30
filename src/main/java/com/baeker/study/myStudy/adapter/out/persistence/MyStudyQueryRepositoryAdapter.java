@@ -3,6 +3,7 @@ package com.baeker.study.myStudy.adapter.out.persistence;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyQueryRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.QMyStudy;
+import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.QStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,6 +11,8 @@ import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
 
 @Repository
 public class MyStudyQueryRepositoryAdapter implements MyStudyQueryRepositoryPort {
@@ -37,6 +40,7 @@ public class MyStudyQueryRepositoryAdapter implements MyStudyQueryRepositoryPort
                 .selectFrom(ms)
                 .join(ms.study, s)
                 .where(ms.member.eq(memberId)
+                        .and(ms.status.eq(MEMBER))
                         .and(s.id.eq(studyId)))
                 .fetch();
     }

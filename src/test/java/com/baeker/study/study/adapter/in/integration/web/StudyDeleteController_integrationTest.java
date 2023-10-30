@@ -1,4 +1,4 @@
-package com.baeker.study.study.adapter.in.integration;
+package com.baeker.study.study.adapter.in.integration.web;
 
 
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.baeker.study.testUtil.global.integration.CreateRow.createStudy;
+import static com.baeker.study.testUtil.global.integration.TestApiUtil.createStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("통합 - 스터디 삭제 통합 테스트")
