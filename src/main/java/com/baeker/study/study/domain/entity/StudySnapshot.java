@@ -1,6 +1,6 @@
 package com.baeker.study.study.domain.entity;
 
-import com.baeker.study.base.entity.ScoreBase;
+import com.baeker.study.global.entity.ScoreBase;
 import com.baeker.study.study.in.reqDto.BaekjoonDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -41,7 +41,7 @@ public class StudySnapshot extends ScoreBase {
     }
 
     //-- update snapshot --//
-    public StudySnapshot update(BaekjoonDto dto) {
+    public StudySnapshot modify(BaekjoonDto dto) {
         return this.toBuilder()
                 .bronze(this.getBronze() + dto.getBronze())
                 .silver(this.getSilver() + dto.getSilver())

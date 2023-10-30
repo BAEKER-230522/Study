@@ -1,3 +1,31 @@
+custom:
+  server: localhost
+
+  feign:
+    member: http://${custom.server}:8081/api/member
+    community: http://${custom.server}:8086/pub/comm/api
+    rule: http://rule:8083/api/rule
+
+  mapping:
+    base:
+      public: /pub/study
+      user: /usr/study
+
+    study:
+      web_pub: ${custom.mapping.base.public}/web/study
+      web_usr: ${custom.mapping.base.user}/web/study
+      api: ${custom.mapping.base.public}/api/study
+    my-study:
+      web_pub: ${custom.mapping.base.public}/web/my-study
+      web_usr: ${custom.mapping.base.user}/web/my-study
+
+  jwt:
+    secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
+    test1: ENC(w/b3otCw2/s8reSGGuEynBQgtFBS/DpTWysLkC7rRJZPUBqczCNCCO/zWNzAIbObr9PMBzLITMeIeNJYdUGJKUcDB3t1gYpu3WY6e2soyCKxeO6VttVdKeJTDbfwQPO8Vjz6NA2GK4u0M5Ifx5+f4U3L2wxoHoYX8+GlGd8NoGSKin9nK7RVSDQofT2PpOi8SGx8wc3xIg987JxJYgLLEMiOrqeC3OLcp6iXRwCeWakk4rN7t+TN4Po+8xx+mdiu1ReJTn8yEVNjFTNWJd+l/DwFANauebWpOmvta1e0GXJ2uFQPv2IYwg==)
+    test2: ENC(ZBza8QJLXm07IbRDHm0GzFBLhn5XofEgT9+3MzUizBeqBqg7xMWpUvoK2EzjWaOuo0itEfVfcUj4SBGyY2r2OWHDPZveL/s1OoUbAJGQl0k4oDPTjqf662U6aOu0l5ijCih4868VYoPmddph+xSkWDrb3XSnv9Jd8hsNHwSRwrI3C9KAkAELwofQjz/MYhhom/7WmLdGn+AuL0KgbYayPbfK17KSfo07hukcwCJV9EpVBVOLM3tMmHu8dDavsD1L+XM5XGBzxoQYVIGy8cYxKryTofbYIjUesmKKiguJ9FAnykrKfTeaOQ==)
+    test3: ENC(WOkS0umepsQOY8WHszFYlfKGF+QxqOqzrFPLOGVWC4tDUy+fpf+iCyTXPfqeYQmg5tjkDB+lXH/uf8zeBe6RCznCVfurURydAU8aUPLkkJjfK5t19cEY2GqzGm54C8g/Y+01Pu7iJAHwgG1pGEEtJg2N0luoSfwNCHrZ+KoSHBkb+1GgjFoa+CFTNXjIxmyWhZbXZg5qSFgYrt8etB7cabocWQoO8w1gYO/crT6oDrtCcRQdtgUo3JiDdVZdgoQ0MtZYhMzG8fs3ws+sFnnF0sskzOwR8jb8/158o9Zzrga6iJnXFBJPTQ==)
+
+
 spring:
   data:
     redis:
@@ -33,6 +61,7 @@ spring:
     username: sa
     password:
 
+
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -43,15 +72,3 @@ message:
     studyRule: "studyRule"
     solved-member: "solved-member"
     name: "study"
-
-custom:
-  jwt:
-    secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
-  redis:
-    host: localhost
-    pw: ENC(GBrC1cw8fEgPRtmFQPTaZA==)
-  server: localhost
-
-  feign:
-    community: http://community:8086/pub/comm/api
-    member: http://${custom.server}:8081/api/member

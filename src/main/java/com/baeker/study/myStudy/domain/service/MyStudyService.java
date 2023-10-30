@@ -1,10 +1,10 @@
 package com.baeker.study.myStudy.domain.service;
 
-import com.baeker.study.base.error.exception.InvalidDuplicateException;
-import com.baeker.study.base.error.exception.NoPermissionException;
-import com.baeker.study.base.error.exception.NotFoundException;
-import com.baeker.study.base.error.exception.OverLimitedException;
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.exception.service.InvalidDuplicateException;
+import com.baeker.study.global.exception.service.NoPermissionException;
+import com.baeker.study.global.exception.service.NotFoundException;
+import com.baeker.study.global.exception.service.OverLimitedException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
@@ -187,6 +187,7 @@ public class MyStudyService {
     /**
      * ** UPDATE METHOD **
      * modify msg
+     * accept
      */
 
     //-- modify msg --//

@@ -1,8 +1,8 @@
 package com.baeker.study.study.domain.service;
 
-import com.baeker.study.base.error.exception.InvalidDuplicateException;
-import com.baeker.study.base.error.exception.NoPermissionException;
-import com.baeker.study.base.error.exception.NotFoundException;
+import com.baeker.study.global.exception.service.InvalidDuplicateException;
+import com.baeker.study.global.exception.service.NoPermissionException;
+import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
@@ -146,7 +146,7 @@ public class StudyService {
             snapshotRepository.save(snapshot);
 
         }else{
-            StudySnapshot snapshot = snapshots.get(snapshots.size() - 1).update(dto);
+            StudySnapshot snapshot = snapshots.get(snapshots.size() - 1).modify(dto);
             snapshotRepository.save(snapshot);
         }
 

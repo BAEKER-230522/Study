@@ -20,7 +20,7 @@ public class QStudy extends EntityPathBase<Study> {
 
     public static final QStudy study = new QStudy("study");
 
-    public final com.baeker.study.base.entity.QScoreBase _super = new com.baeker.study.base.entity.QScoreBase(this);
+    public final com.baeker.study.global.entity.QScoreBase _super = new com.baeker.study.global.entity.QScoreBase(this);
 
     public final StringPath about = createString("about");
 
@@ -65,7 +65,7 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final NumberPath<Integer> studyMember = createNumber("studyMember", Integer.class);
 
-    public final ListPath<com.baeker.study.domain.studyRule.entity.StudyRule, com.baeker.study.domain.studyRule.entity.QStudyRule> studyRules = this.<com.baeker.study.domain.studyRule.entity.StudyRule, com.baeker.study.domain.studyRule.entity.QStudyRule>createList("studyRules", com.baeker.study.domain.studyRule.entity.StudyRule.class, com.baeker.study.domain.studyRule.entity.QStudyRule.class, PathInits.DIRECT2);
+    public final ListPath<com.baeker.study.studyRule.entity.StudyRule, com.baeker.study.studyRule.entity.QStudyRule> studyRules = this.<com.baeker.study.studyRule.entity.StudyRule, com.baeker.study.studyRule.entity.QStudyRule>createList("studyRules", com.baeker.study.studyRule.entity.StudyRule.class, com.baeker.study.studyRule.entity.QStudyRule.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> xp = createNumber("xp", Double.class);
 

@@ -1,7 +1,7 @@
 package com.baeker.study.myStudy.domain.service;
 
-import com.baeker.study.base.error.exception.NoPermissionException;
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.exception.service.NoPermissionException;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;

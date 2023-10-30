@@ -1,6 +1,6 @@
 package com.baeker.study.myStudy.domain.entity;
 
-import com.baeker.study.base.entity.BaseEntity;
+import com.baeker.study.global.entity.BaseEntity;
 import com.baeker.study.study.domain.entity.Study;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

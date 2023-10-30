@@ -1,14 +1,14 @@
 package com.baeker.study.studyRule;
 
-import com.baeker.study.base.error.exception.NotFoundException;
-import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
-import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
-import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
-import com.baeker.study.domain.studyRule.entity.Status;
-import com.baeker.study.domain.studyRule.entity.StudyRule;
-import com.baeker.study.domain.studyRule.service.StudyRuleService;
-import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
+import com.baeker.study.global.exception.service.NotFoundException;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.studyRule.dto.ProblemNumberDto;
+import com.baeker.study.studyRule.dto.request.CreateStudyRuleRequest;
+import com.baeker.study.studyRule.dto.request.ModifyStudyRuleRequest;
+import com.baeker.study.studyRule.entity.Status;
+import com.baeker.study.studyRule.entity.StudyRule;
+import com.baeker.study.studyRule.service.StudyRuleService;
+import com.baeker.study.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
 import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.service.MyStudyService;

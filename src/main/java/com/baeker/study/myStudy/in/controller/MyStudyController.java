@@ -1,6 +1,6 @@
 package com.baeker.study.myStudy.in.controller;
 
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.myStudy.in.reqDto.*;

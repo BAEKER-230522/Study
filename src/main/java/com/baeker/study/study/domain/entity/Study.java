@@ -1,10 +1,9 @@
 package com.baeker.study.study.domain.entity;
 
-import com.baeker.study.base.entity.ScoreBase;
-import com.baeker.study.domain.studyRule.entity.StudyRule;
+import com.baeker.study.global.entity.ScoreBase;
+import com.baeker.study.studyRule.entity.StudyRule;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.study.in.resDto.SolvedCountReqDto;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity @Getter
@@ -32,21 +32,36 @@ public class Study extends ScoreBase {
     private Integer ranking;
 
     @Builder.Default
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = ALL)
     private List<MyStudy> myStudies = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "study", cascade = ALL)
     private List<StudyRule> studyRules = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = ALL)
     private List<StudySnapshot> snapshots = new ArrayList<>();
 
 
     //-- create method --//
     public static Study createStudy(String name, String about, Integer capacity, Long memberId) {
         return builder()
+                .createDate(LocalDateTime.now())
+                .name(name)
+                .about(about)
+                .leader(memberId)
+                .capacity(capacity)
+                .studyMember(1)
+                .xp(0)
+                .build();
+    }
+
+    // test 용 //
+    public static Study createStudy(Long studyId, String name, String about, Integer capacity, Long memberId) {
+        return builder()
+                .id(studyId)
+                .createDate(LocalDateTime.now())
                 .name(name)
                 .about(about)
                 .leader(memberId)
