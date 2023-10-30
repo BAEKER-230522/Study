@@ -2,7 +2,6 @@ package com.baeker.study.global.feign;
 
 import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.config.FeignConfiguration;
-import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
@@ -37,9 +36,6 @@ public interface MemberClient {
     //-- baekjoon 연동 확인 --//
     @GetMapping("/get/test/baekjoon")
     Boolean isConnectBaekJoon(@RequestParam(value = "memberId") Long memberId);
-
-    @GetMapping("/get/v1/{memberId}")
-    RsData<MemberDto> getMember(@PathVariable("memberId") Long memberId);
 
     //-- v2 ranking 조회 --//
     @GetMapping("/test/rnaking/{memberId}")

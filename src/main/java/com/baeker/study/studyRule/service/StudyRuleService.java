@@ -182,7 +182,8 @@ public class StudyRuleService {
         } catch (JwtException e) {
             nickName = memberClient.findById(memberId).getData().getId().toString();
         }
-        return new PersonalStudyRuleResponse(nickName, ruleDto);
+        return new PersonalStudyRuleResponse(nickName, memberId.toString(), ruleDto);
+
     }
 
 
