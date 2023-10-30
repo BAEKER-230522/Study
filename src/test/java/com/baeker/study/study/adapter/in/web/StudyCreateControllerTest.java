@@ -1,6 +1,6 @@
 package com.baeker.study.study.adapter.in.web;
 
-import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
+import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.testUtil.adapter.web.StudyCreateControllerMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
 
     @Autowired MockMvc mvc;
 
-    @Value("${custom.mapping.study.web}")
+    @Value("${custom.mapping.study.web_usr}")
     String mapping;
 
     @BeforeEach
@@ -39,9 +39,7 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
         StudyCreateReqDto reqDto = new StudyCreateReqDto();
 
         ResultActions result = postReq(mvc,
-                mapping + "/v2/study",
-                memberId,
-                reqDto
+                mapping + "/v2/study", memberId, reqDto
         );
 
         result
@@ -57,13 +55,9 @@ class StudyCreateControllerTest extends StudyCreateControllerMock {
         StudyCreateReqDto reqDto = new StudyCreateReqDto();
 
         ResultActions result = postReq(mvc,
-                mapping + "/v2/study",
-                memberId,
-                reqDto
+                mapping + "/v2/study", memberId, reqDto
         );
 
-        result.andExpect(
-                status().is4xxClientError()
-        );
+        result.andExpect(status().is4xxClientError());
     }
 }

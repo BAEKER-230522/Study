@@ -1,6 +1,6 @@
 package com.baeker.study.testUtil.global.integration;
 
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.MembersReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
@@ -13,25 +13,10 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-public class MemberClientIntegrationMock {
+public class MemberClientIntegrationMock extends TestData{
 
     @MockBean
     private MemberClient memberClient;
-
-    @Value("${custom.mapping.study.web}")
-    public String STUDY_URL;
-
-    @Value("${custom.mapping.my-study.web}")
-    public String MY_STUDY_URL;
-
-    @Value("${custom.jwt.test1}")
-    public String jwt1;
-
-    @Value("${custom.jwt.test2}")
-    public String jwt2;
-
-    @Value("${custom.jwt.test3}")
-    public String jwt3;
 
     public void updateMyStudyMocking() {
         when(memberClient.updateMyStudy(any())).thenReturn(

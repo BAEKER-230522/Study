@@ -3,7 +3,7 @@ package com.baeker.study.study.application.service;
 import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
-import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
+import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.in.StudyCreateUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;

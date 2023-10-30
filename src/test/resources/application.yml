@@ -7,11 +7,17 @@ custom:
     rule: http://rule:8083/api/rule
 
   mapping:
+    base:
+      public: /pub/study
+      user: /usr/study
+
     study:
-      web: /web/study
-      api: /api/study
+      web_pub: ${custom.mapping.base.public}/web/study
+      web_usr: ${custom.mapping.base.user}/web/study
+      api: ${custom.mapping.base.public}/api/study
     my-study:
-      web: /web/my-study
+      web_pub: ${custom.mapping.base.public}/web/my-study
+      web_usr: ${custom.mapping.base.user}/web/my-study
 
   jwt:
     secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)

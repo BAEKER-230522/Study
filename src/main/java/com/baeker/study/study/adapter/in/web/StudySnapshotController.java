@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "Study - 스냅샷.V2")
+@Tag(name = "STUDY")
 @RestController
-@RequestMapping("${custom.mapping.study.web}")
+@RequestMapping("${custom.mapping.study.web_pub}")
 @RequiredArgsConstructor
 public class StudySnapshotController {
 

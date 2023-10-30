@@ -4,7 +4,7 @@ import com.baeker.study.global.exception.service.InvalidDuplicateException;
 import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.exception.service.OverLimitedException;
 import com.baeker.study.global.feign.MemberClient;
-import com.baeker.study.myStudy.adapter.in.reqDto.InviteReqDto;
+import com.baeker.study.global.dto.reqDto.InviteReqDto;
 import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;

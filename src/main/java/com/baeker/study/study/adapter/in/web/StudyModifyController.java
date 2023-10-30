@@ -1,7 +1,7 @@
 package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.global.jwt.JwtDecrypt;
-import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
+import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Study - 수정.V2")
+@Tag(name = "STUDY")
 @RestController
-@RequestMapping("${custom.mapping.study.web}")
+@RequestMapping("${custom.mapping.study.web_usr}")
 @RequiredArgsConstructor
 public class StudyModifyController {
 

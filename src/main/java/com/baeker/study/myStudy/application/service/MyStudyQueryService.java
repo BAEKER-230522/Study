@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,5 +49,13 @@ public class MyStudyQueryService implements MyStudyQueryUseCase {
         Integer memberRanking = memberClient.findRanking(memberId);
         MyStudy myStudy = byStudyIdAndMemberId(memberId, study);
         return new MyStudyResDto(myStudy, memberRanking, study.getRanking());
+    }
+
+    @Override
+    public void isMember(Long studyId, Long memberId) {
+        List<MyStudy> myStudies = queryRepository.byMemberId(studyId, memberId);
+
+        if (myStudies.size() == 0)
+            throw new NotFoundException("스터디에 존재하지 않는 회원");
     }
 }

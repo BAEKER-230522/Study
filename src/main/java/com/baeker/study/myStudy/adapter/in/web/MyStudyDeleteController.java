@@ -1,7 +1,7 @@
 package com.baeker.study.myStudy.adapter.in.web;
 
 import com.baeker.study.global.jwt.JwtDecrypt;
-import com.baeker.study.myStudy.adapter.in.reqDto.DropReqDto;
+import com.baeker.study.global.dto.reqDto.DropReqDto;
 import com.baeker.study.myStudy.application.port.in.MyStudyDeleteUseCase;
 import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "My Study - 삭제.V2", description = "나의 스터디 삭제 관련 api")
+@Tag(name = "MY STUDY")
 @RestController
-@RequestMapping("${custom.mapping.my-study.web}")
+@RequestMapping("${custom.mapping.my-study.web_usr}")
 @RequiredArgsConstructor
 public class MyStudyDeleteController {
 

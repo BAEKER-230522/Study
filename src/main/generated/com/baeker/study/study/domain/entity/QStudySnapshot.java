@@ -22,7 +22,7 @@ public class QStudySnapshot extends EntityPathBase<StudySnapshot> {
 
     public static final QStudySnapshot studySnapshot = new QStudySnapshot("studySnapshot");
 
-    public final com.baeker.study.base.entity.QScoreBase _super = new com.baeker.study.base.entity.QScoreBase(this);
+    public final com.baeker.study.global.entity.QScoreBase _super = new com.baeker.study.global.entity.QScoreBase(this);
 
     //inherited
     public final NumberPath<Integer> bronze = _super.bronze;

@@ -1,6 +1,6 @@
 package com.baeker.study.global.feign;
 
-import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.config.FeignConfiguration;
 import com.baeker.study.global.feign.dto.MemberDto;
 import com.baeker.study.global.feign.dto.MembersReqDto;

@@ -1,12 +1,10 @@
 package com.baeker.study.study.domain.service;
 
 import com.baeker.study.global.exception.service.NoPermissionException;
-import com.baeker.study.base.rsdata.RsData;
-import com.baeker.study.global.exception.service.NotFoundException;
+import com.baeker.study.global.layeredBase.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
-import com.baeker.study.myStudy.in.reqDto.InviteMyStudyReqDto;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
