@@ -29,19 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class StudyModifyController_integrationTest extends MemberClientIntegrationMock {
 
-    @Autowired
-    MockMvc mvc;
-    @Autowired
-    StudyQueryUseCase studyQueryUseCase;
+    @Autowired MockMvc mvc;
+    @Autowired StudyQueryUseCase studyQueryUseCase;
 
-    @Value("${custom.mapping.study.web}")
-    String mapping;
-
-    @Value("${custom.jwt.test1}")
-    String jwt1;
-
-    @Value("${custom.jwt.test2}")
-    String jwt2;
 
     @BeforeEach
     void setup() {
@@ -52,14 +42,14 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
     @Test
     @DisplayName("스터디 기본 정보 수정")
     void no1() throws Exception {
-        Long studyId = createStudy(mvc, 1, 10, jwt1).getStudyId();
+        Long studyId = createStudy(mvc, STUDY_USR_URL, 1, jwt1).getStudyId();
         Study study = studyQueryUseCase.byId(studyId);
 
         StudyModifyReqDto reqDto = createModifyReqDto(study.getId(), "이름 수정", "소개 수정", 3);
 
 
         ResultActions result = patchReq(mvc,
-                mapping + "/v2/info", jwt1, reqDto
+                STUDY_USR_URL + "/v2/info", jwt1, reqDto
         );
 
 
@@ -74,22 +64,21 @@ class StudyModifyController_integrationTest extends MemberClientIntegrationMock 
     @Test
     @DisplayName("스터디장 위임 api ")
     void no2() throws Exception {
-        Long studyId = createStudy(mvc, 1, 10, jwt1).getStudyId();
-        joinStudy(mvc, studyId, jwt2);
-        accept(mvc, studyId, 2L, jwt1);
-
-        Study study = studyQueryUseCase.byId(studyId);
-        UpdateLeaderReqDto reqDto = createLeaderReqDto(study.getId(), 2L);
+        Long studyId = createStudy(mvc, STUDY_USR_URL, 1, jwt1).getStudyId();
+        joinStudy(mvc, MY_STUDY_USR_URL, studyId, jwt2);
+        accept(mvc, MY_STUDY_USR_URL, studyId, 2L, jwt1);
+        UpdateLeaderReqDto reqDto = createLeaderReqDto(studyId, 2L);
 
 
-        ResultActions result = patchReq(mvc,
-                mapping + "/v2/leader", jwt1, reqDto);
+        ResultActions result = patchReq(mvc, STUDY_USR_URL +
+                "/v2/leader", jwt1, reqDto);
         StudyResDto resDto = toResDto(result, StudyResDto.class);
 
 
         result.andExpect(status().is2xxSuccessful());
         assertThat(resDto.getLeader()).isEqualTo(2L);
     }
+
 
     private StudyModifyReqDto createModifyReqDto(Long studyId, String name, String about, int capacity) {
         return new StudyModifyReqDto(studyId, name, about, capacity);

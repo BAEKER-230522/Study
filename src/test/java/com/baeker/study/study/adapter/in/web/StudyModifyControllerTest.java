@@ -3,8 +3,6 @@ package com.baeker.study.study.adapter.in.web;
 import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
 import com.baeker.study.testUtil.adapter.web.StudyModifyControllerMock;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,9 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class StudyModifyControllerTest extends StudyModifyControllerMock {
 
     @Autowired MockMvc mvc;
-    @Autowired ObjectMapper mapper;
 
-    @Value("${custom.mapping.study.web}")
+    @Value("${custom.mapping.study.web_usr}")
     String mapping;
 
     @BeforeEach
@@ -46,22 +43,12 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         StudyModifyReqDto reqDto = infoReqDto(studyId);
 
         ResultActions result = patchReq(mvc,
-                mapping + "/v2/info",
-                memberId,
-                reqDto
+                mapping + "/v2/info", memberId, reqDto
         );
 
-        result.andExpect(
-                status().is2xxSuccessful()
-        ).andExpect(
-                jsonPath("id").value(studyId)
-        );
-    }
-
-    private StudyModifyReqDto infoReqDto(Long studyId) throws JsonProcessingException {
-        StudyModifyReqDto dto = new StudyModifyReqDto();
-        dto.setStudyId(studyId);
-        return dto;
+        result
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("id").value(studyId));
     }
 
     @Test
@@ -72,20 +59,25 @@ class StudyModifyControllerTest extends StudyModifyControllerMock {
         Long studyId = 1L;
         UpdateLeaderReqDto reqDto = leaderReqDto(studyId, newLeaderId);
 
+
         ResultActions result = patchReq(mvc,
-                mapping + "/v2/leader",
-                memberId,
-                reqDto
+                mapping + "/v2/leader", memberId, reqDto
         );
 
-        result.andExpect(
-                status().is2xxSuccessful()
-        ).andExpect(
-                jsonPath("leader").value(newLeaderId)
-        );
+
+        result
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("leader").value(newLeaderId));
     }
 
-    private UpdateLeaderReqDto leaderReqDto(Long studyId, String newLeaderId) throws JsonProcessingException {
+
+    private StudyModifyReqDto infoReqDto(Long studyId) {
+        StudyModifyReqDto dto = new StudyModifyReqDto();
+        dto.setStudyId(studyId);
+        return dto;
+    }
+
+    private UpdateLeaderReqDto leaderReqDto(Long studyId, String newLeaderId){
         UpdateLeaderReqDto dto = new UpdateLeaderReqDto();
         dto.setStudyId(studyId);
         dto.setNewLeader(Long.valueOf(newLeaderId));

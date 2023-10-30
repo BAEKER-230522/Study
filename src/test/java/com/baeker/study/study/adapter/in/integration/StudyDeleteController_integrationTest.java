@@ -3,9 +3,7 @@ package com.baeker.study.study.adapter.in.integration;
 
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.testUtil.global.integration.CreateRow;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,9 +37,9 @@ class StudyDeleteController_integrationTest extends MemberClientIntegrationMock 
     @Test
     @DisplayName("스터디 삭제 api")
     void no1() throws Exception {
-        createStudy(mvc, 1, 3, jwt1);
-        createStudy(mvc, 2, 3, jwt2);
-        createStudy(mvc, 3, 3, jwt3);
+        createStudy(mvc, STUDY_USR_URL, 1, jwt1);
+        createStudy(mvc, STUDY_USR_URL, 2, jwt1);
+        createStudy(mvc, STUDY_USR_URL, 3, jwt1);
 
         List<StudyResDto> all = studyQueryUseCase.all();
 

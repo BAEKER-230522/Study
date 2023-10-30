@@ -31,11 +31,6 @@ class StudyCreateController_integrationTest extends MemberClientIntegrationMock 
     @Autowired MockMvc mvc;
     @Autowired StudyQueryUseCase studyQueryUseCase;
 
-    @Value("${custom.mapping.study.web}")
-    String mapping;
-
-    @Value("${custom.jwt.test1}")
-    String jwt;
 
     @BeforeEach
     void setup() {
@@ -48,7 +43,7 @@ class StudyCreateController_integrationTest extends MemberClientIntegrationMock 
     void no1() throws Exception {
         StudyCreateReqDto reqDto = createReqDto("스터디", "하이", 10);
 
-        ResultActions result = postReq(mvc, mapping + "/v2/study", jwt, reqDto);
+        ResultActions result = postReq(mvc, STUDY_USR_URL + "/v2/study", jwt1, reqDto);
         CreateResDto resDto = toResDto(result, CreateResDto.class);
 
 

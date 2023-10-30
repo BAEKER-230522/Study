@@ -43,10 +43,12 @@ class StudyQueryController_integration_byColumnTest extends MemberClientIntegrat
     @Test
     @DisplayName("study id 로 조회")
     void no1() throws Exception {
-        Long studyId = createStudy(mvc, 1, 10, jwt1).getStudyId();
+        Long studyId = createStudy(mvc, STUDY_USR_URL, 1, jwt1).getStudyId();
 
-        ResultActions result = getReq(mvc, STUDY_URL + "/v2/id/{studyId}", studyId);
+
+        ResultActions result = getReq(mvc, STUDY_PUB_URL + "/v2/id/{studyId}", studyId);
         StudyResDto resDto = toResDto(result, StudyResDto.class);
+
 
         result.andExpect(status().is2xxSuccessful());
         assertThat(resDto.getName()).isEqualTo("study1");
@@ -57,10 +59,12 @@ class StudyQueryController_integration_byColumnTest extends MemberClientIntegrat
     @Test
     @DisplayName("study name 으로 조회")
     void no2() throws Exception {
-        createStudy(mvc, 1, 10, jwt1).getStudyId();
+        createStudy(mvc, STUDY_USR_URL, 1, jwt1);
 
-        ResultActions result = getReq(mvc, STUDY_URL + "/v2/name/{name}", "study1");
+
+        ResultActions result = getReq(mvc, STUDY_PUB_URL + "/v2/name/{name}", "study1");
         StudyResDto resDto = toResDto(result, StudyResDto.class);
+
 
         result.andExpect(status().is2xxSuccessful());
         assertThat(resDto.getName()).isEqualTo("study1");
@@ -71,11 +75,11 @@ class StudyQueryController_integration_byColumnTest extends MemberClientIntegrat
     @Test
     @DisplayName("가입중인 스터디 목록 조회")
     void no3() throws Exception {
-        Long study1Id = createStudy(mvc, 1, 10, jwt1).getStudyId();
-        Long study2Id = createStudy(mvc, 2, 10, jwt2).getStudyId();
-        Long study3Id = createStudy(mvc, 3, 10, jwt3).getStudyId();
-        joinStudy(mvc, study2Id, jwt1);
-        inviteStudy(mvc, study3Id, 1L, jwt3);
+        Long studyId1 = createStudy(mvc, STUDY_USR_URL, 1, jwt1).getStudyId();
+        Long studyId2 = createStudy(mvc, STUDY_USR_URL, 2, jwt2).getStudyId();
+        Long studyId3 = createStudy(mvc, STUDY_USR_URL, 3, jwt3).getStudyId();
+        joinStudy(mvc, MY_STUDY_USR_URL, studyId2, jwt1);
+        inviteStudy(mvc, MY_STUDY_USR_URL, studyId3, 1L, jwt3);
 
 
         List<StudyResDto> myStudyList = findMyStudies(1, 1L);
@@ -91,7 +95,7 @@ class StudyQueryController_integration_byColumnTest extends MemberClientIntegrat
 
     private List<StudyResDto> findMyStudies(int status, Long memberId) throws Exception {
         ResultActions result = mvc
-                .perform(get(STUDY_URL + "/v2/study-list/{memberId}", memberId)
+                .perform(get(STUDY_PUB_URL + "/v2/study-list/{memberId}", memberId)
                 .contentType(APPLICATION_JSON)
                 .param("status", String.valueOf(status)))
                 .andDo(print());

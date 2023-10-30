@@ -12,30 +12,30 @@ import static com.baeker.study.testUtil.global.integration.MockMvcRequest.*;
 
 public class CreateRow {
 
-    public static CreateResDto createStudy(MockMvc mvc, int name, Integer capacity, String jwt) throws Exception {
-        StudyCreateReqDto reqDto = new StudyCreateReqDto("study" + name, "", capacity);
-        ResultActions result = postReq(mvc, "/web/study/v2/study", jwt, reqDto);
+    public static CreateResDto createStudy(MockMvc mvc, String url, int name, String jwt) throws Exception {
+        StudyCreateReqDto reqDto = new StudyCreateReqDto("study" + name, "", 10);
+        ResultActions result = postReq(mvc, url + "/v2/study", jwt, reqDto);
 
         return toResDto(result, CreateResDto.class);
     }
 
-    public static void accept(MockMvc mvc, Long studyId, Long targetId, String jwt) throws Exception {
+    public static void accept(MockMvc mvc, String url, Long studyId, Long targetId, String jwt) throws Exception {
         AcceptReqDto dto = new AcceptReqDto(studyId, targetId);
-        patchReq(mvc, "/web/my-study/v2/accept", jwt, dto);
+        patchReq(mvc, url + "/v2/accept", jwt, dto);
     }
 
-    public static void joinStudy(MockMvc mvc, Long studyId, String jwt) throws Exception {
+    public static void joinStudy(MockMvc mvc, String url, Long studyId, String jwt) throws Exception {
         JoinReqDto dto = new JoinReqDto();
         dto.setStudyId(studyId);
         dto.setMsg("");
-        postReq(mvc, "/web/my-study/v2/join", jwt, dto);
+        postReq(mvc, url + "/v2/join", jwt, dto);
     }
 
-    public static void inviteStudy(MockMvc mvc, Long studyId, Long invitee, String jwt) throws Exception {
+    public static void inviteStudy(MockMvc mvc, String url, Long studyId, Long invitee, String jwt) throws Exception {
         InviteReqDto dto = new InviteReqDto();
         dto.setStudyId(studyId);
         dto.setInvitee(invitee);
         dto.setMsg("");
-        postReq(mvc, "/web/my-study/v2/invite", jwt, dto);
+        postReq(mvc, url + "/v2/invite", jwt, dto);
     }
 }

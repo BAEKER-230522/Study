@@ -2,7 +2,6 @@ package com.baeker.study.study.adapter.in.integration;
 
 
 import com.baeker.study.global.feign.dto.CandidateResDto;
-import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.in.resDto.MemberResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
 import org.assertj.core.api.Assertions;
@@ -40,9 +39,9 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
     @Test
     @DisplayName("정회원 목록 조회 api")
     void no1() throws Exception {
-        Long study1Id = createStudy(mvc, 1, 10, jwt1).getStudyId();
-        Long study2Id = createStudy(mvc, 2, 10, jwt2).getStudyId();
-        Long study3Id = createStudy(mvc, 3, 10, jwt3).getStudyId();
+        Long study1Id = createStudy(mvc, STUDY_USR_URL, 1, jwt1).getStudyId();
+        Long study2Id = createStudy(mvc, STUDY_USR_URL, 2,  jwt2).getStudyId();
+        Long study3Id = createStudy(mvc, STUDY_USR_URL, 3, jwt3).getStudyId();
 
         addMember(jwt1, study1Id, jwt2, 2L);
         addMember(jwt1, study1Id, jwt3, 3L);
@@ -60,18 +59,18 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
     @Test
     @DisplayName("가입 대기회원 목록 조회 api")
     void no2() throws Exception {
-        Long study1Id = createStudy(mvc, 1, 10, jwt1).getStudyId();
-        Long study2Id = createStudy(mvc, 2, 10, jwt2).getStudyId();
-        Long study3Id = createStudy(mvc, 3, 10, jwt3).getStudyId();
+        Long study1Id = createStudy(mvc, STUDY_USR_URL, 1, jwt1).getStudyId();
+        Long study2Id = createStudy(mvc, STUDY_USR_URL, 2,  jwt2).getStudyId();
+        Long study3Id = createStudy(mvc, STUDY_USR_URL, 3, jwt3).getStudyId();
 
 
-        joinStudy(mvc, study1Id, jwt2);
-        inviteStudy(mvc, study1Id, 3L, jwt1);
-        inviteStudy(mvc, study2Id, 1L, jwt2);
+        joinStudy(mvc, MY_STUDY_USR_URL, study1Id, jwt2);
+        inviteStudy(mvc, MY_STUDY_USR_URL, study1Id, 3L, jwt1);
+        inviteStudy(mvc, MY_STUDY_USR_URL, study2Id, 1L, jwt2);
 
-        CandidateResDto study1 =  RequestCandidateApi(study1Id);
-        CandidateResDto study2 =  RequestCandidateApi(study2Id);
-        CandidateResDto study3 =  RequestCandidateApi(study3Id);
+        CandidateResDto study1 =  requestCandidateApi(study1Id);
+        CandidateResDto study2 =  requestCandidateApi(study2Id);
+        CandidateResDto study3 =  requestCandidateApi(study3Id);
 
 
         Assertions.assertThat(study1.getPendingSize()).isEqualTo(1);
@@ -85,13 +84,13 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
     }
 
     private void addMember(String leader, Long studyId, String target, Long targetId) throws Exception {
-        joinStudy(mvc, studyId, target);
-        accept(mvc, studyId, targetId, leader);
+        joinStudy(mvc, MY_STUDY_USR_URL, studyId, target);
+        accept(mvc, MY_STUDY_USR_URL, studyId, targetId, leader);
     }
 
     private List<MemberResDto> requestMemberApi(Long studyId) throws Exception {
         ResultActions result = getReq(mvc,
-                STUDY_URL + "/v2/member-list/{studyId}",
+                STUDY_PUB_URL + "/v2/member-list/{studyId}",
                 studyId);
         List<MemberResDto> resDto =  toList(result, MemberResDto.class);
 
@@ -99,9 +98,9 @@ class StudyQueryController_integration_MembersByStudyIdTest extends MemberClient
         return resDto;
     }
 
-    private CandidateResDto RequestCandidateApi(Long studyId) throws Exception{
+    private CandidateResDto requestCandidateApi(Long studyId) throws Exception{
         ResultActions result = getReq(mvc,
-                STUDY_URL + "/v2/candidate-list/{studyId}",
+                STUDY_PUB_URL + "/v2/candidate-list/{studyId}",
                 studyId);
         CandidateResDto resDto =  toResDto(result, CandidateResDto.class);
 
