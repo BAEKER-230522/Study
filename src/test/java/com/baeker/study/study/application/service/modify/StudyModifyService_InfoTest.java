@@ -1,7 +1,7 @@
 package com.baeker.study.study.application.service.modify;
 
 import com.baeker.study.global.exception.service.NoPermissionException;
-import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
+import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.service.StudyModifyService;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.UpdateResDto;

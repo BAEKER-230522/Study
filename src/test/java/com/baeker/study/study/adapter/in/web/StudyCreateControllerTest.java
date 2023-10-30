@@ -1,6 +1,6 @@
 package com.baeker.study.study.adapter.in.web;
 
-import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
+import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.testUtil.adapter.web.StudyCreateControllerMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.baeker.study.study.adapter.in.reqDto;
+package com.baeker.study.global.dto.reqDto;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.baeker.study.study.adapter.in.integration;
 
-import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
+import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.CreateResDto;

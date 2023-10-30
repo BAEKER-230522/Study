@@ -1,7 +1,7 @@
 package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.global.jwt.JwtDecrypt;
-import com.baeker.study.study.adapter.in.reqDto.StudyModifyReqDto;
+import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;

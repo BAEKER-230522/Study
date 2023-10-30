@@ -1,14 +1,12 @@
 package com.baeker.study.testUtil.global.integration;
 
-import com.baeker.study.myStudy.adapter.in.reqDto.InviteReqDto;
-import com.baeker.study.myStudy.adapter.in.reqDto.JoinReqDto;
-import com.baeker.study.study.adapter.in.reqDto.AcceptReqDto;
-import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
+import com.baeker.study.global.dto.reqDto.InviteReqDto;
+import com.baeker.study.global.dto.reqDto.JoinReqDto;
+import com.baeker.study.global.dto.reqDto.AcceptReqDto;
+import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.in.resDto.CreateResDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.*;
 

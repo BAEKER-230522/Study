@@ -1,7 +1,7 @@
 package com.baeker.study.study.adapter.in.web;
 
 import com.baeker.study.global.jwt.JwtDecrypt;
-import com.baeker.study.study.adapter.in.reqDto.StudyCreateReqDto;
+import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
 import com.baeker.study.study.application.port.in.StudyCreateUseCase;
 import com.baeker.study.study.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
