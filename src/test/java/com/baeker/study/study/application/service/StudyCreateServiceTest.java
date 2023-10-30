@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("스터디 생성")
+@DisplayName("단위 - 스터디 생성")
 @ExtendWith(MockitoExtension.class)
 class StudyCreateServiceTest extends StudyCreateMock {
 

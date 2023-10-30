@@ -20,7 +20,7 @@ import java.util.List;
 import static com.baeker.study.testUtil.global.integration.CreateRow.createStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("스터디 삭제 통합 테스트")
+@DisplayName("통합 - 스터디 삭제 통합 테스트")
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc

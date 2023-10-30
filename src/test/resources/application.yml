@@ -3,6 +3,7 @@ custom:
 
   feign:
     member: http://${custom.server}:8081/api/member
+    community: http://${custom.server}:8086/pub/comm/api
     rule: http://rule:8083/api/rule
 
   mapping:
@@ -20,6 +21,11 @@ custom:
 
 
 spring:
+  data:
+    redis:
+      host: localhost
+      password: 1234
+      port: 6379
   mail:
     host: smtp.gmail.com
     port: 587

@@ -2,24 +2,33 @@ package com.baeker.study.domain.studyRule.service;
 
 import com.baeker.study.global.exception.service.NotFoundException;
 import com.baeker.study.base.rsdata.RsData;
+import com.baeker.study.base.util.JwtUtil;
+import com.baeker.study.base.util.RedisUt;
 import com.baeker.study.domain.email.EmailService;
 import com.baeker.study.domain.email.MailDto;
 import com.baeker.study.domain.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.domain.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.domain.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.domain.studyRule.dto.request.ModifyStudyRuleRequest;
+import com.baeker.study.domain.studyRule.dto.response.StudyRuleDetailResponse;
 import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.repository.StudyRuleRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.Problem;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.ProblemService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatus;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.problemStatus.ProblemStatusRepository;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRule;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.PersonalStudyRuleRepository;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleDto;
+import com.baeker.study.domain.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
+import com.baeker.study.myStudy.out.MyStudyQueryRepository;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.resDto.MemberResDto;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +39,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.baeker.study.myStudy.domain.entity.StudyStatus.MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -42,11 +53,15 @@ public class StudyRuleService {
     private final StudyService studyService;
 
     private final EmailService emailService;
-
+    private final MyStudyQueryRepository myStudyQueryRepository;
 
     private final MemberClient memberClient;
 
     private final ProblemService problemService;
+    private final RedisUt redisUt;
+    private final JwtUtil jwtUtil;
+    private final ProblemStatusRepository problemStatusRepository;
+    private final PersonalStudyRuleRepository personalStudyRuleRepository;
 
 
     /**
@@ -62,30 +77,33 @@ public class StudyRuleService {
         studyRule.setMission(now);
         studyRule.setStudy(studyRule, study);
 
+        List<Long> memberIds = memberList(studyRule);
         // Problem 생성
         List<Long> problemIds = problemService.createProblem(request.getCreateProblemList());
         //PersonalStudyRule 생성
-        List<PersonalStudyRule> personalStudyRule = createPersonalStudyRule(study.getMyStudies(), studyRule);
+        List<PersonalStudyRule> personalStudyRule = createPersonalStudyRule(memberIds, studyRule);
         // ProblemStatus 생성
         List<ProblemStatus> problemStatus = createProblemStatus(personalStudyRule, problemIds);
-        /**
-         * 관계 맵핑
-         * problem 엔 status 넣기
-         * personalStudyRule problemStatus 넣기
-         */
 
         studyRuleRepository.save(studyRule);
+
+
         return studyRule.getId();
     }
 
+    private List<Long> memberList(StudyRule studyRule) {
+        Study study = studyRule.getStudy();
+        return myStudyQueryRepository.findMemberList(study, MEMBER);
+    }
+
     @Transactional
-    public List<PersonalStudyRule> createPersonalStudyRule(List<MyStudy> myStudies, StudyRule studyRule) {
+    public List<PersonalStudyRule> createPersonalStudyRule(List<Long> memberIds, StudyRule studyRule) {
         List<PersonalStudyRule> personalStudyRules = new ArrayList<>();
-        for (MyStudy myStudy : myStudies) {
-            PersonalStudyRule personalStudyRule = PersonalStudyRule.create(myStudy.getMember(), studyRule);
+        for (Long memberId : memberIds) {
+            PersonalStudyRule personalStudyRule = PersonalStudyRule.create(memberId, studyRule);
             personalStudyRules.add(personalStudyRule);
             personalStudyRule.addStudyRule(personalStudyRule);
-//            personalStudyRuleRepository.save(personalStudyRule);
+            personalStudyRuleRepository.save(personalStudyRule);
         }
         return personalStudyRules;
     }
@@ -104,7 +122,7 @@ public class StudyRuleService {
                 problemStatuses.add(problemStatus);
                 problemStatus.addProblem();
                 problemStatus.addPersonalStudyRule();
-//                problemStatusRepository.save(problemStatus);
+                problemStatusRepository.save(problemStatus);
             }
         }
         return problemStatuses;
@@ -143,8 +161,28 @@ public class StudyRuleService {
                 .orElseThrow(() -> new NotFoundException("아이디를 확인해주세요"));
     }
 
-    public StudyRuleQueryDto getStudyRuleQueryDto(StudyRule studyRule) {
+    public StudyRuleDetailResponse getStudyRuleDetailResponse(StudyRule studyRule) {
+        StudyRuleQueryDto studyRuleQueryDto = getStudyRuleQueryDto(studyRule);
+        List<PersonalStudyRuleResponse> list = new ArrayList<>();
+        for (PersonalStudyRuleDto personalStudyRuleDto : studyRuleQueryDto.getPersonalStudyRuleDtos()) {
+            list.add(toPersonalStudyRuleResponse(personalStudyRuleDto));
+        }
+        return new StudyRuleDetailResponse(studyRuleQueryDto, list);
+    }
+    private StudyRuleQueryDto getStudyRuleQueryDto(StudyRule studyRule) {
         return studyRuleRepository.findStudyRuleDetail(studyRule);
+    }
+
+    private PersonalStudyRuleResponse toPersonalStudyRuleResponse(PersonalStudyRuleDto ruleDto) {
+        Long memberId = ruleDto.memberId();
+        String token = redisUt.getValue(memberId.toString());
+        String nickName = null;
+        try {
+            nickName = jwtUtil.getClaimValue(token, "nickName");
+        } catch (JwtException e) {
+            nickName = memberClient.findById(memberId).getData().getId().toString();
+        }
+        return new PersonalStudyRuleResponse(nickName, ruleDto);
     }
 
 
@@ -171,21 +209,6 @@ public class StudyRuleService {
 //        return RsData.of("F-1" , "리더가 아닙니다.");
 //    }
 
-    /**
-     * xp 반환
-     * param studyRuleId
-     */
-//    public Integer getXp(Long id) {
-//        StudyRule studyRule = getStudyRule(id);
-//        Long ruleId = studyRule.getRuleId();
-//        RuleDto rule = getRule(ruleId);
-//        return rule.getXp();
-//    }
-
-
-//    public Integer getXp(StudyRule studyRule) {
-//        return getXp(studyRule.getId());
-//    }
 
     /**
      * study 에있는 멤버들 status 확인하여
@@ -323,7 +346,7 @@ public class StudyRuleService {
                 }
             }
             setStatus(studyRule.getId());
-            if (studyRule.getStatus().equals(Status.COMPLETE)) {
+            if (studyRule.getStatus().equals(Status.COMPLETE) && !studyRule.isAddXp()) {
                 addStudyXp(studyRule);
             }
         }
@@ -351,6 +374,7 @@ public class StudyRuleService {
         List<MyStudy> myStudies = studyRule.getStudy().getMyStudies();
         String studyName = studyRule.getName();
         for (MyStudy myStudy : myStudies) {
+            if (!myStudy.getStatus().equals(MEMBER)) continue;
             Long memberId = myStudy.getMember();
             RsData<MemberResDto> member = memberClient.findById(memberId);
             emailService.mailSend(new MailDto(member.getData().getEmail(),
@@ -365,13 +389,17 @@ public class StudyRuleService {
     }
 
     @Scheduled(cron = "0 0 18 * * *")
+    @Transactional
     public void missionDoneStudyRuleSendMail() {
         try {
             List<StudyRule> studyRules = getNotYetSendMail();
             for (StudyRule studyRule : studyRules) {
-                sendMail(studyRule);
+                if (!studyRule.isSendMail()) {
+                    sendMail(studyRule);
+                }
             }
         } catch (NotFoundException ignored) {}
     }
+
 }
 

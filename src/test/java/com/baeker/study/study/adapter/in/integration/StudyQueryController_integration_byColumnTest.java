@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("특정 필드로 study 조회")
+@DisplayName("통합 - 특정 필드로 study 조회")
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc

@@ -23,7 +23,7 @@ import static com.baeker.study.testUtil.global.integration.MockMvcRequest.toResD
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("스터디 수정 통합 테스트")
+@DisplayName("통합 - 스터디 수정 통합 테스트")
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc

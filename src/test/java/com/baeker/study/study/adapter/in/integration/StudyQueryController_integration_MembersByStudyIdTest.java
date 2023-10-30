@@ -22,7 +22,7 @@ import static com.baeker.study.testUtil.global.integration.CreateRow.*;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("스터디에 가입한 회원 목록 조회 통합 테스트")
+@DisplayName("통합 - 스터디에 가입한 회원 목록 조회 통합 테스트")
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc

@@ -1,7 +1,10 @@
 custom:
   feign:
+    community: http://comm:8086/pub/comm/api
     member: http://member:8081/api/member
-
+  redis:
+    host: bk-redis.1ll.ca
+    pw: ENC(GBrC1cw8fEgPRtmFQPTaZA==)
   db:
     url: ENC(cQUB47WfdehGJ/B1hlQxP4bpmUxFRNyGu/4MY91aS3P8AegR0zD/QPfbAOd2A5rkoG8+aIxRxkEjlzFlDmvt8EWhGC5uujEJ5+gFp6VL86BGNPkJICyY2gip6e3mk/9LoqdlLagZVrINiMAT3V32C2x67EKL8rZkch8Jc+uzhmU7Cv0vjdthuNPlASmTOFSB)
     usr: ENC(plDde76MscNwKMt9v4A6Rw==)

@@ -16,7 +16,7 @@ import static com.baeker.study.myStudy.domain.entity.StudyStatus.PENDING;
 import static com.baeker.study.testUtil.global.unit.CreateDomain.createMyStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("스터디원 강퇴")
+@DisplayName("단위 - 스터디원 강퇴")
 @ExtendWith(MockitoExtension.class)
 class MyStudyDeleteService_dropOutTest extends MyStudyDeleteMock {
 

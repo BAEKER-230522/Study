@@ -16,7 +16,7 @@ import static com.baeker.study.testUtil.global.integration.MockMvcRequest.postRe
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("스터디 생성 api 테스트")
+@DisplayName("단위 - 스터디 생성 api 테스트")
 @SpringJUnitConfig
 @WebMvcTest(StudyCreateController.class)
 class StudyCreateControllerTest extends StudyCreateControllerMock {

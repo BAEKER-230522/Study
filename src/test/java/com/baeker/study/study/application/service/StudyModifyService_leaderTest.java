@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("스터디 리더 위임")
+@DisplayName("단위 - 스터디 리더 위임")
 @ExtendWith(MockitoExtension.class)
 class StudyModifyService_leaderTest extends StudyModifyMock {
 

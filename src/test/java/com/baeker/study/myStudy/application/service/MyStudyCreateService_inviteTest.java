@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("스터디 초대")
+@DisplayName("단위 - 스터디 초대")
 @ExtendWith(MockitoExtension.class)
 class MyStudyCreateService_inviteTest extends MyStudyCreateMock {
     

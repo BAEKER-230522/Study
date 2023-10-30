@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 
-@DisplayName("My Study 생성")
+@DisplayName("단위 - My Study 생성")
 @ExtendWith(MockitoExtension.class)
 class MyStudyCreateService_createTest extends MyStudyCreateMock {
 

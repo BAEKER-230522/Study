@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.baeker.study.testUtil.global.integration.MockMvcRequest.deleteReq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("study 삭제 api")
+@DisplayName("단위 - study 삭제 api")
 @SpringJUnitConfig
 @WebMvcTest(StudyDeleteController.class)
 class StudyDeleteControllerTest extends StudyDeleteControllerMock {

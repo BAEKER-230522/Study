@@ -19,7 +19,7 @@ import static com.baeker.study.testUtil.global.integration.MockMvcRequest.patchR
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("스터디 수정 api")
+@DisplayName("단위 - 스터디 수정 api")
 @SpringJUnitConfig
 @WebMvcTest(StudyModifyController.class)
 class StudyModifyControllerTest extends StudyModifyControllerMock {

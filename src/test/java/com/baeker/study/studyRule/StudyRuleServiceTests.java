@@ -9,6 +9,7 @@ import com.baeker.study.domain.studyRule.entity.Status;
 import com.baeker.study.domain.studyRule.entity.StudyRule;
 import com.baeker.study.domain.studyRule.service.StudyRuleService;
 import com.baeker.study.domain.studyRule.studyRuleRelationship.problem.dto.CreateProblem;
+import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
 import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
@@ -16,7 +17,6 @@ import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
 import com.baeker.study.study.in.reqDto.CreateReqDto;
 import com.baeker.study.study.in.resDto.MemberResDto;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -53,6 +53,9 @@ class StudyRuleServiceTests {
 
     @MockBean
     MemberClient memberClient;
+    @MockBean
+    CommunityClient communityClient;
+
 
     @BeforeEach
     void setFeign() {
@@ -62,6 +65,8 @@ class StudyRuleServiceTests {
                 .thenReturn(new RsData<>("S-1", "msg", null));
         when(memberClient.findById(any()))
                 .thenReturn(new RsData<MemberResDto>("S-1", "성공", new MemberResDto(1L, "leader", "bk1234")));
+        when(communityClient.createPost(any()))
+                .thenReturn("1");
     }
 
 
@@ -202,9 +207,9 @@ class StudyRuleServiceTests {
         studyRule.getPersonalStudyRules().forEach(
                 (personal) -> {
                     if (personal.getMemberId().equals(1L)) {
-                        Assertions.assertEquals(Status.COMPLETE, personal.getStatus());
+                        assertEquals(Status.COMPLETE, personal.getStatus());
                     } else {
-                        Assertions.assertEquals(Status.FAIL, personal.getStatus());
+                        assertEquals(Status.FAIL, personal.getStatus());
                     }
                 }
         );
@@ -219,11 +224,14 @@ class StudyRuleServiceTests {
         Long studyId = studyRule.getStudy().getId();
         List<ProblemNumberDto> problemNumberDtos = new ArrayList<>();
         problemNumberDtos.add(new ProblemNumberDto("1000", "10", "1000"));
-
-        studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
-        studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
         Study study = studyRule.getStudy();
-        Assertions.assertEquals(10, study.getXp());
+        System.out.println(study.getXp());
+        System.out.println(studyRule.getXp());
+        studyRuleService.updateProblemStatus(studyId, 1L, problemNumberDtos);
+        System.out.println(study.getXp());
+        studyRuleService.updateProblemStatus(studyId, 0L, problemNumberDtos);
+
+        assertEquals(10, study.getXp());
     }
 
     @Test

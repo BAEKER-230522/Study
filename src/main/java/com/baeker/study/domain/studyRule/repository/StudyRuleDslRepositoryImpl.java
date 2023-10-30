@@ -30,7 +30,6 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
 
-
     @Override
     public Optional<List<StudyRule>> findStudyRuleActiveFromStudy(Long studyId) {
         return Optional.of(jpaQueryFactory.selectFrom(studyRule)
@@ -101,12 +100,15 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
                         (problemStatus)
                 .from(problemStatus)
                 .join(problem)
+                    .on(problemStatus.problem.id.eq(problem.id))
                 .join(personalStudyRule)
+                    .on(personalStudyRule.id.eq(problemStatus.personalStudyRule.id))
                 .fetchJoin()
                 .where(problemStatus.id.in(problemStatusIds))
                 .fetch();
         return problemStatuses.stream()
                 .map(p -> new ProblemStatusQueryDto(
+                        p.getId(),
                         p.getPersonalStudyRule().getMemberId(),
                         p.getProblem().getProblemNumber(),
                         p.getProblem().getProblemName(),
@@ -115,5 +117,4 @@ public class StudyRuleDslRepositoryImpl implements StudyRuleDslRepository {
                         p.getMemory()))
                 .toList();
     }
-
 }

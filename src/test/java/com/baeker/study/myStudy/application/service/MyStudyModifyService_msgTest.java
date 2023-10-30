@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.baeker.study.myStudy.domain.entity.StudyStatus.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("스터디 가입 요청 메시지 수정")
+@DisplayName("단위 - 스터디 가입 요청 메시지 수정")
 @ExtendWith(MockitoExtension.class)
 class MyStudyModifyService_msgTest {
 

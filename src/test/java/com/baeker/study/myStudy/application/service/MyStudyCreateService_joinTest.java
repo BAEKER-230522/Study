@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("스터디 가입 신청")
+@DisplayName("단위 - 스터디 가입 신청")
 @ExtendWith(MockitoExtension.class)
 class MyStudyCreateService_joinTest extends MyStudyCreateMock {
 

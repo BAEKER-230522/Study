@@ -52,7 +52,7 @@ public class StudyRule {
     @Enumerated(EnumType.STRING)
     private Mission mission;
     private boolean sendMail;
-
+    private boolean addXp;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -94,6 +94,7 @@ public class StudyRule {
                 .about(request.getAbout())
                 .xp(request.getXp())
                 .status(FAIL)
+                .addXp(false)
                 .build();
     }
 
@@ -113,5 +114,6 @@ public class StudyRule {
 
     public void addXp() {
         this.study.xpUp(this.xp.intValue());
+        this.addXp = true;
     }
 }

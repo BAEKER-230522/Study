@@ -17,7 +17,7 @@ import java.util.List;
 import static com.baeker.study.testUtil.global.unit.CreateDomain.createStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("snapshot 최신화 단위 테스트")
+@DisplayName("단위 - snapshot 최신화 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class SnapshotService_updateTest extends SnapshotServiceMock {
 

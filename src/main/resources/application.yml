@@ -10,6 +10,7 @@ custom:
     secret-key: ENC(+GbV3Ykx/t5XFlaFHBZnXTzsSf9b3YChS2cVPTvCgwQmevtbB1Hfw91VMC/fTizxVssJvYiAMeQICsuoSrH5zNLh/jxJsXq/)
 
   feign:
+    community: http://comm:8086/pub/comm/api
     member: http://localhost:8081/api/member
 
   db:
@@ -22,7 +23,9 @@ custom:
 
   kafka:
     server: ENC(4U1Evn0+MZzVJcTiiJ3LFNB4t8ISA5Kc)
-
+  redis:
+    host: localhost
+    pw: ENC(GBrC1cw8fEgPRtmFQPTaZA==)
 
 
 server:
@@ -58,6 +61,9 @@ spring:
     url: ${custom.db.url}
     username: ${custom.db.usr}
     password: ${custom.db.pw}
+    hikari:
+      maximum-pool-size: 51
+      minimum-idle: 10
 
   jpa:
     hibernate:
@@ -86,10 +92,6 @@ spring:
 #    solved-member: "solved-member"
 #    name: "study"
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${custom.eureka.server}/eureka/
 
 logging.level:
   org.hibernate:
