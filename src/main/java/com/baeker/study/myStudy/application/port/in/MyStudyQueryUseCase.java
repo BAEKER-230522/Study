@@ -7,8 +7,7 @@ import com.baeker.study.study.domain.entity.Study;
 public interface MyStudyQueryUseCase {
 
     MyStudy byId(Long myStudy);
-
     MyStudy byStudyIdAndMemberId(Long memberId, Study study);
-
     MyStudyResDto toDtoByStudyIdAndMemberId(Long memberId, Study study);
+    void isMember(Long studyId, Long memberId);
 }
