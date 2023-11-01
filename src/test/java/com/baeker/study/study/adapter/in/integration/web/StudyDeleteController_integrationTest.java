@@ -2,7 +2,7 @@ package com.baeker.study.study.adapter.in.integration.web;
 
 
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

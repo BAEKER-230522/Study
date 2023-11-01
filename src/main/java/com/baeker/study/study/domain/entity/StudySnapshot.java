@@ -1,7 +1,7 @@
 package com.baeker.study.study.domain.entity;
 
 import com.baeker.study.global.entity.ScoreBase;
-import com.baeker.study.study.in.reqDto.BaekjoonDto;
+import com.baeker.study.study.legacy.in.reqDto.BaekjoonDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;

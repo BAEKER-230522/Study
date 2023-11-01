@@ -4,7 +4,7 @@ import com.baeker.study.global.dto.reqDto.InviteReqDto;
 import com.baeker.study.global.dto.reqDto.JoinReqDto;
 import com.baeker.study.global.dto.reqDto.AcceptReqDto;
 import com.baeker.study.global.dto.reqDto.StudyCreateReqDto;
-import com.baeker.study.study.in.resDto.CreateResDto;
+import com.baeker.study.study.legacy.in.resDto.CreateResDto;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 

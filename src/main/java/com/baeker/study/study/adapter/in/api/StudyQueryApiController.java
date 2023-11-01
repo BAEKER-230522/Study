@@ -2,8 +2,7 @@ package com.baeker.study.study.adapter.in.api;
 
 import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
-import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

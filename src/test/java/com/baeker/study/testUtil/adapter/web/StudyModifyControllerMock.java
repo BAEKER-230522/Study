@@ -2,9 +2,9 @@ package com.baeker.study.testUtil.adapter.web;
 
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.study.in.resDto.UpdateResDto;
+import com.baeker.study.study.legacy.in.reqDto.UpdateLeaderReqDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.UpdateResDto;
 import com.baeker.study.testUtil.global.unit.StudyQueryUseCaseMock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 

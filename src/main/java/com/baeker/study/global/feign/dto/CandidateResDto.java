@@ -1,6 +1,6 @@
 package com.baeker.study.global.feign.dto;
 
-import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

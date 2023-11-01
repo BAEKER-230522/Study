@@ -1,8 +1,8 @@
 package com.baeker.study.study.application.port.in;
 
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.reqDto.BaekjoonDto;
-import com.baeker.study.study.in.resDto.SnapshotResDto;
+import com.baeker.study.study.legacy.in.reqDto.BaekjoonDto;
+import com.baeker.study.study.legacy.in.resDto.SnapshotResDto;
 
 import java.util.List;
 

@@ -2,10 +2,10 @@ package com.baeker.study.study.application.port.in;
 
 import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.resDto.SolvedCountReqDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.study.in.resDto.UpdateResDto;
+import com.baeker.study.study.legacy.in.reqDto.UpdateLeaderReqDto;
+import com.baeker.study.study.legacy.in.resDto.SolvedCountReqDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.UpdateResDto;
 
 import java.util.List;
 

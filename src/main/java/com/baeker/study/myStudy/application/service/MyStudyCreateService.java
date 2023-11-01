@@ -8,7 +8,7 @@ import com.baeker.study.global.dto.reqDto.InviteReqDto;
 import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
+import com.baeker.study.myStudy.legacy.out.reqDto.CreateMyStudyReqDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;

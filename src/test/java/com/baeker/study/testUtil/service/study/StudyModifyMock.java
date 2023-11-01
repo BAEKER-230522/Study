@@ -3,7 +3,7 @@ package com.baeker.study.testUtil.service.study;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudyRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import com.baeker.study.testUtil.global.unit.MemberClientUnitMock;
 import org.mockito.Mockito;
 

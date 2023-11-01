@@ -6,7 +6,7 @@ import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.application.port.in.MyStudyDeleteUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
+import com.baeker.study.myStudy.legacy.out.reqDto.DeleteMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

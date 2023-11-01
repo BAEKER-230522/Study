@@ -1,6 +1,6 @@
 package com.baeker.study.global.jwt;
 
-import com.baeker.study.global.layeredBase.util.Ut;
+import com.baeker.study.global.legacy.util.Ut;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

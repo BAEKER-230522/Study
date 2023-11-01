@@ -1,7 +1,7 @@
 package com.baeker.study.study.domain.service;
 
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.out.StudyQueryRepository;
+import com.baeker.study.study.legacy.out.StudyQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

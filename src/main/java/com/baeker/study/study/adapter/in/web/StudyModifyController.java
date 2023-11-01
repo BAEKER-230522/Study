@@ -5,9 +5,9 @@ import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.reqDto.UpdateLeaderReqDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
-import com.baeker.study.study.in.resDto.UpdateResDto;
+import com.baeker.study.study.legacy.in.reqDto.UpdateLeaderReqDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.UpdateResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
