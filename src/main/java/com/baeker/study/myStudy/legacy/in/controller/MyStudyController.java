@@ -3,7 +3,6 @@ package com.baeker.study.myStudy.legacy.in.controller;
 import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
-import com.baeker.study.myStudy.in.reqDto.*;
 import com.baeker.study.myStudy.legacy.in.reqDto.*;
 import com.baeker.study.myStudy.legacy.in.resDto.CreateMyStudyDto;
 import com.baeker.study.myStudy.legacy.in.resDto.MyStudyResDto;

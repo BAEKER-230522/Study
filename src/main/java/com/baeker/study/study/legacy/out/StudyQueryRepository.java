@@ -4,7 +4,7 @@ import com.baeker.study.myStudy.domain.entity.QMyStudy;
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.QStudy;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.QStudyResDto;
+import com.baeker.study.study.legacy.in.resDto.QStudyResDto;
 import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import com.querydsl.core.types.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
