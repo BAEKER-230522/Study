@@ -3,7 +3,7 @@ package com.baeker.study.study.adapter.in.web;
 import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.SnapshotResDto;
+import com.baeker.study.study.legacy.in.resDto.SnapshotResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

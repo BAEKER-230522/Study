@@ -1,6 +1,6 @@
 package com.baeker.study.study.in.resDto;
 
-import com.querydsl.core.types.dsl.*;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 
 import com.querydsl.core.types.ConstructorExpression;
 import javax.annotation.processing.Generated;

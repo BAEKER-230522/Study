@@ -1,9 +1,8 @@
 custom:
-  server: localhost
 
   feign:
-    member: http://${custom.server}:8081/api/member
-    community: http://${custom.server}:8086/pub/comm/api
+    member: http://localhost:8081/api/member
+    community: http://localhost:8086/pub/comm/api
     rule: http://rule:8083/api/rule
 
   mapping:

@@ -2,7 +2,7 @@ package com.baeker.study.study.application.port.out.persistence;
 
 import com.baeker.study.myStudy.domain.entity.StudyStatus;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 
 import java.util.List;
 

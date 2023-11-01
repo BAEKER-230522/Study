@@ -6,7 +6,7 @@ import com.baeker.study.global.dto.reqDto.JoinReqDto;
 import com.baeker.study.myStudy.application.port.in.MyStudyCreateUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.CreateResDto;
+import com.baeker.study.study.legacy.in.resDto.CreateResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

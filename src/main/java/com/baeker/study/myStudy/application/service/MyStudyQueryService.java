@@ -6,7 +6,7 @@ import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyQueryRepositoryPort;
 import com.baeker.study.myStudy.application.port.out.persistence.MyStudyRepositoryPort;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.in.resDto.MyStudyResDto;
+import com.baeker.study.myStudy.legacy.in.resDto.MyStudyResDto;
 import com.baeker.study.study.domain.entity.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

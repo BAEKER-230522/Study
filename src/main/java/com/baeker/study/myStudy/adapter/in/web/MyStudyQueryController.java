@@ -1,7 +1,7 @@
 package com.baeker.study.myStudy.adapter.in.web;
 
 import com.baeker.study.myStudy.application.port.in.MyStudyQueryUseCase;
-import com.baeker.study.myStudy.in.resDto.MyStudyResDto;
+import com.baeker.study.myStudy.legacy.in.resDto.MyStudyResDto;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
 import com.baeker.study.study.domain.entity.Study;
 import io.swagger.v3.oas.annotations.Operation;

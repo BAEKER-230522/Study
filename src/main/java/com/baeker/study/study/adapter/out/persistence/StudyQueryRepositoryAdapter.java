@@ -6,7 +6,7 @@ import com.baeker.study.study.application.port.out.persistence.StudyQueryReposit
 import com.baeker.study.study.domain.entity.QStudy;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.in.resDto.QStudyResDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
