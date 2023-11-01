@@ -2,7 +2,7 @@ package com.baeker.study.study.adapter.in.integration.web;
 
 
 import com.baeker.study.global.feign.dto.CandidateResDto;
-import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
 import com.baeker.study.testUtil.global.integration.MemberClientIntegrationMock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

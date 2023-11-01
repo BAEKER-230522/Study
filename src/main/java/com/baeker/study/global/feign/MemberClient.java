@@ -1,11 +1,11 @@
 package com.baeker.study.global.feign;
 
-import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.global.config.FeignConfiguration;
 import com.baeker.study.global.feign.dto.MembersReqDto;
-import com.baeker.study.myStudy.out.reqDto.CreateMyStudyReqDto;
-import com.baeker.study.myStudy.out.reqDto.DeleteMyStudyReqDto;
-import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.myStudy.legacy.out.reqDto.CreateMyStudyReqDto;
+import com.baeker.study.myStudy.legacy.out.reqDto.DeleteMyStudyReqDto;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

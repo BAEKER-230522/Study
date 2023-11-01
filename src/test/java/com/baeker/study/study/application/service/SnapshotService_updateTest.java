@@ -2,7 +2,7 @@ package com.baeker.study.study.application.service;
 
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
-import com.baeker.study.study.in.reqDto.BaekjoonDto;
+import com.baeker.study.study.legacy.in.reqDto.BaekjoonDto;
 import com.baeker.study.testUtil.service.study.SnapshotServiceMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

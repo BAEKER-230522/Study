@@ -4,7 +4,7 @@ import com.baeker.study.studyRule.dto.query.StudyRuleQueryDto;
 import com.baeker.study.studyRule.entity.Mission;
 import com.baeker.study.studyRule.entity.Status;
 import com.baeker.study.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

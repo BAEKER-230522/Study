@@ -4,14 +4,13 @@ import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.out.persistence.StudySnapshotRepositoryPort;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.entity.StudySnapshot;
-import com.baeker.study.study.in.reqDto.BaekjoonDto;
-import com.baeker.study.study.in.resDto.SnapshotResDto;
+import com.baeker.study.study.legacy.in.reqDto.BaekjoonDto;
+import com.baeker.study.study.legacy.in.resDto.SnapshotResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

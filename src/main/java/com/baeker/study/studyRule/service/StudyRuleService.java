@@ -1,7 +1,7 @@
 package com.baeker.study.studyRule.service;
 
 import com.baeker.study.global.exception.service.NotFoundException;
-import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.global.jwt.JwtUtil;
 import com.baeker.study.global.redis.RedisUt;
 import com.baeker.study.global.email.EmailService;
@@ -24,10 +24,10 @@ import com.baeker.study.studyRule.studyRuleRelationship.studyRuleStatus.dto.Pers
 import com.baeker.study.studyRule.studyRuleRelationship.studyRuleStatus.dto.PersonalStudyRuleResponse;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.entity.MyStudy;
-import com.baeker.study.myStudy.out.MyStudyQueryRepository;
+import com.baeker.study.myStudy.legacy.out.MyStudyQueryRepository;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
-import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

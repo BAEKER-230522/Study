@@ -1,7 +1,7 @@
 package com.baeker.study.studyRule;
 
 import com.baeker.study.global.exception.service.NotFoundException;
-import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.studyRule.dto.ProblemNumberDto;
 import com.baeker.study.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.studyRule.dto.request.ModifyStudyRuleRequest;
@@ -12,11 +12,11 @@ import com.baeker.study.studyRule.studyRuleRelationship.problem.dto.CreateProble
 import com.baeker.study.global.feign.CommunityClient;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.myStudy.domain.service.MyStudyService;
-import com.baeker.study.myStudy.in.reqDto.JoinMyStudyReqDto;
+import com.baeker.study.myStudy.legacy.in.reqDto.JoinMyStudyReqDto;
 import com.baeker.study.study.domain.entity.Study;
 import com.baeker.study.study.domain.service.StudyService;
-import com.baeker.study.study.in.reqDto.CreateReqDto;
-import com.baeker.study.study.in.resDto.MemberResDto;
+import com.baeker.study.study.legacy.in.reqDto.CreateReqDto;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

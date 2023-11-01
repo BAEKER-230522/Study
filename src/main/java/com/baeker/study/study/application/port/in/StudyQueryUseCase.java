@@ -2,9 +2,8 @@ package com.baeker.study.study.application.port.in;
 
 import com.baeker.study.global.feign.dto.CandidateResDto;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.domain.entity.StudySnapshot;
-import com.baeker.study.study.in.resDto.MemberResDto;
-import com.baeker.study.study.in.resDto.StudyResDto;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
+import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 
 import java.util.List;
 

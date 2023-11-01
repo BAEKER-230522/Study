@@ -1,10 +1,9 @@
 package com.baeker.study.testUtil.global.integration;
 
-import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import com.baeker.study.global.feign.dto.MembersReqDto;
-import com.baeker.study.study.in.resDto.MemberResDto;
-import org.springframework.beans.factory.annotation.Value;
+import com.baeker.study.study.legacy.in.resDto.MemberResDto;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;

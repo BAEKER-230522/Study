@@ -4,7 +4,7 @@ import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.service.StudyModifyService;
 import com.baeker.study.study.domain.entity.Study;
-import com.baeker.study.study.in.resDto.UpdateResDto;
+import com.baeker.study.study.legacy.in.resDto.UpdateResDto;
 import com.baeker.study.testUtil.service.study.StudyModifyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,6 @@
 package com.baeker.study.studyRule.api;
 
-import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.studyRule.dto.StudyRuleDto;
 import com.baeker.study.studyRule.dto.request.CreateStudyRuleRequest;
 import com.baeker.study.studyRule.dto.request.ModifyStudyRuleRequest;

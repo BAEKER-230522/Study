@@ -1,6 +1,6 @@
 package com.baeker.study.testUtil.global.unit;
 
-import com.baeker.study.global.layeredBase.rsdata.RsData;
+import com.baeker.study.global.legacy.rsdata.RsData;
 import com.baeker.study.global.feign.MemberClient;
 import org.mockito.Mockito;
 
