@@ -1,8 +1,8 @@
 package com.baeker.study.study.application.service;
 
+import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.global.exception.service.NoPermissionException;
 import com.baeker.study.global.exception.service.NotFoundException;
-import com.baeker.study.global.dto.reqDto.StudyModifyReqDto;
 import com.baeker.study.study.application.port.in.SnapshotUseCase;
 import com.baeker.study.study.application.port.in.StudyModifyUseCase;
 import com.baeker.study.study.application.port.in.StudyQueryUseCase;
@@ -14,7 +14,6 @@ import com.baeker.study.study.legacy.in.resDto.SolvedCountReqDto;
 import com.baeker.study.study.legacy.in.resDto.StudyResDto;
 import com.baeker.study.study.legacy.in.resDto.UpdateResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,6 @@ public class StudyModifyService implements StudyModifyUseCase {
     private final StudyRepositoryPort repository;
     private final StudyQueryUseCase queryUseCase;
     private final SnapshotUseCase snapshotUseCase;
-    private final ApplicationEventPublisher publisher;
 
     @Override
     public UpdateResDto info(Study study, Long memberId, StudyModifyReqDto dto) {
@@ -52,20 +50,6 @@ public class StudyModifyService implements StudyModifyUseCase {
         return new StudyResDto(modified);
     }
 
-    private static void isLeader(Study study, Long memberId) {
-        if (study.getLeader() != memberId)
-            throw new NoPermissionException("권한이 없습니다.");
-    }
-
-    private void isMember(Long studyId, Long memberId) {
-        List<StudyResDto> dtos = queryUseCase.byMemberId(memberId, 1);
-
-        for (StudyResDto dto : dtos)
-            if (dto.getId() == studyId) return;
-
-        throw new NotFoundException("가입된 회원이 아닙니다.");
-    }
-
     @Override
     public UpdateResDto xp(Study study, double addXp) {
         study.xpUp(addXp);
@@ -84,6 +68,21 @@ public class StudyModifyService implements StudyModifyUseCase {
             studyList.get(i).updateRanking(i + 1);
     }
 
+
+
+    private static void isLeader(Study study, Long memberId) {
+        if (study.getLeader() != memberId)
+            throw new NoPermissionException("권한이 없습니다.");
+    }
+
+    private void isMember(Long studyId, Long memberId) {
+        List<StudyResDto> dtos = queryUseCase.byMemberId(memberId, 1);
+
+        for (StudyResDto dto : dtos)
+            if (dto.getId() == studyId) return;
+
+        throw new NotFoundException("가입된 회원이 아닙니다.");
+    }
 
     private void updateSolvedCount(List<StudyResDto> studyList, SolvedCountReqDto dto) {
         for (StudyResDto studyDto : studyList) {

@@ -32,13 +32,6 @@ public class SnapshotService implements SnapshotUseCase {
             modifySnapshot(snapshots.get(0), dto);
     }
 
-    private boolean isNew(String today, List<StudySnapshot> snapshots) {
-        if (snapshots.size() == 0)
-            return true;
-        else
-            return !snapshots.get(snapshots.size() - 1).getDayOfWeek().equals(today);
-    }
-
     @Override
     public void createSnapshot(Study study, BaekjoonDto dto, int addDate) {
         String today = LocalDate.now().plusDays(addDate).getDayOfWeek().toString();
@@ -46,19 +39,7 @@ public class SnapshotService implements SnapshotUseCase {
         StudySnapshot snapshot = StudySnapshot.create(study, dto, today);
         repository.save(snapshot);
 
-        List<StudySnapshot> snapshots = study.getSnapshots();
-
-        if (snapshots.size() >= 8) {
-            StudySnapshot overSnapshot = snapshots.get(0);
-            snapshots.remove(overSnapshot);
-            repository.delete(overSnapshot);
-        }
-    }
-
-    private void modifySnapshot(StudySnapshot snapshot, BaekjoonDto dto) {
-        repository.save(
-                snapshot.modify(dto)
-        );
+        deleteOldestSnapshot(study);
     }
 
     @Override
@@ -77,5 +58,31 @@ public class SnapshotService implements SnapshotUseCase {
 
         for (StudySnapshot snapshot : snapshots)
             repository.delete(snapshot);
+    }
+
+
+
+
+    private boolean isNew(String today, List<StudySnapshot> snapshots) {
+        if (snapshots.size() == 0)
+            return true;
+        else
+            return !snapshots.get(snapshots.size() - 1).getDayOfWeek().equals(today);
+    }
+
+    private void modifySnapshot(StudySnapshot snapshot, BaekjoonDto dto) {
+        repository.save(
+                snapshot.modify(dto)
+        );
+    }
+
+    private void deleteOldestSnapshot(Study study) {
+        List<StudySnapshot> snapshots = study.getSnapshots();
+
+        if (snapshots.size() >= 8) {
+            StudySnapshot overSnapshot = snapshots.get(0);
+            snapshots.remove(overSnapshot);
+            repository.delete(overSnapshot);
+        }
     }
 }
