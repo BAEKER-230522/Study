@@ -180,7 +180,7 @@ public class StudyRuleService {
         try {
             nickName = jwtUtil.getClaimValue(token, "nickName");
         } catch (JwtException e) {
-            nickName = memberClient.findById(memberId).getData().getId().toString();
+            nickName = memberClient.findById(memberId).getData().getNickname();
         }
         return new PersonalStudyRuleResponse(nickName, memberId.toString(), ruleDto);
 
